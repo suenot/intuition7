@@ -4,6 +4,7 @@ import { getExchangeAssets } from './getExchangeAssets';
 import { getExchangeOrderbook } from './getExchangeOrderbook';
 import { store } from './store';
 import _ from 'lodash';
+import { toShift } from './toShift/toShift';
 
 export const intervalFn = async () => {
   console.log('interval');
@@ -32,5 +33,6 @@ export const intervalFn = async () => {
   if (!store.orderBooksByBase[base][quote]) store.orderBooksByBase[base][quote] = {};
   store.orderBooksByBase[base][quote][exchangeId] = store.orderBooks[instrumentId];
   if (!store.orderBooksHistory[instrumentId]) store.orderBooksHistory[instrumentId] = [];
-  store.orderBooksHistory[instrumentId].push(_.cloneDeep(orderbook));
+  // store.orderBooksHistory[instrumentId].push(_.cloneDeep(orderbook));
+  toShift(store.orderBooksHistory[instrumentId], [orderbook], 100);
 }

@@ -7,8 +7,7 @@ import {
 // Пример использования ccxt для получения списка доступных активов (монет) на бирже
 export async function getExchangeAssets(exchangeId: string): Promise<Asset[]> {
   try {
-    // const ccxt = await import('https://cdn.jsdelivr.net/npm/ccxt@latest/src');
-    const exchange = new (ccxt as any)[exchangeId]();
+    const exchange = new (ccxt as any)[exchangeId](); // TODO: fix
     const assets: CcxtMarket[] = await exchange.loadMarkets();
     const uniqueAssets: { [key: string]: Asset } = {};
 
