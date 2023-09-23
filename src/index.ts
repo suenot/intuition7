@@ -2,6 +2,7 @@ import { Elysia } from 'elysia';
 // import { yoga } from '@elysiajs/graphql-yoga';
 import { store } from "./store";
 import { intervalFn } from './intervalFn';
+import { initNedb } from './nedb';
 
 (async () => {
   await intervalFn();
@@ -9,6 +10,8 @@ import { intervalFn } from './intervalFn';
     await intervalFn();
   }, 10000);
 })();
+
+initNedb();
 
 const app = new Elysia()
     // .use(

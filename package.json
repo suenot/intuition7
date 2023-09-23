@@ -7,9 +7,10 @@
   },
   "dependencies": {
     "@elysiajs/graphql-yoga": "^0.6.3",
-    "ccxt": "https://github.com/ccxt/ccxt",
+    "ccxt": "^4.0.104",
     "elysia": "latest",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "nedb": "^1.8.0"
   },
   "devDependencies": {
     "bun-types": "latest"
