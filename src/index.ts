@@ -35,17 +35,17 @@ const app = new Elysia()
     // )
     .get('/ping', () => 'pong')
     // .get('/orderbook', (context) => store.orderbooks?.[`${context?.query?.exchange as string}--${context?.query?.base as string}--${context?.query?.quote as string}`])
-    .get('/orderbooks', (context) => store.orderbooksByBase)
+    .get('/orderbooks', (context) => store.orderBooksByBase)
     .get('/orderbook', ({ query: { exchange, base, quote } }) => {
       console.log('orderbook', exchange, base, quote);
       if (exchange && base && quote) {
-        return store.orderbooksByBase?.[base as string]?.[quote as string]?.[exchange as string] || [];
+        return store.orderBooksByBase?.[base as string]?.[quote as string]?.[exchange as string] || [];
       } else if (base && quote) {
-        return store.orderbooksByBase?.[base as string]?.[quote as string] || {};
+        return store.orderBooksByBase?.[base as string]?.[quote as string] || {};
       } else if (base) {
-        return store.orderbooksByBase?.[base as string] || {};
+        return store.orderBooksByBase?.[base as string] || {};
       } else {
-        return store.orderbooksByBase || {};
+        return store.orderBooksByBase || {};
       }
       
     })

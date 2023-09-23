@@ -5,8 +5,9 @@ import {
 export const store: Store = {
   assets: [],
   instruments: [],
-  orderbooks: {},
-  orderbooksByBase: {},
+  orderBooks: {},
+  orderBooksByBase: {},
+  orderBooksHistory: [],
   // trades: [],
   // candles: [],
 }

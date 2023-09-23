@@ -34,20 +34,21 @@ export interface OrderBook {
   trades?: any[],
 }
 
-export interface StoreOrderbooksBase {
-  [key: string]: StoreOrderbooksQuote,
+export interface StoreOrderBooksBase {
+  [key: string]: StoreOrderBooksQuote,
 }
-export interface StoreOrderbooksQuote {
-  [key: string]: StoreOrderbooksExchange,
+export interface StoreOrderBooksQuote {
+  [key: string]: StoreOrderBooksExchange,
 }
 
-export interface StoreOrderbooksExchange {
+export interface StoreOrderBooksExchange {
   [key: string]: OrderBook,
 }
 
 export interface Store {
   assets: Asset[],
   instruments: Instrument[],
-  orderbooks: StoreOrderbooksExchange,
-  orderbooksByBase: StoreOrderbooksBase,
+  orderBooks: StoreOrderBooksExchange,
+  orderBooksByBase: StoreOrderBooksBase,
+  orderBooksHistory: StoreOrderBooksExchange[],
 }
