@@ -38,8 +38,21 @@ const app = new Elysia()
     .get('/orderbooks', (context) => store.orderbooksByBase)
     .get('/orderbook', ({ query: { exchange, base, quote } }) => {
       console.log('orderbook', exchange, base, quote);
-      return store.orderbooksByBase?.[base as string]?.[quote as string]?.[exchange as string] || [];
+      if (exchange && base && quote) {
+        return store.orderbooksByBase?.[base as string]?.[quote as string]?.[exchange as string] || [];
+      } else if (base && quote) {
+        return store.orderbooksByBase?.[base as string]?.[quote as string] || {};
+      } else if (base) {
+        return store.orderbooksByBase?.[base as string] || {};
+      } else {
+        return store.orderbooksByBase || {};
+      }
+      
     })
+    // .get('/orderbook-history', ({ query: { exchange, base, quote } }) => {
+    //   console.log('orderbook', exchange, base, quote);
+    //   return store.orderbooksByBase?.[base as string]?.[quote as string] || {};
+    // })
     .get('/assets', (context) => store.assets)
     .get('/instruments', (context) => store.instruments)
     .listen(8080)
