@@ -38,7 +38,7 @@ const app = new Elysia()
     .get('/orderbooks', (context) => store.orderbooksByBase)
     .get('/orderbook', ({ query: { exchange, base, quote } }) => {
       console.log('orderbook', exchange, base, quote);
-      store.orderbooksByBase?.[base as string]?.[quote as string]?.[exchange as string] || []
+      return store.orderbooksByBase?.[base as string]?.[quote as string]?.[exchange as string] || [];
     })
     .get('/assets', (context) => store.assets)
     .get('/instruments', (context) => store.instruments)
