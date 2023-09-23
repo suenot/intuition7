@@ -8,6 +8,7 @@
   "dependencies": {
     "@elysiajs/graphql-yoga": "^0.6.3",
     "ccxt": "^4.0.104",
+    "debug": "^4.3.4",
     "elysia": "latest",
     "lodash": "^4.17.21",
     "nedb": "^1.8.0"

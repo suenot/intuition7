@@ -1,13 +1,12 @@
 import debug from "debug";
+import _ from "lodash";
 import { getExchangeInfo } from "./getExchangeInfo";
 import { getExchangeInstruments } from "./getExchangeInstruments";
 import { getExchangeAssets } from "./getExchangeAssets";
 import { getExchangeOrderbook } from "./getExchangeOrderbook";
 import { store } from "./store";
-
-const log = debug("intervalFn");
-import _ from "lodash";
 import { toShift } from "./toShift/toShift";
+const log = debug("intervalFn");
 
 export const intervalFn = async () => {
   log("interval");
