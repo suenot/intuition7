@@ -35,7 +35,7 @@ const app = new Elysia()
     // )
     .get('/ping', () => 'pong')
     // .get('/orderbook', (context) => store.orderbooks?.[`${context?.query?.exchange as string}--${context?.query?.base as string}--${context?.query?.quote as string}`])
-    .get('/orderbooks', (context) => store.orderBooksByBase)
+    // .get('/orderbooks', (context) => store.orderBooksByBase)
     .get('/orderbook', ({ query: { exchange, base, quote } }) => {
       console.log('orderbook', exchange, base, quote);
       if (exchange && base && quote) {
@@ -49,10 +49,14 @@ const app = new Elysia()
       }
       
     })
-    // .get('/orderbook-history', ({ query: { exchange, base, quote } }) => {
-    //   console.log('orderbook', exchange, base, quote);
-    //   return store.orderbooksByBase?.[base as string]?.[quote as string] || {};
-    // })
+    .get('/orderbook-history', ({ query: { exchange, base, quote } }) => {
+      console.log('orderbook-history', exchange, base, quote);
+      if (exchange && base && quote) {
+        return store.orderBooksHistory?.[`${base}/${quote}/${exchange}`] || [];
+      } else if (base && quote) {
+        return []; // TODO: сделать выборку множества историй одним запросом, по аналогии с /orderbook
+      }
+    })
     .get('/assets', (context) => store.assets)
     .get('/instruments', (context) => store.instruments)
     .listen(8080)

@@ -7,7 +7,7 @@ export const store: Store = {
   instruments: [],
   orderBooks: {},
   orderBooksByBase: {},
-  orderBooksHistory: [],
+  orderBooksHistory: {},
   // trades: [],
   // candles: [],
 }

@@ -3,6 +3,7 @@ import { getExchangeInstruments } from './getExchangeInstruments';
 import { getExchangeAssets } from './getExchangeAssets';
 import { getExchangeOrderbook } from './getExchangeOrderbook';
 import { store } from './store';
+import _ from 'lodash';
 
 export const intervalFn = async () => {
   console.log('interval');
@@ -21,10 +22,15 @@ export const intervalFn = async () => {
   console.log('Доступные активы (монеты) на бирже:', assets);
   store.assets = assets;
 
-  const orderbook = await getExchangeOrderbook(exchangeId, 'BTC/USDT');
-  // store.orderbooks['BTC/USDT'] = orderbook;
-  store.orderbooks['BTC_USDT'] = orderbook;
-  if (!store.orderbooksByBase['BTC']) store.orderbooksByBase['BTC'] = {};
-  if (!store.orderbooksByBase['BTC']['USDT']) store.orderbooksByBase['BTC']['USDT'] = {};
-  store.orderbooksByBase['BTC']['USDT'][exchangeId] = store.orderbooks['BTC_USDT'];
+  const base = 'BTC';
+  const quote = 'USDT';
+  const pairId = `${base}/${quote}`; // Замените на ID пары, которую хотите исследовать
+  const instrumentId = `${base}/${quote}/${exchangeId}`; // Замените на ID инструмента, который хотите исследовать
+  const orderbook = await getExchangeOrderbook(exchangeId, pairId);
+  store.orderBooks[instrumentId] = orderbook;
+  if (!store.orderBooksByBase[base]) store.orderBooksByBase[base] = {};
+  if (!store.orderBooksByBase[base][quote]) store.orderBooksByBase[base][quote] = {};
+  store.orderBooksByBase[base][quote][exchangeId] = store.orderBooks[instrumentId];
+  if (!store.orderBooksHistory[instrumentId]) store.orderBooksHistory[instrumentId] = [];
+  store.orderBooksHistory[instrumentId].push(_.cloneDeep(orderbook));
 }
