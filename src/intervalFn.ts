@@ -1,4 +1,3 @@
-import debug from "debug";
 import _ from "lodash";
 import { getExchangeInfo } from "./getExchangeInfo";
 import { getExchangeInstruments } from "./getExchangeInstruments";
@@ -6,10 +5,19 @@ import { getExchangeAssets } from "./getExchangeAssets";
 import { getExchangeOrderbook } from "./getExchangeOrderbook";
 import { store } from "./store";
 import { toShift } from "./toShift/toShift";
+import { insertExchange, insertInstrument } from "./nedb";
+import debug from "debug";
 const log = debug("intervalFn");
 
 export const intervalFn = async () => {
   log("interval");
+
+  // TODO: получить список бирж
+  // записать их в nedb
+  // exchanges.forEach((exchange) => {
+  //   insertExchange(exchange);
+  // });
+
   const exchangeId = "okex"; // Замените на ID биржи, которую хотите исследовать
   const exchangeInfo = await getExchangeInfo(exchangeId);
   log("Информация о бирже:", exchangeInfo);
@@ -20,6 +28,9 @@ export const intervalFn = async () => {
   log({ instruments });
   log("Доступные пары (инструменты) на бирже:", instruments);
   store.instruments = instruments;
+  instruments.forEach((instrument) => {
+    insertInstrument(instrument);
+  });
 
   const assets = await getExchangeAssets(exchangeId);
   log("Доступные активы (монеты) на бирже:", assets);
