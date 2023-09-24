@@ -60,7 +60,12 @@ const app = new Elysia()
     if (exchange && base && quote) {
       return store.orderBooksHistory?.[`${base}/${quote}/${exchange}`] || [];
     } else if (base && quote) {
-      return []; // TODO: Retrieve multiple histories with a single query, similar to /orderbook
+      const histories = {};
+      for (const exchange in store.orderBooksHistory) {
+        histories[exchange] =
+          store.orderBooksHistory?.[`${base}/${quote}/${exchange}`] || [];
+      }
+      return histories;
     }
   })
   .get("/assets", (context) => store.assets)
