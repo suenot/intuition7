@@ -58,12 +58,12 @@ const app = new Elysia()
   .get("/orderbook-history", ({ query: { exchange, base, quote } }) => {
     log("orderbook-history", exchange, base, quote);
     if (exchange && base && quote) {
-      return store.orderBooksHistory?.[`${base}/${quote}/${exchange}`] || [];
+      return store.orderBooksHistoryByBase?.[`${base}/${quote}/${exchange}`] || [];
     } else if (base && quote) {
       const histories = {};
-      for (const exchange in store.orderBooksHistory) {
+      for (const exchange in store.orderBooksHistoryByBase) {
         histories[exchange] =
-          store.orderBooksHistory?.[`${base}/${quote}/${exchange}`] || [];
+          store.orderBooksHistoryByBase?.[`${base}/${quote}/${exchange}`] || [];
       }
       return histories;
     }
