@@ -49,6 +49,11 @@ export const intervalFn = async () => {
     store.orderBooks[instrumentId];
   if (!store.orderBooksHistory[instrumentId])
     store.orderBooksHistory[instrumentId] = [];
-  // store.orderBooksHistory[instrumentId].push(_.cloneDeep(orderbook));
+  if (!store.orderBooksHistoryByBase[base]) store.orderBooksHistoryByBase[base] = {};
+  if (!store.orderBooksHistoryByBase[base][quote])
+    store.orderBooksHistoryByBase[base][quote] = {};
+  if (!store.orderBooksHistoryByBase[base][quote][exchangeId])
+    store.orderBooksHistoryByBase[base][quote][exchangeId] = [];
+  store.orderBooksHistoryByBase[base][quote][exchangeId].push(_.cloneDeep(orderbook));
   toShift(store.orderBooksHistory[instrumentId], [orderbook], 100);
 };
