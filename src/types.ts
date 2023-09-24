@@ -53,4 +53,5 @@ export interface Store {
   orderBooks: StoreOrderBooksExchange,
   orderBooksByBase: StoreOrderBooksBase,
   orderBooksHistory: StoreOrderBooksHistoryExchange,
+  // orderBooksHistoryByBase:
 }
