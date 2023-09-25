@@ -40,20 +40,15 @@ const app = new Elysia()
   // .get('/orderbook', (context) => store.orderbooks?.[`${context?.query?.exchange as string}--${context?.query?.base as string}--${context?.query?.quote as string}`])
   // .get('/orderbooks', (context) => store.orderBooksByBase)
   .get('/instruments', () => {
-    return store.instruments
+    return store.instruments;
   })
   .get('/exchanges', () => {
-    // return store.exchanges
-    return ['OKEX']
+    return store.exchanges;
   })
   .get("/orderbook", ({ query: { exchange, base, quote } }) => {
     log("orderbook", exchange, base, quote);
     if (exchange && base && quote) {
-      return (
-        store.orderBooksByBase?.[base as string]?.[quote as string]?.[
-          exchange as string
-        ] || []
-      );
+      return store.orderBooksByBase?.[base as string]?.[quote as string]?.[exchange as string] || [];
     } else if (base && quote) {
       return store.orderBooksByBase?.[base as string]?.[quote as string] || {};
     } else if (base) {
@@ -65,14 +60,13 @@ const app = new Elysia()
   .get("/orderbook-history", ({ query: { exchange, base, quote } }) => {
     log("orderbook-history", exchange, base, quote);
     if (exchange && base && quote) {
-      return store.orderBooksHistoryByBase?.[`${base}/${quote}/${exchange}`] || [];
+      return store.orderBooksHistoryByBase?.[base as string]?.[quote as string]?.[exchange as string] || [];
     } else if (base && quote) {
-      const histories = {};
-      for (const exchange in store.orderBooksHistoryByBase) {
-        histories[exchange] =
-          store.orderBooksHistoryByBase?.[`${base}/${quote}/${exchange}`] || [];
-      }
-      return histories;
+      return store.orderBooksHistoryByBase?.[base as string]?.[quote as string] || {};
+    } else if (base) {
+      return store.orderBooksHistoryByBase?.[base as string] || {};
+    } else {
+      return store.orderBooksHistoryByBase || [];
     }
   })
   .get("/assets", (context) => store.assets)

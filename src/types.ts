@@ -44,15 +44,20 @@ export interface StoreOrderBooksQuote {
 export interface StoreOrderBooksExchange {
   [key: string]: OrderBook,
 }
+
+
+export interface StoreOrderBooksHistoryBase {
+  [key: string]: StoreOrderBooksHistoryQuote,
+}
+export interface StoreOrderBooksHistoryQuote {
+  [key: string]: StoreOrderBooksHistoryExchange,
+}
 export interface StoreOrderBooksHistoryExchange {
   [key: string]: OrderBook[],
 }
 
-export interface StoreOrderBooksHistoryBase {
-  [key: string]: StoreOrderBooksHistoryExchange,
-}
-
 export interface Store {
+  exchanges: Exchange[],
   assets: Asset[],
   instruments: Instrument[],
   orderBooks: StoreOrderBooksExchange,

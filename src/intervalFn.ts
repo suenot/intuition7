@@ -1,4 +1,5 @@
 import _ from "lodash";
+import ccxt from "ccxt";
 import { getExchangeInfo } from "./getExchangeInfo";
 import { getExchangeInstruments } from "./getExchangeInstruments";
 import { getExchangeAssets } from "./getExchangeAssets";
@@ -6,6 +7,7 @@ import { getExchangeOrderbook } from "./getExchangeOrderbook";
 import { store } from "./store";
 import { toShift } from "./toShift/toShift";
 import { insertExchange, insertInstrument } from "./nedb";
+import { getExchanges } from "./getExchanges";
 import debug from "debug";
 const log = debug("intervalFn");
 
@@ -13,12 +15,14 @@ export const intervalFn = async () => {
   log("interval");
 
   // TODO: получить список exchanges
+  // const exchanges = ccxt.exchanges;
   const exchanges = await getExchanges();
   log("Список бирж:", exchanges);
   // TODO: записать их в nedb
-  // exchanges.forEach((exchange) => {
-  //   insertExchange(exchange);
-  // });
+  store.exchanges = exchanges;
+  exchanges.forEach((exchange) => {
+    insertExchange(exchange);
+  });
 
   const exchangeId = "okex"; // Замените на ID биржи, которую хотите исследовать
   const exchangeInfo = await getExchangeInfo(exchangeId);
