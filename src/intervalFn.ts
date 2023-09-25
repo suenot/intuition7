@@ -49,6 +49,7 @@ export const intervalFn = async () => {
     store.orderBooks[instrumentId];
   if (!store.orderBooksHistory[instrumentId])
     store.orderBooksHistory[instrumentId] = [];
+  store.orderBooksHistory[instrumentId].push(_.cloneDeep(orderbook));
   if (!store.orderBooksHistoryByBase[base]) store.orderBooksHistoryByBase[base] = {};
   if (!store.orderBooksHistoryByBase[base][quote])
     store.orderBooksHistoryByBase[base][quote] = {};
