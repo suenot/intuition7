@@ -39,6 +39,13 @@ const app = new Elysia()
   .get("/ping", () => "pong")
   // .get('/orderbook', (context) => store.orderbooks?.[`${context?.query?.exchange as string}--${context?.query?.base as string}--${context?.query?.quote as string}`])
   // .get('/orderbooks', (context) => store.orderBooksByBase)
+  .get('/instruments', () => {
+    return store.instruments
+  })
+  .get('/exchanges', () => {
+    // return store.exchanges
+    return ['OKEX']
+  })
   .get("/orderbook", ({ query: { exchange, base, quote } }) => {
     log("orderbook", exchange, base, quote);
     if (exchange && base && quote) {
@@ -58,11 +65,16 @@ const app = new Elysia()
   .get("/orderbook-history", ({ query: { exchange, base, quote } }) => {
     log("orderbook-history", exchange, base, quote);
     if (exchange && base && quote) {
-      return store.orderBooksHistory?.[`${base}/${quote}/${exchange}`] || [];
+      return store.orderBooksHistoryByBase?.[`${base}/${quote}/${exchange}`] || [];
     } else if (base && quote) {
-      return []; // TODO: Retrieve multiple histories with a single query, similar to /orderbook
+      const histories = {};
+      for (const exchange in store.orderBooksHistoryByBase) {
+        histories[exchange] =
+          store.orderBooksHistoryByBase?.[`${base}/${quote}/${exchange}`] || [];
+      }
+      return histories;
     }
   })
   .get("/assets", (context) => store.assets)
   .get("/instruments", (context) => store.instruments)
-  .listen(8080);
+  .listen(7771);

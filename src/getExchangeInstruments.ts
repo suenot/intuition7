@@ -5,12 +5,12 @@ import {
 
 // Пример использования ccxt для получения списка доступных пар (инструментов) на бирже
 export async function getExchangeInstruments(exchangeId: string): Promise<Instrument[]> {
-  console.log('getExchangeInstruments');
+  // console.log('getExchangeInstruments');
   try {
     // const ccxt = await import('https://cdn.jsdelivr.net/npm/ccxt@latest/src');
     const exchange = new (ccxt as any)[exchangeId]();
     const markets = await exchange.loadMarkets();
-    console.log('getExchangeInstruments try before return');
+    // console.log('getExchangeInstruments try before return');
     return Object.values(markets).map((market: any) => ({
       symbol: market.symbol,
       baseAsset: market.base,
