@@ -55,6 +55,6 @@ export const intervalFn = async () => {
     store.orderBooksHistoryByBase[base][quote] = {};
   if (!store.orderBooksHistoryByBase[base][quote][exchangeId])
     store.orderBooksHistoryByBase[base][quote][exchangeId] = [];
-  store.orderBooksHistoryByBase[base][quote][exchangeId].push(_.cloneDeep(orderbook));
+  store.orderBooksHistoryByBase[base][quote][exchangeId] = store.orderBooksHistory[instrumentId];
   toShift(store.orderBooksHistory[instrumentId], [orderbook], 100);
 };
