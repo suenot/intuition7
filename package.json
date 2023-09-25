@@ -3,7 +3,8 @@
   "version": "1.0.50",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "DEBUG=* bun run --watch src/index.ts"
+    "dev": "bun run --watch src/index.ts",
+    "dev:debug": "DEBUG=* bun run --watch src/index.ts"
   },
   "dependencies": {
     "@elysiajs/graphql-yoga": "^0.6.3",
