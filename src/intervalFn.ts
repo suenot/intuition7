@@ -12,8 +12,10 @@ const log = debug("intervalFn");
 export const intervalFn = async () => {
   log("interval");
 
-  // TODO: получить список бирж
-  // записать их в nedb
+  // TODO: получить список exchanges
+  const exchanges = await getExchanges();
+  log("Список бирж:", exchanges);
+  // TODO: записать их в nedb
   // exchanges.forEach((exchange) => {
   //   insertExchange(exchange);
   // });

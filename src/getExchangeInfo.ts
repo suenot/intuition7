@@ -13,6 +13,7 @@ export async function getExchangeInfo(exchangeId: string): Promise<Exchange | nu
       name: exchange.name,
       url: exchange.urls.www,
       version: exchange.version,
+      active: false,
     };
   } catch (error) {
     console.error(`Ошибка при получении информации о бирже ${exchangeId}:`, error);

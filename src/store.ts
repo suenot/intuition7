@@ -8,7 +8,7 @@ export const store: Store = {
   orderBooks: {},
   orderBooksByBase: {},
   orderBooksHistory: {},
-  orderBooksHistoryByBase: {},
+  // orderBooksHistoryByBase: {},
   // trades: [],
   // candles: [],
 }

@@ -4,6 +4,7 @@ export interface Exchange {
   name: string;
   url: string;
   version?: string;
+  active?: boolean;
 }
 
 // Интерфейс для представления пары (инструмента)
