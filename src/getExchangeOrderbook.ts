@@ -6,7 +6,7 @@ import {
 
 export const getExchangeOrderbook = async (exchangeId: string, symbol: string): Promise<OrderBook> => {
   try {
-    console.log('getExchangeOrderbook', {exchangeId, symbol});
+    // console.log('getExchangeOrderbook', {exchangeId, symbol});
     const exchange = new (ccxt as any)[exchangeId]();
     const orderBook: CcxtOrderBook = await exchange.fetchOrderBook(symbol);
 
@@ -35,7 +35,7 @@ export const getExchangeOrderbook = async (exchangeId: string, symbol: string): 
       data: [...bids, ...asks],
     };
 
-    console.log(orderBookFormatted);
+    // console.log(orderBookFormatted);
     return orderBookFormatted;
   } catch (error) {
     console.error(`Ошибка при получении стакана на бирже ${exchangeId}:`, error);
