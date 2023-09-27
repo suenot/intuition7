@@ -1,6 +1,7 @@
 import debug from "debug";
 import { Elysia } from "elysia";
 // import { yoga } from '@elysiajs/graphql-yoga';
+import { cors } from '@elysiajs/cors'
 import { store } from "./store";
 import { intervalFn } from "./intervalFn";
 
@@ -14,6 +15,7 @@ const log = debug("index");
 })();
 
 const app = new Elysia()
+  .use(cors())
   // .use(
   //     yoga({
   //         typeDefs: /* GraphQL */`
@@ -39,12 +41,7 @@ const app = new Elysia()
   .get("/ping", () => "pong")
   // .get('/orderbook', (context) => store.orderbooks?.[`${context?.query?.exchange as string}--${context?.query?.base as string}--${context?.query?.quote as string}`])
   // .get('/orderbooks', (context) => store.orderBooksByBase)
-  .get('/instruments', () => {
-    return store.instruments;
-  })
-  .get('/exchanges', () => {
-    return store.exchanges;
-  })
+  
   .get("/orderbook", ({ query: { exchange, base, quote } }) => {
     log("orderbook", exchange, base, quote);
     if (exchange && base && quote) {
@@ -69,6 +66,7 @@ const app = new Elysia()
       return store.orderBooksHistoryByBase || [];
     }
   })
+  .get('/exchanges', (context) => store.exchanges )
   .get("/assets", (context) => store.assets)
   .get("/instruments", (context) => store.instruments)
   .listen(7771);
