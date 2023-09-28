@@ -1,6 +1,5 @@
 import debug from "debug";
 import { Elysia } from "elysia";
-// import { yoga } from '@elysiajs/graphql-yoga';
 import { store } from "./store";
 import { intervalFn } from "./intervalFn";
 
@@ -14,34 +13,7 @@ const log = debug("index");
 })();
 
 const app = new Elysia()
-  // .use(
-  //     yoga({
-  //         typeDefs: /* GraphQL */`
-  //             type Orderbook {
-  //               price: Float!
-  //               amount: Float!
-  //               type: String!
-  //               total: Float!
-  //             },
-  //             type Query {
-  //                 hi: String,
-  //                 orderbook: [Orderbook]
-  //             },
-  //         `,
-  //         resolvers: {
-  //             Query: {
-  //                 hi: () => 'Hello from Elysia',
-  //                 orderbook: () => orderbooks,
-  //             }
-  //         }
-  //     })
-  // )
   .get("/ping", () => "pong")
-  // .get('/orderbook', (context) => store.orderbooks?.[`${context?.query?.exchange as string}--${context?.query?.base as string}--${context?.query?.quote as string}`])
-  // .get('/orderbooks', (context) => store.orderBooksByBase)
-  .get('/instruments', () => {
-    return store.instruments;
-  })
   .get('/exchanges', () => {
     return store.exchanges;
   })
@@ -71,4 +43,12 @@ const app = new Elysia()
   })
   .get("/assets", (context) => store.assets)
   .get("/instruments", (context) => store.instruments)
-  .listen(7771);
+  .get("/pairs", (context) => store.pairs)
+  .get("/trades", (context) => store.trades)
+  .get("/candles", (context) => store.candles)
+  .get("/users", (context) => store.users)
+  .get("/strategies", (context) => store.strategies)
+  .get("/signals", (context) => store.signals)
+  .get("/bots", (context) => store.bots)
+  .get("/store", (context) => store)
+  .listen(8101);

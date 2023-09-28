@@ -3,12 +3,20 @@ import {
 } from "./types";
 
 export const store: Store = {
-  assets: [],
-  instruments: [],
+  modules: {},
+  exchanges: {},
+  assets: {},
+  pairs: {},
+  instruments: {},
+  users: {},
+  strategies: {},
+  signals: {},
+  bots: {},
   orderBooks: {},
   orderBooksByBase: {},
   orderBooksHistory: {},
   orderBooksHistoryByBase: {},
-  // trades: [],
-  // candles: [],
+  trades: [],
+  candles: [],
+  exchangesInstances: {},
 }

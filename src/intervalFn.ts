@@ -1,66 +1,57 @@
 import _ from "lodash";
 import ccxt from "ccxt";
-import { getExchangeInfo } from "./getExchangeInfo";
-import { getExchangeInstruments } from "./getExchangeInstruments";
-import { getExchangeAssets } from "./getExchangeAssets";
 import { getExchangeOrderbook } from "./getExchangeOrderbook";
 import { store } from "./store";
 import { toShift } from "./toShift/toShift";
 import { insertExchange, insertInstrument } from "./nedb";
 import { getExchanges } from "./getExchanges";
 import debug from "debug";
+import { getMarketData } from "./getMarketData";
 const log = debug("intervalFn");
 
 export const intervalFn = async () => {
   log("interval");
 
-  // TODO: получить список exchanges
-  // const exchanges = ccxt.exchanges;
-  const exchanges = await getExchanges();
-  log("Список бирж:", exchanges);
-  // TODO: записать их в nedb
-  store.exchanges = exchanges;
-  exchanges.forEach((exchange) => {
-    insertExchange(exchange);
-  });
-
-  const exchangeId = "okex"; // Замените на ID биржи, которую хотите исследовать
-  const exchangeInfo = await getExchangeInfo(exchangeId);
-  log("Информация о бирже:", exchangeInfo);
-
-  log("before getExchangeInstruments");
-  const instruments = await getExchangeInstruments(exchangeId);
-  log("after getExchangeInstruments");
-  log({ instruments });
-  log("Доступные пары (инструменты) на бирже:", instruments);
-  store.instruments = instruments;
-  instruments.forEach((instrument) => {
-    insertInstrument(instrument);
-  });
-
-  const assets = await getExchangeAssets(exchangeId);
-  log("Доступные активы (монеты) на бирже:", assets);
+  const { assets, pairs, instruments, exchanges, exchangesInstances } = await getMarketData(); // TODO:
   store.assets = assets;
+  store.pairs = pairs;
+  store.instruments = instruments;
+  store.exchanges = exchanges;
+  store.exchangesInstances = exchangesInstances;
 
-  const base = "BTC";
-  const quote = "USDT";
-  const pairId = `${base}/${quote}`; // Замените на ID пары, которую хотите исследовать
-  const instrumentId = `${base}/${quote}/${exchangeId}`; // Замените на ID инструмента, который хотите исследовать
-  const orderbook = await getExchangeOrderbook(exchangeId, pairId);
-  store.orderBooks[instrumentId] = orderbook;
-  if (!store.orderBooksByBase[base]) store.orderBooksByBase[base] = {};
-  if (!store.orderBooksByBase[base][quote])
-    store.orderBooksByBase[base][quote] = {};
-  store.orderBooksByBase[base][quote][exchangeId] =
-    store.orderBooks[instrumentId];
-  if (!store.orderBooksHistory[instrumentId])
-    store.orderBooksHistory[instrumentId] = [];
-  store.orderBooksHistory[instrumentId].push(_.cloneDeep(orderbook));
-  if (!store.orderBooksHistoryByBase[base]) store.orderBooksHistoryByBase[base] = {};
-  if (!store.orderBooksHistoryByBase[base][quote])
-    store.orderBooksHistoryByBase[base][quote] = {};
-  if (!store.orderBooksHistoryByBase[base][quote][exchangeId])
-    store.orderBooksHistoryByBase[base][quote][exchangeId] = [];
-  store.orderBooksHistoryByBase[base][quote][exchangeId] = store.orderBooksHistory[instrumentId];
-  toShift(store.orderBooksHistory[instrumentId], [orderbook], 100);
+  // TODO: временный конфиг для теста
+  store.exchanges['binance'].active = true;
+  store.exchanges['okex'].active = true;
+  // store.instruments['BTC/USDT/binance'].active = true;
+  // store.instruments['BTC/USDT/okex'].active = true;
+  
+  for (const instrument of Object.values(instruments)) {
+    // if (!instrument.active) continue;
+    // if (instrument.exchangeId !== 'binance') continue;
+    const base = instrument.baseAssetId;
+    const quote = instrument.quoteAssetId;
+    const pairId = `${base}/${quote}`;
+    const instrumentId = instrument.id;
+    const exchangeId = instrument.exchangeId;
+
+
+    const orderbook = await getExchangeOrderbook(exchangeId, pairId); // TODO: пробрасывать экземпляр биржи и exchangeInstance?
+    store.orderBooks[instrumentId] = orderbook;
+    if (!store.orderBooksByBase[base]) store.orderBooksByBase[base] = {};
+    if (!store.orderBooksByBase[base][quote])
+      store.orderBooksByBase[base][quote] = {};
+    store.orderBooksByBase[base][quote][exchangeId] =
+      store.orderBooks[instrumentId];
+    if (!store.orderBooksHistory[instrumentId])
+      store.orderBooksHistory[instrumentId] = [];
+    store.orderBooksHistory[instrumentId].push(_.cloneDeep(orderbook));
+    if (!store.orderBooksHistoryByBase[base]) store.orderBooksHistoryByBase[base] = {};
+    if (!store.orderBooksHistoryByBase[base][quote])
+      store.orderBooksHistoryByBase[base][quote] = {};
+    if (!store.orderBooksHistoryByBase[base][quote][exchangeId])
+      store.orderBooksHistoryByBase[base][quote][exchangeId] = [];
+    store.orderBooksHistoryByBase[base][quote][exchangeId] = store.orderBooksHistory[instrumentId];
+    toShift(store.orderBooksHistory[instrumentId], [orderbook], 100);
+  }
+
 };
