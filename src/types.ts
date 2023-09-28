@@ -21,13 +21,13 @@ export interface Exchange {
 // Интерфейс для представления инструмента (торговой пары на конкретной бирже)
 export interface Instrument {
   id: string;
-  baseAsset: Asset // string; // Базовый актив (монета)
-  baseAssetId: string;
-  quoteAsset: Asset // string; // Котируемый актив (монета)
-  quoteAssetId: string;
-  pair: Pair;
+  // base?: Asset // string; // Базовый актив (монета)
+  baseId: string;
+  // quote?: Asset // string; // Котируемый актив (монета)
+  quoteId: string;
+  // pair?: Pair;
   pairId: string;
-  exchange: Exchange;
+  // exchange?: Exchange;
   exchangeId: string;
   active?: boolean;
   timestampFounded?: number;
@@ -37,16 +37,16 @@ export interface Instrument {
 
 // Торговая пара это просто набор двух ассетов, который может встречать на разных биржах
 export interface Pair {
-  baseAsset: Asset // string; // Базовый актив (монета)
-  baseAssetId: string;
-  quoteAsset: Asset // string; // Котируемый актив (монета)
-  quoteAssetId: string;
+  // baseAsset?: Asset // string; // Базовый актив (монета)
+  baseId: string;
+  // quoteAsset?: Asset // string; // Котируемый актив (монета)
+  quoteId: string;
 }
 
 // Интерфейс для представления актива (монеты)
 export interface Asset {
   id: string;
-  symbol: string;
+  // symbol: string;
   name: string;
 }
 
@@ -56,9 +56,9 @@ export interface Order {
   type: String,
   total: Number,
   timestampFounded?: Number,
-  user?: User,
+  // user?: User,
   userId?: String,
-  strategy?: Strategy,
+  // strategy?: Strategy,
   strategyId?: String,
 }
 
@@ -104,9 +104,9 @@ export interface User {
 export interface Strategy {
   id: String,
   name: String,
-  signal: Signal,
+  // signal?: Signal,
   signalId: String,
-  bot: Bot,
+  // bot?: Bot,
   botId: String,
 }
 

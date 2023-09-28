@@ -50,5 +50,4 @@ const app = new Elysia()
   .get("/strategies", (context) => store.strategies)
   .get("/signals", (context) => store.signals)
   .get("/bots", (context) => store.bots)
-  .get("/store", (context) => store)
   .listen(8101);

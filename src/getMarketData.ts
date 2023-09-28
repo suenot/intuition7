@@ -1,4 +1,5 @@
 import ccxt from "ccxt";
+import _ from "lodash";
 import {
   Instrument,
   Asset,
@@ -8,6 +9,7 @@ import {
 } from "./types";
 import { Market as CcxtMarket } from "ccxt";
 import { getExchanges } from "./getExchanges";
+import { ccxtExchanges } from "./exchangesData";
 import debug from "debug";
 const log = debug("getMarketData");
 
@@ -34,52 +36,52 @@ export async function getMarketData(): Promise<{
         // log({exchangeInstance});
         exchangesInstances[exchangeId] = exchangeInstance;
         // log({exchangesInstancesHasLoadMarkets: exchangeInstance.has.loadMarkets});
-        if (exchangeId === 'binance') {
+        if ( _.includes(ccxtExchanges, exchangeId) ) {
+        // if (exchangeId === 'binance') {
           log({exchangesInstancesHasLoadMarkets: exchangeInstance.has.fetchMarkets});
-          const markets: CcxtMarket = await exchangeInstance.fetchMarkets(); // loadMarkets()fetchMarkets
+          const markets: CcxtMarket = await exchangeInstance.loadMarkets(); // loadMarkets()fetchMarkets
+          log({markets});
     
           for (const market of Object.values(markets)) {
-            const { baseAsset, quoteAsset } = market;
-            const pairId = `${market.base}/${market.quote}`;
-            const instrumentId = `${baseAsset}/${quoteAsset}/${exchangeId}`;
+            const { baseId, quoteId } = market;
+            const pairId = `${baseId}/${quoteId}`;
+            const instrumentId = `${baseId}/${quoteId}/${exchangeId}`;
             log({instrumentId});
       
-            if (!assets[market.base]) {
-              assets[market.base] = {
-                id: market.baseId,
-                symbol: market.base,
-                name: market.base,
+            if (!assets[baseId]) {
+              assets[baseId] = {
+                id: baseId,
+                name: baseId,
               };
             }
 
-            if (!assets[market.quote]) {
-              assets[market.quote] = {
-                id: market.quoteId,
-                symbol: market.quote,
-                name: market.quote,
+            if (!assets[quoteId]) {
+              assets[quoteId] = {
+                id: quoteId,
+                name: quoteId,
               };
             }
 
             if (!pairs[pairId]) {
               pairs[pairId] = {
-                baseAsset,
-                baseAssetId: market.baseId,
-                quoteAsset,
-                quoteAssetId: market.quoteId,
+                // baseAsset,
+                baseId: baseId,
+                // quoteAsset,
+                quoteId: quoteId,
               };
             }
 
             if (!instruments[instrumentId]) {
               instruments[instrumentId] = {
                 id: instrumentId,
-                exchange,
+                // exchange,
                 exchangeId,
-                exchangeInstance: exchangesInstances[exchangeId],
-                baseAsset: assets[market.base],
-                baseAssetId: market.baseId,
-                quoteAsset: assets[market.quote],
-                quoteAssetId: market.quoteId,
-                pair: pairs[pairId],
+                // exchangeInstance: exchangesInstances[exchangeId],
+                // baseAsset: assets[baseId],
+                baseId: baseId,
+                // quoteAsset: assets[quoteId],
+                quoteId: quoteId,
+                // pair: pairs[pairId],
                 pairId: pairId,
               };
             }
