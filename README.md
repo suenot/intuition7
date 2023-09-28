@@ -9,7 +9,7 @@ bun run dev
 Open http://localhost:8080/ with your browser to see the result.
 
 ## Получение ордербука
-http://localhost:7771/orderbook?base=BTC&quote=USDT&exchange=okex
+http://localhost:7771/orderbook?base=ETH&quote=LTC&exchange=okex
 
 ## Получение истории ордербука
-http://localhost:7771/orderbook-history?base=BTC&quote=USDT&exchange=okex
+http://localhost:7771/orderbook-history?base=ETH&quote=LTC&exchange=okex

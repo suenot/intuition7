@@ -31,59 +31,61 @@ export async function getMarketData(): Promise<{
     for (const exchange of Object.values(exchanges)) {
       try {
         const exchangeId = exchange.id;
-        log({exchangeId});
+        // log({exchangeId});
         const exchangeInstance = new (ccxt as any)[exchangeId]();
         // log({exchangeInstance});
         exchangesInstances[exchangeId] = exchangeInstance;
         // log({exchangesInstancesHasLoadMarkets: exchangeInstance.has.loadMarkets});
-        if ( _.includes(ccxtExchanges, exchangeId) ) {
-        // if (exchangeId === 'binance') {
+        if ( _.includes(ccxtExchanges, exchangeId) ) { // TODO: вынести в другую функцию либо for continue. Временное решение
           log({exchangesInstancesHasLoadMarkets: exchangeInstance.has.fetchMarkets});
           const markets: CcxtMarket = await exchangeInstance.loadMarkets(); // loadMarkets()fetchMarkets
           log({markets});
     
           for (const market of Object.values(markets)) {
+            
             const { baseId, quoteId } = market;
-            const pairId = `${baseId}/${quoteId}`;
-            const instrumentId = `${baseId}/${quoteId}/${exchangeId}`;
-            log({instrumentId});
-      
-            if (!assets[baseId]) {
-              assets[baseId] = {
-                id: baseId,
-                name: baseId,
-              };
-            }
+            if ( _.includes(['ETH', 'LTC'], baseId) ) { 
+              const pairId = `${baseId}/${quoteId}`;
+              const instrumentId = `${baseId}/${quoteId}/${exchangeId}`;
+              log({instrumentId});
+        
+              if (!assets[baseId]) {
+                assets[baseId] = {
+                  id: baseId,
+                  name: baseId,
+                };
+              }
 
-            if (!assets[quoteId]) {
-              assets[quoteId] = {
-                id: quoteId,
-                name: quoteId,
-              };
-            }
+              if (!assets[quoteId]) {
+                assets[quoteId] = {
+                  id: quoteId,
+                  name: quoteId,
+                };
+              }
 
-            if (!pairs[pairId]) {
-              pairs[pairId] = {
-                // baseAsset,
-                baseId: baseId,
-                // quoteAsset,
-                quoteId: quoteId,
-              };
-            }
+              if (!pairs[pairId]) {
+                pairs[pairId] = {
+                  // baseAsset,
+                  baseId: baseId,
+                  // quoteAsset,
+                  quoteId: quoteId,
+                };
+              }
 
-            if (!instruments[instrumentId]) {
-              instruments[instrumentId] = {
-                id: instrumentId,
-                // exchange,
-                exchangeId,
-                // exchangeInstance: exchangesInstances[exchangeId],
-                // baseAsset: assets[baseId],
-                baseId: baseId,
-                // quoteAsset: assets[quoteId],
-                quoteId: quoteId,
-                // pair: pairs[pairId],
-                pairId: pairId,
-              };
+              if (!instruments[instrumentId]) {
+                instruments[instrumentId] = {
+                  id: instrumentId,
+                  // exchange,
+                  exchangeId,
+                  // exchangeInstance: exchangesInstances[exchangeId],
+                  // baseAsset: assets[baseId],
+                  baseId: baseId,
+                  // quoteAsset: assets[quoteId],
+                  quoteId: quoteId,
+                  // pair: pairs[pairId],
+                  pairId: pairId,
+                };
+              }
             }
           }
         }
