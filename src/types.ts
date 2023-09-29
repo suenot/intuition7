@@ -29,18 +29,20 @@ export interface Instrument {
   pairId: string;
   // exchange?: Exchange;
   exchangeId: string;
-  active?: boolean;
   timestampFounded?: number;
   timestampUpdated?: number;
   exchangeInstance?: any;
+  active?: boolean;
 }
 
 // Торговая пара это просто набор двух ассетов, который может встречать на разных биржах
 export interface Pair {
+  id: string;
   // baseAsset?: Asset // string; // Базовый актив (монета)
   baseId: string;
   // quoteAsset?: Asset // string; // Котируемый актив (монета)
   quoteId: string;
+  active?: boolean;
 }
 
 // Интерфейс для представления актива (монеты)
@@ -48,6 +50,7 @@ export interface Asset {
   id: string;
   // symbol: string;
   name: string;
+  active?: boolean;
 }
 
 export interface Order {

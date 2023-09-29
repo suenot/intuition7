@@ -3,7 +3,7 @@ import ccxt from "ccxt";
 import { getExchangeOrderbook } from "./getExchangeOrderbook";
 import { store } from "./store";
 import { toShift } from "./toShift/toShift";
-import { insertExchange, insertInstrument } from "./nedb";
+import { upsertExchange, upsertInstrument } from "./db/nedb/nedb";
 import { getExchanges } from "./getExchanges";
 import debug from "debug";
 import { getMarketData } from "./getMarketData";
