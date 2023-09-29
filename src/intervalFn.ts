@@ -13,7 +13,7 @@ export const intervalFn = async () => {
   log("interval");
 
   const { assets, pairs, instruments, exchanges, exchangesInstances } = await getMarketData(); // TODO:
-  log({ assets, pairs, instruments, exchanges, exchangesInstances });
+  log({ assets, pairs, instruments, exchanges });
   store.assets = assets;
   store.pairs = pairs;
   store.instruments = instruments;
@@ -28,7 +28,7 @@ export const intervalFn = async () => {
   
   for (const instrument of Object.values(instruments)) {
     // if (!instrument.active) continue;
-    // if (instrument.exchangeId !== 'binance') continue;
+    if (instrument.exchangeId !== 'binance') continue;
     const base = instrument.baseId;
     const quote = instrument.quoteId;
     const pairId = `${base}/${quote}`;
