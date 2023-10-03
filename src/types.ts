@@ -59,9 +59,7 @@ export interface Order {
   type: String,
   total: Number,
   timestampFounded?: Number,
-  // user?: User,
   userId?: String,
-  // strategy?: Strategy,
   strategyId?: String,
 }
 

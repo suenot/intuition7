@@ -8,7 +8,7 @@ export const getExchangeOrderbook = async (exchangeId: string, symbol: string): 
   try {
     // console.log('getExchangeOrderbook', {exchangeId, symbol});
     const exchange = new (ccxt as any)[exchangeId]();
-    const orderBook: CcxtOrderBook = await exchange.fetchOrderBook(symbol);
+    const orderBook = await exchange.fetchOrderBook(symbol);
 
     // Convert CCXT order book data to the specified format
     const bids = orderBook.bids.map((bid) => {
