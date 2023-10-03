@@ -63,19 +63,25 @@ const app = new Elysia()
       return store.orderBooksHistoryByBase || [];
     }
   })
-  .get("/assets", (context) => store.assets)
-  .get("/assets/:id", ({ query: { active }, params: { id } }) => {
-    if (active === 'true' || active === 'false') {
+  .get("/assets/:id", ({ query: { active, id } }) => {
+    if (id && (active === 'true' || active === 'false')) {
       upsertAsset({ dbs: ['store', 'nedb'], asset: {...store.assets[id], active: JSON.parse(active)}});
+    } else {
+      if (id) {
+        return store.assets[id];
+      }
     }
-    return store.assets[id];
+    return store.assets;
   })
-  .get("/instruments", (context) => store.instruments)
-  .get("/instruments/:id", ({ query: { active }, params: { id } }) => {
-    if (active === 'true' || active === 'false') {
+  .get("/instruments", ({ query: { active, id } }) => {
+    if (id && (active === 'true' || active === 'false')) {
       upsertInstrument({ dbs: ['store', 'nedb'], instrument: {...store.instruments[id], active: JSON.parse(active)}});
+    } else {
+      if (id) {
+        return store.instruments[id];
+      }
     }
-    return store.instruments[id];
+    return store.instruments;
   })
   // .get("/pairs", (context) => store.pairs)
   .get("/pairs", ({ query: { active, id } }) => {
