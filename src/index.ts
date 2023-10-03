@@ -57,12 +57,36 @@ const app = new Elysia()
     }
   })
   .get("/assets", (context) => store.assets)
+  .get("/assets/:id", ({ query: { active }, params: { id } }) => {
+    if (active === 'true') store.assets[id].active = true;
+    return store.assets[id];
+  })
   .get("/instruments", (context) => store.instruments)
+  .get("/instruments/:id", ({ query: { active }, params: { id } }) => {
+    if (active === 'true') store.instruments[id].active = true;
+    return store.instruments[id];
+  })
   .get("/pairs", (context) => store.pairs)
+  .get("/pairs/:id", ({ query: { active }, params: { id } }) => {
+    if (active === 'true') store.pairs[id].active = true;
+    return store.pairs[id];
+  })
   .get("/trades", (context) => store.trades)
   .get("/candles", (context) => store.candles)
   .get("/users", (context) => store.users)
+  .get("/users/:id", ({ params: { id } }) => {
+    return store.users[id];
+  })
   .get("/strategies", (context) => store.strategies)
+  .get("/strategies/:id", ({ params: { id } }) => {
+    return store.strategies[id];
+  })
   .get("/signals", (context) => store.signals)
+  .get("/signals/:id", ({ params: { id } }) => {
+    return store.signals[id];
+  })
   .get("/bots", (context) => store.bots)
+  .get("/bots/:id", ({ params: { id } }) => {
+    return store.bots[id];
+  })
   .listen(7771);

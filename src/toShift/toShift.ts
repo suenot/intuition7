@@ -1,11 +1,11 @@
 /**
- * Функция для сдвига элементов в массиве, чтобы общее количество элементов
- * в baseArray и newArray не превышало значение max. Старые данные сохраняются.
+ * Function for shifting elements in an array to ensure that the total number of elements
+ * in baseArray and newArray does not exceed the value of max. The old data is preserved.
  *
- * @param baseArray - базовый массив, который будет изменяться.
- * @param newArray - новый массив, элементы которого будут добавлены в baseArray.
- * @param max - максимальное количество элементов, которое может содержать baseArray после добавления элементов из newArray.
- * @returns Возвращает объект, содержащий baseArray после добавления элементов из newArray и oldData, содержащий старые данные, которые были удалены из baseArray.
+ * @param baseArray - the base array to be modified.
+ * @param newArray - the new array whose elements will be added to baseArray.
+ * @param max - the maximum number of elements that baseArray can contain after adding elements from newArray.
+ * @returns Returns an object containing baseArray after adding elements from newArray and oldData, which contains the old data that was removed from baseArray.
  */
 export const toShift = (baseArray: any[], newArray: any[], max: number): { baseArray: any[], oldData: any[]} => {
   const totalLength = baseArray.length + newArray.length;
