@@ -17,7 +17,7 @@ http://localhost:7771/orderbook-history?base=ETH&quote=LTC&exchange=okex
 ## Получение информации о биржах
 http://localhost:7771/exchanges
 http://localhost:7771/exchanges/binance
-# Включить биржу
+## Включить биржу
 http://localhost:7771/exchanges/binance?active=true
 
 ## Получение информации о парах
@@ -26,6 +26,20 @@ http://localhost:7771/pairs?id=LTC/BTC
 
 ## Включить пару
 http://localhost:7771/pairs?id=LTC/BTC&active=true
+
+## Получение информации об ассетах
+http://localhost:7771/assets
+http://localhost:7771/assets?id=LTC
+
+## Включить ассет
+http://localhost:7771/pairs?id=LTC&active=true
+
+## Получение информации об инструментах
+http://localhost:7771/instruments
+http://localhost:7771/instruments?id=LTC/BTC/binance
+
+## Включить инструмент
+http://localhost:7771/instruments?id=LTC/BTC/binance&active=true
 
 # Алгоритм
 - есть функция работы парсеров, которая перезапускается, если меняется конфиг
