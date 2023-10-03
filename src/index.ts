@@ -77,12 +77,16 @@ const app = new Elysia()
     }
     return store.instruments[id];
   })
-  .get("/pairs", (context) => store.pairs)
-  .get("/pairs/:id", ({ query: { active }, params: { id } }) => {
-    if (active === 'true' || active === 'false') {
+  // .get("/pairs", (context) => store.pairs)
+  .get("/pairs", ({ query: { active, id } }) => {
+    if (id && (active === 'true' || active === 'false')) {
       upsertPair({ dbs: ['store', 'nedb'], pair: {...store.pairs[id], active: JSON.parse(active)}});
+    } else {
+      if (id) {
+        return store.pairs[id];
+      }
     }
-    return store.pairs[id];
+    return store.pairs;
   })
   .get("/trades", (context) => store.trades)
   .get("/candles", (context) => store.candles)

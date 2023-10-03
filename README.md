@@ -22,6 +22,10 @@ http://localhost:7771/exchanges/binance?active=true
 
 ## Получение информации о парах
 http://localhost:7771/pairs
+http://localhost:7771/pairs?id=LTC/BTC
+
+## Включить пару
+http://localhost:7771/pairs?id=LTC/BTC&active=true
 
 # Алгоритм
 - есть функция работы парсеров, которая перезапускается, если меняется конфиг
