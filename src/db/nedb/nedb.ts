@@ -4,7 +4,7 @@ import {Exchange, Instrument, Asset, Pair} from '../../types';
 import debug from "debug";
 const log = debug("nedb");
 
- interface NedbInstance {
+interface NedbInstance {
   exchanges: Datastore<Exchange>,
   assets: Datastore<Asset>,
   pairs: Datastore<Pair>,

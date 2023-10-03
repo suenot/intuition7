@@ -67,6 +67,10 @@ export interface Order {
 
 export interface OrderBook {
   timestamp: Number,
+  lag?: Number,
+  exchangeId?: String,
+  baseId?: String,
+  quoteId?: String,
   data: Order[],
   trades?: any[],
 }

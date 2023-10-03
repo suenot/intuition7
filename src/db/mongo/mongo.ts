@@ -1,12 +1,8 @@
+import { MongoClient } from "mongodb";
 import { Exchange, Instrument, Asset, Pair } from "../../types";
 import debug from "debug";
 const log = debug("mongo");
-
 export const mongoInstances = {};
-
-// Need upsert all keys except `active`
-import { MongoClient } from "mongodb";
-import { Exchange, Instrument, Asset, Pair } from "../../types";
 
 export class MongoDB {
   private url: string;
@@ -47,7 +43,7 @@ export class MongoDB {
     const db = this.client.db(this.dbName);
     const collection = db.collection("exchanges");
     await collection.updateOne(
-      { _id: exchange._id },
+      { id: exchange.id },
       { $set: exchange },
       { upsert: true },
     );
@@ -57,7 +53,7 @@ export class MongoDB {
     const db = this.client.db(this.dbName);
     const collection = db.collection("assets");
     await collection.updateOne(
-      { _id: asset._id },
+      { id: asset.id },
       { $set: asset },
       { upsert: true },
     );
@@ -67,7 +63,7 @@ export class MongoDB {
     const db = this.client.db(this.dbName);
     const collection = db.collection("pairs");
     await collection.updateOne(
-      { _id: pair._id },
+      { id: pair.id },
       { $set: pair },
       { upsert: true },
     );
@@ -77,7 +73,7 @@ export class MongoDB {
     const db = this.client.db(this.dbName);
     const collection = db.collection("instruments");
     await collection.updateOne(
-      { _id: instrument._id },
+      { id: instrument.id },
       { $set: instrument },
       { upsert: true },
     );
