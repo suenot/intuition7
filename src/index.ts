@@ -1,9 +1,10 @@
 import debug from "debug";
 import { Elysia } from "elysia";
 import { cors } from '@elysiajs/cors'
-import { store } from "./store";
+import { store } from "./db/store/store";
 import { intervalFn } from "./intervalFn";
 import ccxt from "ccxt";
+import { upsertAsset, upsertExchange, upsertInstrument, upsertPair } from "./db/db";
 
 const log = debug("index");
 
@@ -32,6 +33,12 @@ const app = new Elysia()
   .get('/exchanges', () => {
     return store.exchanges;
   })
+  .get('/exchanges/:id', ({ query: { active }, params: { id } }) => {
+    if (active === 'true' || active === 'false') {
+      upsertExchange({ dbs: ['store', 'nedb'], exchange: {...store.exchanges[id], active: JSON.parse(active)}});
+    }
+    return store.exchanges[id];
+  })
   .get("/orderbook", ({ query: { exchange, base, quote } }) => {
     log("orderbook", exchange, base, quote);
     if (exchange && base && quote) {
@@ -58,17 +65,23 @@ const app = new Elysia()
   })
   .get("/assets", (context) => store.assets)
   .get("/assets/:id", ({ query: { active }, params: { id } }) => {
-    if (active === 'true') store.assets[id].active = true;
+    if (active === 'true' || active === 'false') {
+      upsertAsset({ dbs: ['store', 'nedb'], asset: {...store.assets[id], active: JSON.parse(active)}});
+    }
     return store.assets[id];
   })
   .get("/instruments", (context) => store.instruments)
   .get("/instruments/:id", ({ query: { active }, params: { id } }) => {
-    if (active === 'true') store.instruments[id].active = true;
+    if (active === 'true' || active === 'false') {
+      upsertInstrument({ dbs: ['store', 'nedb'], instrument: {...store.instruments[id], active: JSON.parse(active)}});
+    }
     return store.instruments[id];
   })
   .get("/pairs", (context) => store.pairs)
   .get("/pairs/:id", ({ query: { active }, params: { id } }) => {
-    if (active === 'true') store.pairs[id].active = true;
+    if (active === 'true' || active === 'false') {
+      upsertPair({ dbs: ['store', 'nedb'], pair: {...store.pairs[id], active: JSON.parse(active)}});
+    }
     return store.pairs[id];
   })
   .get("/trades", (context) => store.trades)
