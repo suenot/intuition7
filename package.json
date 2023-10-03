@@ -13,6 +13,7 @@
     "debug": "^4.3.4",
     "elysia": "latest",
     "lodash": "^4.17.21",
+    "mongodb": "^6.1.0",
     "nedb": "^1.8.0"
   },
   "devDependencies": {

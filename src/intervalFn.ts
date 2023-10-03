@@ -1,9 +1,9 @@
 import _ from "lodash";
 import ccxt from "ccxt";
 import { getExchangeOrderbook } from "./getExchangeOrderbook";
-import { store } from "./store";
+import { store } from "./db/store/store";
 import { toShift } from "./toShift/toShift";
-import { upsertExchange, upsertInstrument } from "./db/nedb/nedb";
+import { upsertExchange, upsertInstrument, upsertAsset, upsertPair } from "./db/db";
 import { getExchanges } from "./getExchanges";
 import debug from "debug";
 import { getMarketData } from "./getMarketData";
@@ -14,11 +14,20 @@ export const intervalFn = async () => {
 
   const { assets, pairs, instruments, exchanges, exchangesInstances } = await getMarketData(); // TODO:
   log({ assets, pairs, instruments, exchanges });
-  store.assets = assets;
-  store.pairs = pairs;
-  store.instruments = instruments;
-  store.exchanges = exchanges;
-  store.exchangesInstances = exchangesInstances;
+
+  for (const exchange of Object.values(exchanges)) {
+    upsertExchange({ dbs: ['store', 'nedb'], exchange });
+  }
+  for (const asset of Object.values(assets)) {
+    upsertAsset({ dbs: ['store', 'nedb'], asset });
+  }
+  for (const pair of Object.values(pairs)) {
+    upsertPair({ dbs: ['store', 'nedb'], pair } );
+  }
+  for (const instrument of Object.values(instruments)) {
+    upsertInstrument({ dbs: ['store', 'nedb'], instrument });
+  }
+
 
   // TODO: временный конфиг для теста
   store.exchanges['binance'].active = true;
@@ -28,6 +37,7 @@ export const intervalFn = async () => {
   
   for (const instrument of Object.values(instruments)) {
     // if (!instrument.active) continue;
+
     if (instrument.exchangeId !== 'binance') continue;
     const base = instrument.baseId;
     const quote = instrument.quoteId;

@@ -38,7 +38,7 @@ export async function getMarketData(): Promise<{
         // log({exchangesInstancesHasLoadMarkets: exchangeInstance.has.loadMarkets});
         if ( _.includes(ccxtExchanges, exchangeId) ) { // TODO: вынести в другую функцию либо for continue. Временное решение
           log({exchangesInstancesHasLoadMarkets: exchangeInstance.has.fetchMarkets});
-          const markets: CcxtMarket = await exchangeInstance.loadMarkets(); // loadMarkets()fetchMarkets
+          const markets: CcxtMarket[] = await exchangeInstance.loadMarkets(); // loadMarkets()fetchMarkets
           log({markets});
     
           for (const market of Object.values(markets)) {
@@ -65,9 +65,8 @@ export async function getMarketData(): Promise<{
 
               if (!pairs[pairId]) {
                 pairs[pairId] = {
-                  // baseAsset,
+                  id: pairId,
                   baseId: baseId,
-                  // quoteAsset,
                   quoteId: quoteId,
                 };
               }
