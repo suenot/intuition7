@@ -1,38 +1,58 @@
-import { getExchangeInfo } from './getExchangeInfo';
-import { getExchangeInstruments } from './getExchangeInstruments';
-import { getExchangeAssets } from './getExchangeAssets';
-import { getExchangeOrderbook } from './getExchangeOrderbook';
-import { store } from './store';
-import _ from 'lodash';
-import { toShift } from './toShift/toShift';
+import _ from "lodash";
+import ccxt from "ccxt";
+import { getExchangeOrderbook } from "./getExchangeOrderbook";
+import { store } from "./store";
+import { toShift } from "./toShift/toShift";
+import { upsertExchange, upsertInstrument } from "./db/nedb/nedb";
+import { getExchanges } from "./getExchanges";
+import debug from "debug";
+import { getMarketData } from "./getMarketData";
+const log = debug("intervalFn");
 
 export const intervalFn = async () => {
-  console.log('interval');
-  const exchangeId = 'okex'; // Замените на ID биржи, которую хотите исследовать
-  const exchangeInfo = await getExchangeInfo(exchangeId);
-  console.log('Информация о бирже:', exchangeInfo);
+  log("interval");
 
-  console.log('before getExchangeInstruments');
-  const instruments = await getExchangeInstruments(exchangeId);
-  console.log('after getExchangeInstruments');
-  console.log({instruments});
-  console.log('Доступные пары (инструменты) на бирже:', instruments);
-  store.instruments = instruments;
-
-  const assets = await getExchangeAssets(exchangeId);
-  console.log('Доступные активы (монеты) на бирже:', assets);
+  const { assets, pairs, instruments, exchanges, exchangesInstances } = await getMarketData(); // TODO:
+  log({ assets, pairs, instruments, exchanges });
   store.assets = assets;
+  store.pairs = pairs;
+  store.instruments = instruments;
+  store.exchanges = exchanges;
+  store.exchangesInstances = exchangesInstances;
 
-  const base = 'BTC';
-  const quote = 'USDT';
-  const pairId = `${base}/${quote}`; // Замените на ID пары, которую хотите исследовать
-  const instrumentId = `${base}/${quote}/${exchangeId}`; // Замените на ID инструмента, который хотите исследовать
-  const orderbook = await getExchangeOrderbook(exchangeId, pairId);
-  store.orderBooks[instrumentId] = orderbook;
-  if (!store.orderBooksByBase[base]) store.orderBooksByBase[base] = {};
-  if (!store.orderBooksByBase[base][quote]) store.orderBooksByBase[base][quote] = {};
-  store.orderBooksByBase[base][quote][exchangeId] = store.orderBooks[instrumentId];
-  if (!store.orderBooksHistory[instrumentId]) store.orderBooksHistory[instrumentId] = [];
-  // store.orderBooksHistory[instrumentId].push(_.cloneDeep(orderbook));
-  toShift(store.orderBooksHistory[instrumentId], [orderbook], 100);
-}
+  // TODO: временный конфиг для теста
+  store.exchanges['binance'].active = true;
+  store.exchanges['okex'].active = true;
+  // store.instruments['BTC/USDT/binance'].active = true;
+  // store.instruments['BTC/USDT/okex'].active = true;
+  
+  for (const instrument of Object.values(instruments)) {
+    // if (!instrument.active) continue;
+    if (instrument.exchangeId !== 'binance') continue;
+    const base = instrument.baseId;
+    const quote = instrument.quoteId;
+    const pairId = `${base}/${quote}`;
+    const instrumentId = instrument.id;
+    const exchangeId = instrument.exchangeId;
+
+
+    const orderbook = await getExchangeOrderbook(exchangeId, pairId); // TODO: пробрасывать экземпляр биржи и exchangeInstance?
+    store.orderBooks[instrumentId] = orderbook;
+    if (!store.orderBooksByBase[base]) store.orderBooksByBase[base] = {};
+    if (!store.orderBooksByBase[base][quote])
+      store.orderBooksByBase[base][quote] = {};
+    store.orderBooksByBase[base][quote][exchangeId] =
+      store.orderBooks[instrumentId];
+    if (!store.orderBooksHistory[instrumentId])
+      store.orderBooksHistory[instrumentId] = [];
+    store.orderBooksHistory[instrumentId].push(_.cloneDeep(orderbook));
+    if (!store.orderBooksHistoryByBase[base]) store.orderBooksHistoryByBase[base] = {};
+    if (!store.orderBooksHistoryByBase[base][quote])
+      store.orderBooksHistoryByBase[base][quote] = {};
+    if (!store.orderBooksHistoryByBase[base][quote][exchangeId])
+      store.orderBooksHistoryByBase[base][quote][exchangeId] = [];
+    store.orderBooksHistoryByBase[base][quote][exchangeId] = store.orderBooksHistory[instrumentId];
+    toShift(store.orderBooksHistory[instrumentId], [orderbook], 100);
+  }
+
+};

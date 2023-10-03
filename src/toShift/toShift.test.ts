@@ -9,7 +9,7 @@ describe('toShift', () => {
 
     const result = toShift(baseArray, newArray, max);
 
-    expect(result).toEqual([1, 2, 3, 4, 5, 6]);
+    expect(result.baseArray).toEqual([1, 2, 3, 4, 5, 6]);
   });
 
   test('should remove elements from baseArray if total length exceeds max', () => {
@@ -19,7 +19,7 @@ describe('toShift', () => {
 
     const result = toShift(baseArray, newArray, max);
 
-    expect(result).toEqual([2, 3, 4, 5, 6]);
+    expect(result.baseArray).toEqual([2, 3, 4, 5, 6]);
   });
 
   test('should not modify baseArray or newArray if total length does not exceed max', () => {
@@ -29,6 +29,6 @@ describe('toShift', () => {
 
     const result = toShift(baseArray, newArray, max);
 
-    expect(result).toEqual([1, 2, 3]);
+    expect(result.baseArray).toEqual([1, 2, 3]);
   });
 });
