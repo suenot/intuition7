@@ -1,5 +1,5 @@
 import ccxt from "ccxt";
-import { OrderBook as CcxtOrderBook } from "ccxt";
+import { OrderBook as CcxtOrderBook } from "./ccxtTypes";
 import {
   OrderBook
 } from "./types";
@@ -8,7 +8,7 @@ export const getExchangeOrderbook = async (exchangeId: string, symbol: string): 
   try {
     // console.log('getExchangeOrderbook', {exchangeId, symbol});
     const exchange = new (ccxt as any)[exchangeId]();
-    const orderBook = await exchange.fetchOrderBook(symbol);
+    const orderBook: CcxtOrderBook = await exchange.fetchOrderBook(symbol);
 
     // Convert CCXT order book data to the specified format
     const bids = orderBook.bids.map((bid) => {
@@ -29,10 +29,12 @@ export const getExchangeOrderbook = async (exchangeId: string, symbol: string): 
       };
     });
 
+
     // Create the OrderBook object
     const orderBookFormatted = {
-      timestamp: orderBook.timestamp,
+      timestamp: orderBook.timestamp || new Date().getTime(), // TODO: здесь баг, почему-то не получается orderBook.timestamp
       data: [...bids, ...asks],
+      exchangeId: exchangeId,
     };
 
     // console.log(orderBookFormatted);
