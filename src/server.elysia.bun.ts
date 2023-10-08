@@ -13,12 +13,12 @@ const log = debug("index");
   await intervalFn();
 
   // Сбор ордербуков, тиков, свечей, трейдов вебсокетами
-  parseOrderBooks();
+  await parseOrderBooks();
 
   // Сбор ассетов, пар, инструментов, бирж в цикле
-  setInterval(async () => {
-    await intervalFn();
-  }, 30000);
+  // setInterval(async () => {
+  //   await intervalFn();
+  // }, 30000);
 
 })();
 

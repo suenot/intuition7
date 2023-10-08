@@ -1,10 +1,12 @@
 {
   "name": "app",
   "version": "1.0.50",
+  "type": "module",
   "scripts": {
     "test": "bun test",
-    "dev": "bun run --watch src/index.ts",
-    "dev:debug": "DEBUG=* bun run --watch src/index.ts"
+    "dev:bun": "bun run --watch src/index.ts",
+    "dev:bun:debug": "DEBUG=* bun run --watch src/index.ts",
+    "dev:node:experimental": "node --experimental-specifier-resolution=node --loader ts-node/esm ./src/server.fastify.ts"
   },
   "dependencies": {
     "@elysiajs/cors": "^0.7.0",
@@ -12,14 +14,18 @@
     "ccxt": "^4.0.104",
     "debug": "^4.3.4",
     "elysia": "latest",
+    "fastify": "^4.23.2",
     "lodash": "^4.17.21",
     "mongodb": "^6.1.0",
     "nedb": "^1.8.0"
   },
   "devDependencies": {
     "@types/debug": "^4.1.9",
+    "@types/lodash": "^4.14.199",
     "@types/nedb": "^1.8.14",
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
   },
   "module": "src/index.js"
 }
