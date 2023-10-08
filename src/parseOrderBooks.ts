@@ -10,6 +10,8 @@ export const parseOrderBooks = async () => {
       // console.log(trades);
       const orderbook = await binance.watchOrderBookForSymbols(symbols);
       console.log(orderbook);
+      // TODO: не могу понять, что в orderbook, какие данные там есть, так не работают сервера
+      // upsertOrderBoook({ orderbook, instrumentId, exchangeId: 'binance', pairId, base, quote });
       // const ohlcvs = await binance.watchOHLCVForSymbols(symbolsTimeframes);
       // console.log(ohlcvs);
   }

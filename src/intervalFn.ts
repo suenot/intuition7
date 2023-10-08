@@ -27,21 +27,21 @@ export const intervalFn = async () => {
 
 
   // TODO: временный конфиг для теста
-  store.exchanges['binance'].active = true;
-  store.exchanges['okex'].active = true;
+  // store.exchanges['binance'].active = true;
+  // store.exchanges['okex'].active = true;
   // store.instruments['BTC/USDT/binance'].active = true;
   // store.instruments['BTC/USDT/okex'].active = true;
   
-  for (const instrument of Object.values(instruments)) {
-    if (!(instrument.exchangeId === 'binance')) continue;
+  // for (const instrument of Object.values(instruments)) {
+  //   if (!(instrument.exchangeId === 'binance')) continue;
     
-    const base = instrument.baseId;
-    const quote = instrument.quoteId;
-    const pairId = `${base}/${quote}`;
-    const instrumentId = instrument.id;
-    const exchangeId = instrument.exchangeId;
-    const orderbook = await getExchangeOrderbook(exchangeId, pairId);
-    upsertOrderBoook({ orderbook, instrumentId, exchangeId, pairId, base, quote });
-  }
+  //   const base = instrument.baseId;
+  //   const quote = instrument.quoteId;
+  //   const pairId = `${base}/${quote}`;
+  //   const instrumentId = instrument.id;
+  //   const exchangeId = instrument.exchangeId;
+  //   const orderbook = await getExchangeOrderbook(exchangeId, pairId);
+  //   upsertOrderBoook({ orderbook, instrumentId, exchangeId, pairId, base, quote });
+  // }
 
 };
