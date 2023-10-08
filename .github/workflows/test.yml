@@ -1,10 +1,13 @@
-name: test
+name: Bun test
+on:
+  push:
+    branches: [ main, develop ]
 jobs:
-  my-job:
-    name: my-job
+  bun-test:
+    name: bun-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: oven-sh/setup-bun@v1
       - run: bun install
-      - run: bun run test
+      - run: bun test
