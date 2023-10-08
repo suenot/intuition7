@@ -53,6 +53,7 @@ export async function getMarketData(): Promise<{
                 assets[baseId] = {
                   id: baseId,
                   name: baseId,
+                  active: false,
                 };
               }
 
@@ -60,6 +61,7 @@ export async function getMarketData(): Promise<{
                 assets[quoteId] = {
                   id: quoteId,
                   name: quoteId,
+                  active: false,
                 };
               }
 
@@ -68,6 +70,7 @@ export async function getMarketData(): Promise<{
                   id: pairId,
                   baseId: baseId,
                   quoteId: quoteId,
+                  active: false,
                 };
               }
 
@@ -83,6 +86,7 @@ export async function getMarketData(): Promise<{
                   quoteId: quoteId,
                   // pair: pairs[pairId],
                   pairId: pairId,
+                  active: false,
                 };
               }
             }

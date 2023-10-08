@@ -3,16 +3,23 @@ import { Elysia } from "elysia";
 import { cors } from '@elysiajs/cors'
 import { store } from "./db/store/store";
 import { intervalFn } from "./intervalFn";
-import ccxt from "ccxt";
 import { upsertAsset, upsertExchange, upsertInstrument, upsertPair } from "./db/db";
+import { parseOrderBooks } from "./parseOrderBooks";
 
 const log = debug("index");
 
 (async () => {
+  // Сбор ассетов, пар, инструментов, бирж
   await intervalFn();
+
+  // Сбор ордербуков, тиков, свечей, трейдов вебсокетами
+  parseOrderBooks();
+
+  // Сбор ассетов, пар, инструментов, бирж в цикле
   setInterval(async () => {
     await intervalFn();
-  }, 10000);
+  }, 30000);
+
 })();
 
 // const binance = new ccxt.pro.binance({});
