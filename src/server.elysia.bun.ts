@@ -1,11 +1,10 @@
-import debug from "debug";
 import { Elysia } from "elysia";
 import { cors } from '@elysiajs/cors'
 import { store } from "./db/store/store";
 import { intervalFn } from "./intervalFn";
 import { upsertAsset, upsertExchange, upsertInstrument, upsertPair } from "./db/db";
 import { parseOrderBooks } from "./parseOrderBooks";
-
+import debug from "debug";
 const log = debug("index");
 
 (async () => {
@@ -70,7 +69,7 @@ const app = new Elysia()
       return store.orderBooksHistoryByBase || [];
     }
   })
-  .get("/assets/:id", ({ query: { active, id } }) => {
+  .get("/assets", ({ query: { active, id } }) => {
     if (id && (active === 'true' || active === 'false')) {
       upsertAsset({ dbs: ['store', 'nedb'], asset: {...store.assets[id], active: JSON.parse(active)}});
     } else {

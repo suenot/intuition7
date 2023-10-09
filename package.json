@@ -6,21 +6,26 @@
     "test": "bun test",
     "dev:bun": "bun run --watch src/index.ts",
     "dev:bun:debug": "DEBUG=* bun run --watch src/index.ts",
-    "dev:node:experimental": "node --experimental-specifier-resolution=node --loader ts-node/esm ./src/server.fastify.ts"
+    "dev:node:fastify": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm ./src/server.fastify.ts",
+    "dev:node:express": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm ./src/server.express.ts"
   },
   "dependencies": {
     "@elysiajs/cors": "^0.7.0",
     "@elysiajs/graphql-yoga": "^0.6.3",
     "ccxt": "^4.0.104",
+    "cors": "^2.8.5",
     "debug": "^4.3.4",
     "elysia": "latest",
+    "express": "^4.18.2",
     "fastify": "^4.23.2",
     "lodash": "^4.17.21",
     "mongodb": "^6.1.0",
     "nedb": "^1.8.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.14",
     "@types/debug": "^4.1.9",
+    "@types/express": "^4.17.18",
     "@types/lodash": "^4.14.199",
     "@types/nedb": "^1.8.14",
     "bun-types": "latest",
