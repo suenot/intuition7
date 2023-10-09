@@ -1,4 +1,4 @@
-import { OrderBook as CcxtOrderBook } from '../ccxtTypes';
+import { OrderBook as CcxtOrderBook, OrderBookSubscription as CcxtOrderBookSubscription } from '../ccxtTypes';
 // export interface CcxtOrderBook {
 //   asks: [number, number][];
 //   bids: [number, number][];
@@ -32,7 +32,7 @@ import { OrderBook } from '../types';
  * @param {CcxtOrderBook} orderBookCcxt - The order book data in the CCXT format to be converted.
  * @returns {OrderBook} - The order book data in the custom specified format (OrderBook).
  */
-export const orderBookCcxtToCore = (orderBookCcxt: CcxtOrderBook): OrderBook => {
+export const orderBookCcxtToCore = ({orderBookCcxt, pairId, baseId, quoteId, instrumentId, exchangeId}: {orderBookCcxt: CcxtOrderBookSubscription, pairId: string, baseId: string, quoteId: string, instrumentId: string, exchangeId: string}): OrderBook => {
   // Convert CCXT order book data to the specified format
   const bids = orderBookCcxt.bids.map((bid) => {
     return {
@@ -54,6 +54,11 @@ export const orderBookCcxtToCore = (orderBookCcxt: CcxtOrderBook): OrderBook => 
 
   // Create the OrderBook object
   const orderBookFormatted = {
+    pairId,
+    baseId,
+    quoteId,
+    exchangeId,
+    instrumentId,
     timestamp: orderBookCcxt.timestamp,
     data: [...bids, ...asks],
   };

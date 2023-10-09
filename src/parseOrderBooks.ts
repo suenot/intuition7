@@ -1,18 +1,20 @@
 import ccxt from "ccxt";
+import { orderBookCcxtToCore } from "./orderBookCcxtToCore/orderBookCcxtToCore";
+import { OrderBook as CcxtOrderBook, OrderBookSubscription as CcxtOrderBookSubscription } from "./ccxtTypes";
+import { upsertOrderBoook } from "./db/db";
 
 export const parseOrderBooks = async () => {
   const binance = new ccxt.pro.binance({});
   const symbols = ['BTC/USDT', 'ETH/USDT', 'DOGE/USDT'];
-  // const symbolsTimeframes = [['BTC/USDT', '1m'], ['ETH/USDT', '1m'], ['DOGE/USDT', '1m']];
 
   while (true) {
-      // const trades = await binance.watchTradesForSymbols(symbols);
-      // console.log(trades);
-      const orderbook = await binance.watchOrderBookForSymbols(symbols);
-      console.log({pair: orderbook.symbol, asks: orderbook.asks, bids: orderbook.bids});
-      // TODO: не могу понять, что в orderbook, какие данные там есть, так не работают сервера
-      // upsertOrderBoook({ orderbook, instrumentId, exchangeId: 'binance', pairId, base, quote });
-      // const ohlcvs = await binance.watchOHLCVForSymbols(symbolsTimeframes);
-      // console.log(ohlcvs);
+      const orderBookCcxt: CcxtOrderBookSubscription = await binance.watchOrderBookForSymbols(symbols);
+      const pairId = orderBookCcxt?.symbol;
+      const exchangeId = 'binance';
+      const baseId = pairId.split('/')[0];
+      const quoteId = pairId.split('/')[1];
+      const instrumentId = `${baseId}/${quoteId}/${exchangeId}`;
+      const orderBook = orderBookCcxtToCore({orderBookCcxt, pairId, exchangeId, instrumentId, baseId, quoteId});
+      upsertOrderBoook({ orderBook, instrumentId, exchangeId, pairId, baseId, quoteId });
   }
 }

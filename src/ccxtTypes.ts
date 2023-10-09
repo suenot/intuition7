@@ -108,6 +108,11 @@ export interface OrderBook {
   nonce: number;
 }
 
+
+export interface OrderBookSubscription extends OrderBook { 
+  symbol: string;
+}
+
 export interface Ticker {
   symbol: string;
   info: any;
