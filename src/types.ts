@@ -54,21 +54,23 @@ export interface Asset {
 }
 
 export interface Order {
-  price: Number,
-  amount: Number,
-  type: String,
-  total: Number,
-  timestampFounded?: Number,
-  userId?: String,
-  strategyId?: String,
+  price: number,
+  amount: number,
+  type: string,
+  total: number,
+  timestampFounded?: number,
+  userId?: string,
+  strategyId?: string,
 }
 
 export interface OrderBook {
-  timestamp: Number,
-  lag?: Number,
-  exchangeId?: String,
-  baseId?: String,
-  quoteId?: String,
+  timestamp: number,
+  lag?: number,
+  instrumentId: string,
+  exchangeId: string,
+  pairId: string,
+  baseId: string,
+  quoteId: string,
   data: Order[],
   trades?: any[],
 }
@@ -94,44 +96,44 @@ export interface StoreOrderBooksHistoryExchange {
 }
 
 export interface Trade { // TODO: объединить с Order или нет?
-  price: Number,
-  amount: Number,
-  type: String,
-  total: Number,
-  timestampFounded?: Number,
+  price: number,
+  amount: number,
+  type: string,
+  total: number,
+  timestampFounded?: number,
 }
 
 export interface User {
-  id: String,
-  name: String,
+  id: string,
+  name: string,
 }
 
 export interface Strategy {
-  id: String,
-  name: String,
+  id: string,
+  name: string,
   // signal?: Signal,
-  signalId: String,
+  signalId: string,
   // bot?: Bot,
-  botId: String,
+  botId: string,
 }
 
 export interface Signal {
-  id: String,
-  name: String,
+  id: string,
+  name: string,
 }
 
 export interface Bot {
-  id: String,
-  name: String,
+  id: string,
+  name: string,
 }
 
 export interface Candle {
-  timestamp: Number,
-  open: Number,
-  high: Number,
-  low: Number,
-  close: Number,
-  volume: Number,
+  timestamp: number,
+  open: number,
+  high: number,
+  low: number,
+  close: number,
+  volume: number,
 }
 export interface Store {
   modules: Dictionary<Module>,

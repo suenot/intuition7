@@ -32,7 +32,12 @@ import { OrderBook } from '../types';
  * @param {CcxtOrderBook} orderBookCcxt - The order book data in the CCXT format to be converted.
  * @returns {OrderBook} - The order book data in the custom specified format (OrderBook).
  */
-export const orderBookCcxtToCore = ({orderBookCcxt, pairId, baseId, quoteId, instrumentId, exchangeId}: {orderBookCcxt: CcxtOrderBookSubscription, pairId: string, baseId: string, quoteId: string, instrumentId: string, exchangeId: string}): OrderBook => {
+export const orderBookCcxtToCore = ({orderBookCcxt, exchangeId}: {orderBookCcxt: CcxtOrderBookSubscription, exchangeId: string}): OrderBook => {
+  const pairId = orderBookCcxt?.symbol;
+  const baseId = pairId.split('/')[0];
+  const quoteId = pairId.split('/')[1];
+  const instrumentId = `${baseId}/${quoteId}/${exchangeId}`;
+
   // Convert CCXT order book data to the specified format
   const bids = orderBookCcxt.bids.map((bid) => {
     return {

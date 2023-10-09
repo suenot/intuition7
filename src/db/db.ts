@@ -77,21 +77,22 @@ export const upsertInstrument = ({ dbs, instrument}: { dbs: String[], instrument
   }
 };
 
-export const upsertOrderBoook = async ({ orderBook, instrumentId, exchangeId, pairId, baseId, quoteId }: { orderBook: OrderBook, instrumentId: string, exchangeId: string, pairId: string, baseId: string, quoteId: string }) => {
-    store.orderBooks[instrumentId] = orderBook;
-    if (!store.orderBooksByBase[baseId]) store.orderBooksByBase[baseId] = {};
-    if (!store.orderBooksByBase[baseId][quoteId])
-      store.orderBooksByBase[baseId][quoteId] = {};
-    store.orderBooksByBase[baseId][quoteId][exchangeId] =
-      store.orderBooks[instrumentId];
-    if (!store.orderBooksHistory[instrumentId])
-      store.orderBooksHistory[instrumentId] = [];
-    store.orderBooksHistory[instrumentId].push(_.cloneDeep(orderBook));
-    if (!store.orderBooksHistoryByBase[baseId]) store.orderBooksHistoryByBase[baseId] = {};
-    if (!store.orderBooksHistoryByBase[baseId][quoteId])
-      store.orderBooksHistoryByBase[baseId][quoteId] = {};
-    if (!store.orderBooksHistoryByBase[baseId][quoteId][exchangeId])
-      store.orderBooksHistoryByBase[baseId][quoteId][exchangeId] = [];
-    store.orderBooksHistoryByBase[baseId][quoteId][exchangeId] = store.orderBooksHistory[instrumentId];
-    toShift(store.orderBooksHistory[instrumentId], [orderBook], 100);
+export const upsertOrderBoook = async (orderBook: OrderBook) => {
+  const { instrumentId, exchangeId, baseId, quoteId } = orderBook;
+  store.orderBooks[instrumentId] = orderBook;
+  if (!store.orderBooksByBase[baseId]) store.orderBooksByBase[baseId] = {};
+  if (!store.orderBooksByBase[baseId][quoteId])
+    store.orderBooksByBase[baseId][quoteId] = {};
+  store.orderBooksByBase[baseId][quoteId][exchangeId] =
+    store.orderBooks[instrumentId];
+  if (!store.orderBooksHistory[instrumentId])
+    store.orderBooksHistory[instrumentId] = [];
+  store.orderBooksHistory[instrumentId].push(_.cloneDeep(orderBook));
+  if (!store.orderBooksHistoryByBase[baseId]) store.orderBooksHistoryByBase[baseId] = {};
+  if (!store.orderBooksHistoryByBase[baseId][quoteId])
+    store.orderBooksHistoryByBase[baseId][quoteId] = {};
+  if (!store.orderBooksHistoryByBase[baseId][quoteId][exchangeId])
+    store.orderBooksHistoryByBase[baseId][quoteId][exchangeId] = [];
+  store.orderBooksHistoryByBase[baseId][quoteId][exchangeId] = store.orderBooksHistory[instrumentId];
+  toShift(store.orderBooksHistory[instrumentId], [orderBook], 100);
 }

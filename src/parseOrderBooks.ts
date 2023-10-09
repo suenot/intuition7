@@ -4,17 +4,20 @@ import { OrderBook as CcxtOrderBook, OrderBookSubscription as CcxtOrderBookSubsc
 import { upsertOrderBoook } from "./db/db";
 
 export const parseOrderBooks = async () => {
-  const binance = new ccxt.pro.binance({});
-  const symbols = ['BTC/USDT', 'ETH/USDT', 'DOGE/USDT'];
+  // читаем активные биржи и запускаем для каждой из них парсинг стаканов
+  const exchangesId = ['binance']
+  const pairsId = ['BTC/USDT', 'ETH/USDT', 'DOGE/USDT'];
 
-  while (true) {
-      const orderBookCcxt: CcxtOrderBookSubscription = await binance.watchOrderBookForSymbols(symbols);
-      const pairId = orderBookCcxt?.symbol;
-      const exchangeId = 'binance';
-      const baseId = pairId.split('/')[0];
-      const quoteId = pairId.split('/')[1];
-      const instrumentId = `${baseId}/${quoteId}/${exchangeId}`;
-      const orderBook = orderBookCcxtToCore({orderBookCcxt, pairId, exchangeId, instrumentId, baseId, quoteId});
-      upsertOrderBoook({ orderBook, instrumentId, exchangeId, pairId, baseId, quoteId });
+    // для каждой биржи свой цикл
+  for (const exchangeId of exchangesId) {
+    if (exchangeId in ccxt.pro) {
+      const exchangeInstance = new (ccxt.pro as any)[exchangeId]({});
+      while (true) {
+        const orderBookCcxt: CcxtOrderBookSubscription = await exchangeInstance.watchOrderBookForSymbols(pairsId);
+        const orderBook = orderBookCcxtToCore({orderBookCcxt, exchangeId});
+        upsertOrderBoook(orderBook);
+      }
+    }
   }
+
 }
