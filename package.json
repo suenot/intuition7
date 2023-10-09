@@ -6,8 +6,10 @@
     "test": "bun test",
     "dev:bun": "bun run --watch src/index.ts",
     "dev:bun:debug": "DEBUG=* bun run --watch src/index.ts",
-    "dev:node:fastify": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm ./src/server.fastify.ts",
-    "dev:node:express": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm ./src/server.express.ts"
+    "dev:node:fastify": "nodemon --experimental-specifier-resolution=node ./src/server.fastify.ts",
+    "prod:node:fastify": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm ./src/server.fastify.ts",
+    "dev:node:express": "nodemon --experimental-specifier-resolution=node ./src/server.express.ts",
+    "prod:node:express": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm ./src/server.express.ts"
   },
   "dependencies": {
     "@elysiajs/cors": "^0.7.0",
@@ -20,7 +22,8 @@
     "fastify": "^4.23.2",
     "lodash": "^4.17.21",
     "mongodb": "^6.1.0",
-    "nedb": "^1.8.0"
+    "nedb": "^1.8.0",
+    "nodemon": "^3.0.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.14",
