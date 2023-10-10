@@ -16,83 +16,95 @@ import { store } from "./store/store";
 import _ from "lodash";
 import { getExchangeOrderbook } from "../getExchangeOrderbook";
 import { toShift } from "../toShift/toShift";
+import debug from "debug";
+const log = debug("db");
 
 export const upsertExchange = ({ dbs, exchange}: { dbs: String[], exchange: Exchange }) => {
   for (const db of dbs) {
-    switch (db) {
-      case "nedb":
-        upsertExchangeNedb(exchange);
-        break;
-      case "store":
-        upsertExchangeStore(exchange);
-        break;
-      default:
-        break;
-    }
-  }
+    try {
+      switch (db) {
+        case "nedb":
+          upsertExchangeNedb(exchange);
+          break;
+        case "store":
+          upsertExchangeStore(exchange);
+          break;
+        default:
+          break;
+      }
+    } catch (e) { log(e) };
+  };
 };
 
 export const upsertAsset = ({ dbs, asset}: { dbs: String[], asset: Asset }) => {
   for (const db of dbs) {
-    switch (db) {
-      case "nedb":
-        upsertAssetNedb(asset);
-        break;
-      case "store":
-        upsertAssetStore(asset);
-        break;
-      default:
-        break;
-    }
+    try {
+      switch (db) {
+        case "nedb":
+          upsertAssetNedb(asset);
+          break;
+        case "store":
+          upsertAssetStore(asset);
+          break;
+        default:
+          break;
+      }
+    } catch (e) { log(e) };
   }
 };
 
 export const upsertPair = ({ dbs, pair}: { dbs: String[], pair: Pair }) => {
   for (const db of dbs) {
-    switch (db) {
-      case "nedb":
-        upsertPairNedb(pair);
-        break;
-      case "store":
-        upsertPairStore(pair);
-        break;
-      default:
-        break;
-    }
+    try {
+      switch (db) {
+        case "nedb":
+          upsertPairNedb(pair);
+          break;
+        case "store":
+          upsertPairStore(pair);
+          break;
+        default:
+          break;
+      }
+    } catch (e) { log(e) };
   }
 };
 
 export const upsertInstrument = ({ dbs, instrument}: { dbs: String[], instrument: Instrument }) => {
   for (const db of dbs) {
-    switch (db) {
-      case "nedb":
-        upsertInstrumentNedb(instrument);
-        break;
-      case "store":
-        upsertInstrumentStore(instrument);
-        break;
-      default:
-        break;
-    }
+    try {
+      switch (db) {
+        case "nedb":
+          upsertInstrumentNedb(instrument);
+          break;
+        case "store":
+          upsertInstrumentStore(instrument);
+          break;
+        default:
+          break;
+      }
+    } catch (e) { log(e) };
   }
 };
 
 export const upsertOrderBoook = async (orderBook: OrderBook) => {
-  const { instrumentId, exchangeId, baseId, quoteId } = orderBook;
-  store.orderBooks[instrumentId] = orderBook;
-  if (!store.orderBooksByBase[baseId]) store.orderBooksByBase[baseId] = {};
-  if (!store.orderBooksByBase[baseId][quoteId])
-    store.orderBooksByBase[baseId][quoteId] = {};
-  store.orderBooksByBase[baseId][quoteId][exchangeId] =
-    store.orderBooks[instrumentId];
-  if (!store.orderBooksHistory[instrumentId])
-    store.orderBooksHistory[instrumentId] = [];
-  store.orderBooksHistory[instrumentId].push(_.cloneDeep(orderBook));
-  if (!store.orderBooksHistoryByBase[baseId]) store.orderBooksHistoryByBase[baseId] = {};
-  if (!store.orderBooksHistoryByBase[baseId][quoteId])
-    store.orderBooksHistoryByBase[baseId][quoteId] = {};
-  if (!store.orderBooksHistoryByBase[baseId][quoteId][exchangeId])
-    store.orderBooksHistoryByBase[baseId][quoteId][exchangeId] = [];
-  store.orderBooksHistoryByBase[baseId][quoteId][exchangeId] = store.orderBooksHistory[instrumentId];
-  toShift(store.orderBooksHistory[instrumentId], [orderBook], 100);
+  try {
+    const { instrumentId, exchangeId, baseId, quoteId } = orderBook;
+    store.orderBooks[instrumentId] = orderBook;
+    if (!store.orderBooksByBase[baseId]) store.orderBooksByBase[baseId] = {};
+    if (!store.orderBooksByBase[baseId][quoteId])
+      store.orderBooksByBase[baseId][quoteId] = {};
+    store.orderBooksByBase[baseId][quoteId][exchangeId] =
+      store.orderBooks[instrumentId];
+    if (!store.orderBooksHistory[instrumentId])
+      store.orderBooksHistory[instrumentId] = [];
+    store.orderBooksHistory[instrumentId].push(_.cloneDeep(orderBook));
+    if (!store.orderBooksHistoryByBase[baseId]) store.orderBooksHistoryByBase[baseId] = {};
+    if (!store.orderBooksHistoryByBase[baseId][quoteId])
+      store.orderBooksHistoryByBase[baseId][quoteId] = {};
+    if (!store.orderBooksHistoryByBase[baseId][quoteId][exchangeId])
+      store.orderBooksHistoryByBase[baseId][quoteId][exchangeId] = [];
+    store.orderBooksHistoryByBase[baseId][quoteId][exchangeId] = store.orderBooksHistory[instrumentId];
+    toShift(store.orderBooksHistory[instrumentId], [orderBook], 100);
+  } catch (e) { log(e) };
 }
