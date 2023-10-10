@@ -42,53 +42,50 @@ export async function getMarketData(): Promise<{
           log({markets});
     
           for (const market of Object.values(markets)) {
-            
             const { baseId, quoteId } = market;
-            if ( _.includes(['ETH', 'LTC'], baseId) ) { 
-              const pairId = `${baseId}/${quoteId}`;
-              const instrumentId = `${baseId}/${quoteId}/${exchangeId}`;
-              log({instrumentId});
-        
-              if (!assets[baseId]) {
-                assets[baseId] = {
-                  id: baseId,
-                  name: baseId,
-                  active: false,
-                };
-              }
+            const pairId = `${baseId}/${quoteId}`;
+            const instrumentId = `${baseId}/${quoteId}/${exchangeId}`;
+            log({instrumentId});
+      
+            if (!assets[baseId]) {
+              assets[baseId] = {
+                id: baseId,
+                name: baseId,
+                active: false,
+              };
+            }
 
-              if (!assets[quoteId]) {
-                assets[quoteId] = {
-                  id: quoteId,
-                  name: quoteId,
-                  active: false,
-                };
-              }
+            if (!assets[quoteId]) {
+              assets[quoteId] = {
+                id: quoteId,
+                name: quoteId,
+                active: false,
+              };
+            }
 
-              if (!pairs[pairId]) {
-                pairs[pairId] = {
-                  id: pairId,
-                  baseId: baseId,
-                  quoteId: quoteId,
-                  active: false,
-                };
-              }
+            if (!pairs[pairId]) {
+              pairs[pairId] = {
+                id: pairId,
+                baseId: baseId,
+                quoteId: quoteId,
+                active: false,
+              };
+            }
 
-              if (!instruments[instrumentId]) {
-                instruments[instrumentId] = {
-                  id: instrumentId,
-                  // exchange,
-                  exchangeId,
-                  // exchangeInstance: exchangesInstances[exchangeId],
-                  // baseAsset: assets[baseId],
-                  baseId: baseId,
-                  // quoteAsset: assets[quoteId],
-                  quoteId: quoteId,
-                  // pair: pairs[pairId],
-                  pairId: pairId,
-                  active: false,
-                };
-              }
+            if (!instruments[instrumentId]) {
+              instruments[instrumentId] = {
+                id: instrumentId,
+                // exchange,
+                exchangeId,
+                // exchangeInstance: exchangesInstances[exchangeId],
+                // baseAsset: assets[baseId],
+                baseId: baseId,
+                // quoteAsset: assets[quoteId],
+                quoteId: quoteId,
+                // pair: pairs[pairId],
+                pairId: pairId,
+                active: false,
+              };
             }
           }
         }
