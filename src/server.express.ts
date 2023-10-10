@@ -11,6 +11,16 @@ const log = debug("index");
   // Сбор ассетов, пар, инструментов, бирж
   await intervalFn();
 
+  // Сделать активными часть бирж и пар
+  if (store.exchanges['binance']) store.exchanges['binance'].active = true;
+  if (store.exchanges['okex']) store.exchanges['okex'].active = true;
+  if (store.pairs['ETH/BTC']) store.pairs['ETH/BTC'].active = true;
+  if (store.pairs['LTC/BTC']) store.pairs['LTC/BTC'].active = true;
+  if (store.pairs['BTC/USDT']) store.pairs['BTC/USDT'].active = true;
+  if (store.pairs['ETH/USDT']) store.pairs['ETH/USDT'].active = true;
+  if (store.pairs['DOGE/USDT']) store.pairs['DOGE/USDT'].active = true;
+
+
   // Сбор ордербуков, тиков, свечей, трейдов вебсокетами
   await parseOrderBooks();
 

@@ -5,7 +5,7 @@ import { upsertOrderBoook } from "./db/db";
 
 export const parseOrderBooks = async () => {
   // читаем активные биржи и запускаем для каждой из них парсинг стаканов
-  const exchangesId = ['binance']
+  const exchangesId = ['binance', 'okex']
   const pairsId = ['BTC/USDT', 'ETH/USDT', 'DOGE/USDT'];
 
     // для каждой биржи свой цикл
