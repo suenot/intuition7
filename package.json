@@ -8,10 +8,12 @@
     "prod:bun:elysia": "DEBUG=* bun run src/server.elysia.ts",
     "dev:node:fastify": "DEBUG=* nodemon --experimental-specifier-resolution=node ./src/server.fastify.ts",
     "prod:node:fastify": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm ./src/server.fastify.ts",
-    "dev:node:express": "DEBUG=* nodemon --experimental-specifier-resolution=node ./src/server.express.ts",
-    "prod:node:express": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm ./src/server.express.ts"
+    "dev:node:express": "nodemon --experimental-specifier-resolution=node ./src/server.express.ts",
+    "prod:node:express": "DEBUG=index node --experimental-specifier-resolution=node --loader ts-node/esm ./src/server.express.ts"
   },
   "dependencies": {
+    "@deep-foundation/deeplinks": "^0.0.316",
+    "@deep-foundation/hasura": "^0.0.56",
     "@elysiajs/cors": "^0.7.0",
     "@elysiajs/graphql-yoga": "^0.6.3",
     "ccxt": "^4.0.104",

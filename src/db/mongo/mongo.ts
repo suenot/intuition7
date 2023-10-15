@@ -36,7 +36,7 @@ export class MongoDB {
     });
 
     await this.client.connect();
-    console.log("Connected to MongoDB server");
+    // console.log("Connected to MongoDB server");
   }
 
   async upsertExchange(exchange: Exchange) {

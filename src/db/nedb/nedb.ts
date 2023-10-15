@@ -20,24 +20,24 @@ export const nedbInstance: NedbInstance = {
 
 export const upsertExchange = (exchange: Exchange) => {
   nedbInstance.exchanges.update({ id: exchange.id }, _.omit(exchange, ['active']), { upsert: true }, function (err, numReplaced, upsert) {
-    console.log({err, numReplaced, upsert});
+    // console.log({err, numReplaced, upsert});
   });
 }
 
 export const upsertAsset = (asset: Asset) => {
   nedbInstance.assets.update({ id: asset.id }, _.omit(asset, ['active']), { upsert: true }, function (err, numReplaced, upsert) {
-    console.log({err, numReplaced, upsert});
+    // console.log({err, numReplaced, upsert});
   });
 }
 
 export const upsertPair = (pair: Pair) => {
   nedbInstance.pairs.update({ id: pair.id }, _.omit(pair, ['active']), { upsert: true }, function (err, numReplaced, upsert) {
-    console.log({err, numReplaced, upsert});
+    // console.log({err, numReplaced, upsert});
   });
 }
 
 export const upsertInstrument = (instrument: Instrument) => {
   nedbInstance.instruments.update({ id: instrument.id }, _.omit(instrument, ['active']), { upsert: true }, function (err, numReplaced, upsert) {
-    console.log({err, numReplaced, upsert});
+    // console.log({err, numReplaced, upsert});
   });
 }

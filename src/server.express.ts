@@ -5,6 +5,7 @@ import { intervalFn } from "./intervalFn";
 import { upsertAsset, upsertExchange, upsertInstrument, upsertPair } from "./db/db";
 import { parseOrderBooks } from "./parseOrderBooks";
 import debug from "debug";
+import _ from "lodash";
 const log = debug("index");
 
 (async () => {
@@ -12,7 +13,7 @@ const log = debug("index");
   await intervalFn();
 
   // Сделать активными часть бирж и пар
-  const exchangeIds = ['binance', 'okex'];
+  const exchangeIds = ['binance', 'okex', 'kucoin'];
   const pairIds = ['ETH/BTC', 'LTC/BTC', 'BTC/USDT', 'ETH/USDT', 'DOGE/USDT'];
   for (const exchangeId of exchangeIds) {
     upsertExchange({ dbs: ['store', 'nedb'], exchange: {...store.exchanges[exchangeId], active: true}});
@@ -60,6 +61,12 @@ const app = express()
       res.json(store.orderBooksByBase || {});
     }
   })
+  .get(/orderbook-timestamp/, (req: any, res: any) => {
+    const { from, to, base, quote, exchange }: { from: number, to: number, base: string, quote: string, exchange: string } = req.query;
+    log("orderbook-timestamp", {from, to, base, quote, exchange});
+
+
+  })
   .get("/orderbook-history", (req: any, res: any) => {
     const { exchange, base, quote } = req.query;
     log("orderbook-history", exchange, base, quote);
@@ -85,6 +92,10 @@ const app = express()
     }
     res.json( store.assets );
   })
+  // .post("/assets/", (req: any, res: any) => {
+  //   const { id, active } = req.query;
+    
+  // })
   .get("/instruments", (req: any, res: any) => {
     const { id, active } = req.query;
     if (id && (active === 'true' || active === 'false')) {
@@ -99,14 +110,25 @@ const app = express()
   // .get("/pairs", (context) => store.pairs)
   .get("/pairs", (req: any, res: any) => {
     const { id, active } = req.query;
-    if (id && (active === 'true' || active === 'false')) {
-      upsertPair({ dbs: ['store', 'nedb'], pair: {...store.pairs[id], active: JSON.parse(active)}});
+    console.log('/pairs', {id, active});
+    if (active) {
+      // Возвращаем только активные пары
+      const filteredPairs = _.filter(store.pairs, (pair) => {
+        return pair.active === true;
+      });
+      res.json( _.keyBy(filteredPairs, 'id') );
     } else {
       if (id) {
         res.json( store.pairs[id] );
       }
     }
     res.json( store.pairs );
+  })
+  .post("/pairs", (req: any, res: any) => {
+    const { id, active } = req.query;
+    if (id && (active === 'true' || active === 'false')) {
+      upsertPair({ dbs: ['store', 'nedb'], pair: {...store.pairs[id], active: JSON.parse(active)}});
+    }
   })
   .get("/trades", () => store.trades)
   .get("/candles", () => store.candles)

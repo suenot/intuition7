@@ -9,7 +9,7 @@ export const parseOrderBooks = async () => {
   while (true) {
     try {
       const trades = await binance.watchTradesForSymbols(symbols);
-      console.log(trades);
+      // console.log(trades);
     } catch(e) { log(e) };
   }
 }

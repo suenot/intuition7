@@ -9,10 +9,14 @@ bun dev:bun:debug
 Open http://localhost:8080/ with your browser to see the result.
 
 ## Получение ордербука
-http://localhost:7771/orderbook?base=ETH&quote=LTC&exchange=okex
+http://localhost:7771/orderbook?base=ETH
+http://localhost:7771/orderbook?base=ETH&quote=BTC
+http://localhost:7771/orderbook?base=ETH&quote=BTC&exchange=binance
 
 ## Получение истории ордербука
-http://localhost:7771/orderbook-history?base=ETH&quote=LTC&exchange=okex
+- http://localhost:7771/orderbook-history?base=ETH
+- http://localhost:7771/orderbook-history?base=ETH&quote=BTC
+- http://localhost:7771/orderbook-history?base=ETH&quote=BTC&exchange=binance
 
 ## Получение информации о биржах
 http://localhost:7771/exchanges
