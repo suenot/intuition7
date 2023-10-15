@@ -8,28 +8,31 @@ const log = debug("parseOrderBooks");
 
 // TODO: разбить функцию на части: сбор пересечений, цикл, запуск для одной биржи
 export const parseOrderBooks = async ({exchangeIds, pairIds}: {exchangeIds: string[], pairIds: string[]}) => {
+  console.log({exchangeIds, pairIds})
   // для каждой биржи свой цикл
   for (const exchangeId of exchangeIds) {
-    if (exchangeId in ccxt.pro) {
-      const exchangeInstance = new (ccxt.pro as any)[exchangeId]({});
-      // TODO:
-      // получаем список пар, которые есть на бирже
-      // ищем пересечение пар
-      // отдаем пары
-
+    console.log(exchangeId)
       
-
-      
-      while (true) {
-        try {
-          // можно просто каждый раз брать список актуальных парх
-          // const pairIds = _.filter(store.pairs, pair => (pair. === exchangeId && pair.active === true))
-          const orderBookCcxt: CcxtOrderBookSubscription = await exchangeInstance.watchOrderBookForSymbols(pairIds);
-          const orderBook = orderBookCcxtToCore({orderBookCcxt, exchangeId});
-          upsertOrderBoook(orderBook);
-        } catch (e) { log(e) };
-      }
-    }
+    // TODO:
+    // получаем список пар, которые есть на бирже
+    // ищем пересечение пар
+    // отдаем пары
+    parseOrderBooksOne({exchangeId, pairIds})
   }
 
+}
+
+export const parseOrderBooksOne = async ({exchangeId, pairIds}: {exchangeId: string, pairIds: string[]}) => {
+  const exchangeInstance = new (ccxt.pro as any)[exchangeId]({});
+  if (exchangeId in ccxt.pro) {
+    while (true) {
+      try {
+        // можно просто каждый раз брать список актуальных парх
+        // const pairIds = _.filter(store.pairs, pair => (pair. === exchangeId && pair.active === true))
+        const orderBookCcxt: CcxtOrderBookSubscription = await exchangeInstance.watchOrderBookForSymbols(pairIds);
+        const orderBook = orderBookCcxtToCore({orderBookCcxt, exchangeId});
+        upsertOrderBoook(orderBook);
+      } catch (e) { log(e) };
+    }
+  }
 }
