@@ -96,9 +96,39 @@ export const upsertOrderBoook = async (orderBook: OrderBook) => {
       store.orderBooksByBase[baseId][quoteId] = {};
     store.orderBooksByBase[baseId][quoteId][exchangeId] =
       store.orderBooks[instrumentId];
-    if (!store.orderBooksHistory[instrumentId])
-      store.orderBooksHistory[instrumentId] = [];
-    store.orderBooksHistory[instrumentId].push(_.cloneDeep(orderBook));
+  } catch (e) { log(e) };
+};
+
+export const saveOrderBookHistoryByTimer = (timer: number) => {
+  setInterval(() => {
+    saveOrderBookHistoryList();
+  }, timer);
+}
+
+export const saveOrderBookHistoryList = async () => {
+  // Проходим по всем активным биржам и активным парам и сохраняем историю
+  const exchanges = _.filter(store.exchanges, (exchange) => exchange.active === true);
+  const pairs = _.filter(store.pairs, (pair) => pair.active === true);
+  for (const exchange of exchanges) {
+    for (const pair of pairs) {
+      try {
+        saveOrderBookHistory(store.orderBooksByBase[pair.baseId][pair.quoteId][exchange.id])
+      } catch (e) { log(e) };
+    }
+  }
+}
+
+export const saveOrderBookHistory = (orderBook: OrderBook) => {
+  try {
+    const orderBookCloned = _.cloneDeep(orderBook)
+    
+    // Нормализуем время до точности 1 секунда, так как биржи отдают с разной скоростью
+    orderBookCloned.timestamp = Number(orderBook.timestamp.toString().toString() + '000');
+    console.log(orderBookCloned.timestamp)
+
+    const { instrumentId, exchangeId, baseId, quoteId } = orderBook;
+    if (!store.orderBooksHistory[instrumentId]) store.orderBooksHistory[instrumentId] = [];
+    store.orderBooksHistory[instrumentId].push(orderBookCloned);
     if (!store.orderBooksHistoryByBase[baseId]) store.orderBooksHistoryByBase[baseId] = {};
     if (!store.orderBooksHistoryByBase[baseId][quoteId])
       store.orderBooksHistoryByBase[baseId][quoteId] = {};
@@ -107,4 +137,5 @@ export const upsertOrderBoook = async (orderBook: OrderBook) => {
     store.orderBooksHistoryByBase[baseId][quoteId][exchangeId] = store.orderBooksHistory[instrumentId];
     toShift(store.orderBooksHistory[instrumentId], [orderBook], 100);
   } catch (e) { log(e) };
-}
+};
+

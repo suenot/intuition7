@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { store } from "./db/store/store";
 import { intervalFn } from "./intervalFn";
-import { upsertAsset, upsertExchange, upsertInstrument, upsertPair } from "./db/db";
+import { upsertAsset, upsertExchange, upsertInstrument, upsertPair, saveOrderBookHistoryByTimer } from "./db/db";
 import { parseOrderBooks } from "./parseOrderBooks";
 import debug from "debug";
 import _ from "lodash";
@@ -25,7 +25,10 @@ const log = debug("index");
 
 
   // Сбор ордербуков, тиков, свечей, трейдов вебсокетами
-  await parseOrderBooks({exchangeIds, pairIds});
+  parseOrderBooks({exchangeIds, pairIds});
+
+  // Раз в 1 секунду собирать исторические данные
+  saveOrderBookHistoryByTimer(1000)
 
   // Сбор ассетов, пар, инструментов, бирж в цикле
   // setInterval(async () => {

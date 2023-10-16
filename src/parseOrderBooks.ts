@@ -7,7 +7,7 @@ import { store } from "./db/store/store";
 const log = debug("parseOrderBooks");
 
 // TODO: разбить функцию на части: сбор пересечений, цикл, запуск для одной биржи
-export const parseOrderBooks = async ({exchangeIds, pairIds}: {exchangeIds: string[], pairIds: string[]}) => {
+export const parseOrderBooks = ({exchangeIds, pairIds}: {exchangeIds: string[], pairIds: string[]}) => {
   console.log({exchangeIds, pairIds})
   // для каждой биржи свой цикл
   for (const exchangeId of exchangeIds) {
