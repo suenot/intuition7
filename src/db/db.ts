@@ -123,7 +123,7 @@ export const saveOrderBookHistory = (orderBook: OrderBook) => {
     const orderBookCloned = _.cloneDeep(orderBook)
     
     // Нормализуем время до точности 1 секунда, так как биржи отдают с разной скоростью
-    orderBookCloned.timestamp = Number(orderBook.timestamp.toString().toString() + '000');
+    orderBookCloned.timestamp = Number(orderBook.timestamp.toString().slice(0, -3) + '000');
     console.log(orderBookCloned.timestamp)
 
     const { instrumentId, exchangeId, baseId, quoteId } = orderBook;
