@@ -123,10 +123,10 @@ export const saveOrderBookHistory = (orderBook: OrderBook) => {
     const orderBookCloned = _.cloneDeep(orderBook)
     
     // Нормализуем время до точности 1 секунда, так как биржи отдают с разной скоростью
-    orderBookCloned.timestamp = Number(orderBook.timestamp.toString().slice(0, -3) + '000');
-    console.log(orderBookCloned.timestamp)
+    orderBookCloned.timestamp = Number(orderBookCloned.timestamp.toString().slice(0, -3) + '000');
+    log(orderBookCloned.timestamp)
 
-    const { instrumentId, exchangeId, baseId, quoteId } = orderBook;
+    const { instrumentId, exchangeId, baseId, quoteId } = orderBookCloned;
     if (!store.orderBooksHistory[instrumentId]) store.orderBooksHistory[instrumentId] = [];
     store.orderBooksHistory[instrumentId].push(orderBookCloned);
     if (!store.orderBooksHistoryByBase[baseId]) store.orderBooksHistoryByBase[baseId] = {};
@@ -135,7 +135,7 @@ export const saveOrderBookHistory = (orderBook: OrderBook) => {
     if (!store.orderBooksHistoryByBase[baseId][quoteId][exchangeId])
       store.orderBooksHistoryByBase[baseId][quoteId][exchangeId] = [];
     store.orderBooksHistoryByBase[baseId][quoteId][exchangeId] = store.orderBooksHistory[instrumentId];
-    toShift(store.orderBooksHistory[instrumentId], [orderBook], 100);
+    toShift(store.orderBooksHistory[instrumentId], [orderBookCloned], 100);
   } catch (e) { log(e) };
 };
 
