@@ -62,6 +62,9 @@ export async function getMarketData(): Promise<{
                 active: false,
               };
             }
+            if (pairs[pairId]) {
+              pairs[pairId].exchanges[exchangeId] = exchange;
+            }
 
             if (!pairs[pairId]) {
               pairs[pairId] = {
@@ -69,8 +72,12 @@ export async function getMarketData(): Promise<{
                 baseId: baseId,
                 quoteId: quoteId,
                 active: false,
+                exchanges: {
+                  [exchangeId]: exchange,
+                },
               };
             }
+
 
             if (!instruments[instrumentId]) {
               instruments[instrumentId] = {
@@ -86,6 +93,13 @@ export async function getMarketData(): Promise<{
                 pairId: pairId,
                 active: false,
               };
+            }
+
+            if (!exchanges[exchangeId].pairs) {
+              exchanges[exchangeId].pairs = {};
+            } 
+            if (exchanges[exchangeId] && pairs[pairId]) {
+              exchanges[exchangeId].pairs[pairId] = pairs[pairId];
             }
           }
         }

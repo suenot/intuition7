@@ -1,3 +1,4 @@
+import _ from "lodash";
 import ccxt from "ccxt";
 import { orderBookCcxtToCore } from "./orderBookCcxtToCore/orderBookCcxtToCore";
 import { OrderBook as CcxtOrderBook, OrderBookSubscription as CcxtOrderBookSubscription } from "./ccxtTypes";
@@ -12,12 +13,19 @@ export const parseOrderBooks = ({exchangeIds, pairIds}: {exchangeIds: string[], 
   // для каждой биржи свой цикл
   for (const exchangeId of exchangeIds) {
     console.log(exchangeId)
-      
-    // TODO:
+
+    // TODO: вынести эту логику выше, так как она повторяется в сборе трейдов и свечек
     // получаем список пар, которые есть на бирже
-    // ищем пересечение пар
-    // отдаем пары
-    parseOrderBooksOne({exchangeId, pairIds})
+    const exchangePairs = store.exchanges[exchangeId].pairs;
+    console.log(exchangePairs);
+    // получаем список активных пар
+    const exchangePairsActive = _.filter(exchangePairs, pair => pair.active === true);
+    console.log(exchangePairsActive);
+    // поулчаем их id
+    const exchangePairsActiveIds = _.map(exchangePairsActive, pair => pair.id);
+    console.log(exchangePairsActiveIds);
+    // запускаем парсинг
+    parseOrderBooksOne({exchangeId, pairIds: exchangePairsActiveIds})
   }
 
 }

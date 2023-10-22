@@ -16,6 +16,7 @@ export interface Exchange {
   active?: boolean;
   timestampFounded?: number;
   timestampUpdated?: number;
+  pairs: Dictionary<Pair>;
 }
 
 // Интерфейс для представления инструмента (торговой пары на конкретной бирже)
@@ -43,6 +44,7 @@ export interface Pair {
   // quoteAsset?: Asset // string; // Котируемый актив (монета)
   quoteId: string;
   active?: boolean;
+  exchanges: Dictionary<Exchange>;
 }
 
 // Интерфейс для представления актива (монеты)
