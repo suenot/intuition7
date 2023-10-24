@@ -62,9 +62,9 @@ export async function getMarketData(): Promise<{
                 active: false,
               };
             }
-            if (pairs[pairId]) {
-              pairs[pairId].exchanges[exchangeId] = exchange;
-            }
+            // if (pairs[pairId]) {
+            //   pairs[pairId].exchanges[exchangeId] = exchange;
+            // }
 
             if (!pairs[pairId]) {
               pairs[pairId] = {
@@ -72,9 +72,9 @@ export async function getMarketData(): Promise<{
                 baseId: baseId,
                 quoteId: quoteId,
                 active: false,
-                exchanges: {
-                  [exchangeId]: exchange,
-                },
+                // exchanges: {
+                //   [exchangeId]: exchange,
+                // },
               };
             }
 

@@ -44,7 +44,7 @@ export interface Pair {
   // quoteAsset?: Asset // string; // Котируемый актив (монета)
   quoteId: string;
   active?: boolean;
-  exchanges: Dictionary<Exchange>;
+  // exchanges: Dictionary<Exchange>; // TODO: убрал, так как при текущей архитектуре store это вызывает бесконечный цикл
 }
 
 // Интерфейс для представления актива (монеты)

@@ -19,15 +19,15 @@ import { toShift } from "../toShift/toShift";
 import debug from "debug";
 const log = debug("db");
 
-export const upsertExchange = ({ dbs, exchange}: { dbs: String[], exchange: Exchange }) => {
+export const upsertExchange = async ({ dbs, exchange}: { dbs: String[], exchange: Exchange }) => {
   for (const db of dbs) {
     try {
       switch (db) {
         case "nedb":
-          upsertExchangeNedb(exchange);
+          await upsertExchangeNedb(exchange);
           break;
         case "store":
-          upsertExchangeStore(exchange);
+          await upsertExchangeStore(exchange);
           break;
         default:
           break;
@@ -36,15 +36,15 @@ export const upsertExchange = ({ dbs, exchange}: { dbs: String[], exchange: Exch
   };
 };
 
-export const upsertAsset = ({ dbs, asset}: { dbs: String[], asset: Asset }) => {
+export const upsertAsset = async ({ dbs, asset}: { dbs: String[], asset: Asset }) => {
   for (const db of dbs) {
     try {
       switch (db) {
         case "nedb":
-          upsertAssetNedb(asset);
+          await upsertAssetNedb(asset);
           break;
         case "store":
-          upsertAssetStore(asset);
+          await upsertAssetStore(asset);
           break;
         default:
           break;
@@ -53,15 +53,15 @@ export const upsertAsset = ({ dbs, asset}: { dbs: String[], asset: Asset }) => {
   }
 };
 
-export const upsertPair = ({ dbs, pair}: { dbs: String[], pair: Pair }) => {
+export const upsertPair = async ({ dbs, pair}: { dbs: String[], pair: Pair }) => {
   for (const db of dbs) {
     try {
       switch (db) {
         case "nedb":
-          upsertPairNedb(pair);
+          await upsertPairNedb(pair);
           break;
         case "store":
-          upsertPairStore(pair);
+          await upsertPairStore(pair);
           break;
         default:
           break;
@@ -70,15 +70,15 @@ export const upsertPair = ({ dbs, pair}: { dbs: String[], pair: Pair }) => {
   }
 };
 
-export const upsertInstrument = ({ dbs, instrument}: { dbs: String[], instrument: Instrument }) => {
+export const upsertInstrument = async ({ dbs, instrument}: { dbs: String[], instrument: Instrument }) => {
   for (const db of dbs) {
     try {
       switch (db) {
         case "nedb":
-          upsertInstrumentNedb(instrument);
+          await upsertInstrumentNedb(instrument);
           break;
         case "store":
-          upsertInstrumentStore(instrument);
+          await upsertInstrumentStore(instrument);
           break;
         default:
           break;
@@ -99,9 +99,9 @@ export const upsertOrderBoook = async (orderBook: OrderBook) => {
   } catch (e) { log(e) };
 };
 
-export const saveOrderBookHistoryByTimer = (timer: number) => {
-  setInterval(() => {
-    saveOrderBookHistoryList();
+export const saveOrderBookHistoryByTimer = async (timer: number) => {
+  setInterval(async () => {
+    await saveOrderBookHistoryList();
   }, timer);
 }
 
@@ -112,13 +112,13 @@ export const saveOrderBookHistoryList = async () => {
   for (const exchange of exchanges) {
     for (const pair of pairs) {
       try {
-        saveOrderBookHistory(store.orderBooksByBase[pair.baseId][pair.quoteId][exchange.id])
+        await saveOrderBookHistory(store.orderBooksByBase[pair.baseId][pair.quoteId][exchange.id])
       } catch (e) { log(e) };
     }
   }
 }
 
-export const saveOrderBookHistory = (orderBook: OrderBook) => {
+export const saveOrderBookHistory = async (orderBook: OrderBook) => {
   try {
     const orderBookCloned = _.cloneDeep(orderBook)
     

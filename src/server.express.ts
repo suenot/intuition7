@@ -16,10 +16,10 @@ const log = debug("index");
   const exchangeIds = ['binance', 'okex', 'kucoin'];
   const pairIds = ['ETH/BTC', 'LTC/BTC', 'BTC/USDT', 'ETH/USDT', 'DOGE/USDT'];
   for (const exchangeId of exchangeIds) {
-    upsertExchange({ dbs: ['store', 'nedb'], exchange: {...store.exchanges[exchangeId], active: true}});
+    await upsertExchange({ dbs: ['store', 'nedb'], exchange: {...store.exchanges[exchangeId], active: true}});
   }
   for (const pairId of pairIds) {
-    upsertPair({ dbs: ['store', 'nedb'], pair: {...store.pairs[pairId], active: true}});
+    await upsertPair({ dbs: ['store', 'nedb'], pair: {...store.pairs[pairId], active: true}});
   }
 
 
