@@ -39,7 +39,10 @@ const log = debug("index");
 
 const app = express()
   .use(cors())
-  .get("/ping", (req: any, res: any) => res.send("pong"))
+  .get("/ping", (req: any, res: any) => {
+    console.log("pong");
+    res.send("pong");
+  })
   .get('/exchanges', (req: any, res: any) => {
     res.json(store.exchanges);
   })
