@@ -167,15 +167,14 @@ async ({ deep, require }) => {
     console.log({assetFileData, assetFile, ticker, assetAvatarData, assetAvatar, assetSrc, walletFileData, walletFile, walletAvatarData, walletAvatar, walletSrc, src});
     const amountFixed = typeof(amount) === 'number' ? amount.toFixed(8) : "";
     return <div>
-      <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' p='4' backgroundColor='white'>
+      <Box maxW='sm' minW='sm' w='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' p='4' backgroundColor='white'>
         
         <Avatar size='2xl' name='' src={src} mb='1' />
 
-        <Editable defaultValue='Name' style={{flex: '1 0 auto'}}>
+        <Editable defaultValue={walletNameData?.[0]?.value?.value} style={{flex: '1 0 auto'}}>
           <EditablePreview />
           <EditableInput />
         </Editable>
-        <Text size="sm">{walletNameData?.[0]?.value?.value}</Text>
         <Text>{amountFixed} {ticker?.[0]?.value?.value} <Avatar size='sm' name='' src={assetSrc} mb='1' /></Text>
         <Editable defaultValue={walletDescriptionData?.[0]?.value?.value}>
           <EditablePreview />
