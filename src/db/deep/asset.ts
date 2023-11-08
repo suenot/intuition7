@@ -225,7 +225,7 @@ export const createAsset = async (
   // descriptionSymbol
   const { data: [{ id: descriptionSymbolId }] } = await deep.insert({
     type_id: SymbolId,
-    string: { data: { value: '📝' } },
+    string: { data: { value: '✍️' } },
     in: { data: [
       {
         type_id: ContainId,
