@@ -177,7 +177,7 @@ export const createTransactionTests = async (
 
   // Создаем wallet1 description
   const { data: [{ id: wallet1DescriptionId }] } = await deep.insert({
-    type_id: WalletNameId,
+    type_id: WalletDescriptionId,
     from_id: walletId1,
     to_id: walletId1,
     in: { data: [
@@ -193,7 +193,7 @@ export const createTransactionTests = async (
 
     // Создаем wallet1 avatar
     const { data: [{ id: wallet1AvatarId }] } = await deep.insert({
-      type_id: WalletNameId,
+      type_id: WalletAvatarId,
       from_id: walletId1,
       to_id: walletId1,
       in: { data: [

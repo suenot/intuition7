@@ -189,7 +189,6 @@ export const createTransaction = async (
   });
   log({handleInsertId});
 
-
   return {packageId, TransactionId, transactionValueId, symbolId, DescriptionId, descriptionSymbolId, descriptionValueId, syncTextFile, handlerId, handleInsertId};
 };
 
