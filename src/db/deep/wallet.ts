@@ -148,5 +148,97 @@ export const createWallet = async (
   });
   log({ContainAssetId});
 
-  return {packageId, WalletId, waletValueId, symbolId, NameId, nameSymbolId, ContainAssetId};
+  // Avatar
+  const { data: [{ id: AvatarId }] } = await deep.insert({
+    type_id: TypeId,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'Avatar' } },
+      },
+    ] },
+    from_id: WalletId,
+    to_id: WalletId,
+  });
+  log({AvatarId});
+
+  // avatarSymbol
+  const { data: [{ id: avatarSymbolId }] } = await deep.insert({
+    type_id: SymbolId,
+    string: { data: { value: '🖼️' } },
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'avatarSymbol' } },
+      },
+    ] },
+    from_id: AvatarId,
+    to_id: AvatarId,
+  });
+  log({avatarSymbolId});
+
+  // avatarValue
+  const { data: [{ id: avatarValueId }] } = await deep.insert({
+    type_id: ValueId,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'avatarValue' } },
+      },
+    ] },
+    from_id: AvatarId,
+    to_id: StringId,
+  });
+  log({avatarValueId});
+
+  // Description
+  const { data: [{ id: DescriptionId }] } = await deep.insert({
+    type_id: TypeId,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'Description' } },
+      },
+    ] },
+    from_id: WalletId,
+    to_id: WalletId,
+  });
+  log({DescriptionId});
+
+  // descriptionSymbol
+  const { data: [{ id: descriptionSymbolId }] } = await deep.insert({
+    type_id: SymbolId,
+    string: { data: { value: '✍️' } },
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'descriptionSymbol' } },
+      },
+    ] },
+    from_id: DescriptionId,
+    to_id: DescriptionId,
+  });
+  log({descriptionSymbolId});
+
+  // descriptionValue
+  const { data: [{ id: descriptionValueId }] } = await deep.insert({
+    type_id: ValueId,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'descriptionValue' } },
+      },
+    ] },
+    from_id: DescriptionId,
+    to_id: StringId,
+  });
+  log({descriptionValueId});
+
+  return {packageId, WalletId, waletValueId, symbolId, NameId, nameSymbolId, ContainAssetId, AvatarId, avatarSymbolId, avatarValueId, DescriptionId, descriptionSymbolId, descriptionValueId};
 };

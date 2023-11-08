@@ -54,7 +54,7 @@ export const createEmission = async (
     type_id: TypeId,
     // ASK: можно добавить, что она от Asset к Wallet, а так Any к Any
     // ASK: может эмиссия это просто один из видов транзакций? Но у нее свои хендлеры (она не снимает деньги с ассета, но эту логику можно объединить в одном insert handler)
-    from_id: AssetId,
+    from_id: AssetId, // AssetId,
     to_id: WalletId,
     in: { data: [
       {
