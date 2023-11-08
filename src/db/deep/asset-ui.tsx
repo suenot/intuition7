@@ -1,8 +1,9 @@
 async ({ deep, require }) => {
   const React = require('react');
-  const { Box, Text, Avatar, Wrap, WrapItem } = require('@chakra-ui/react');
+  const { Box, Text, Avatar, Wrap, WrapItem, Editable, EditablePreview, EditableInput, EditableTextarea, Center, Flex } = require('@chakra-ui/react');
   const asyncFileTypeId = await deep.id("@deep-foundation/core", "AsyncFile");
   const assetNameTypeId = await deep.id("@suenot/asset", "Name");
+  const assetDescriptionTypeId = await deep.id("@suenot/asset", "Description");
   const assetTickerTypeId = await deep.id("@suenot/asset", "Ticker");
   const assetAvatarTypeId = await deep.id("@suenot/asset", "Avatar");
   
@@ -19,6 +20,10 @@ async ({ deep, require }) => {
           },
           {
             to_id: link.id,
+            type_id: { _id: ["@suenot/asset", "Description"] }
+          },
+          {
+            to_id: link.id,
             type_id: { _id: ["@suenot/asset", "Ticker"] }
           },
           {
@@ -32,11 +37,15 @@ async ({ deep, require }) => {
       to_id: link.id,
       type_id: asyncFileTypeId
     });
-    const name = deep.minilinks.query({
+    const nameData = deep.minilinks.query({
       to_id: link.id,
       type_id: assetNameTypeId
     });
-    const ticker = deep.minilinks.query({
+    const assetDescriptionData = deep.minilinks.query({
+      to_id: link.id,
+      type_id: assetDescriptionTypeId
+    });
+    const tickerData = deep.minilinks.query({
       to_id: link.id,
       type_id: assetTickerTypeId
     });
@@ -48,15 +57,38 @@ async ({ deep, require }) => {
     const avatar = avatarData?.[0]?.value?.value;
     // File has more priority than avatar (url)
     const src = file || avatar || "";
+
+    const name = nameData?.[0]?.value?.value || '';
+    const ticker = tickerData?.[0]?.value?.value || '';
+    const description = assetDescriptionData?.[0]?.value?.value || "";
     console.log({data});
     console.log({fileData, file, name, ticker, avatarData, avatar, src});
     return <div>
-      <Box maxW='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' p='4' backgroundColor='white'>
+      <Box maxW='sm' minW='sm' w='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' p='4' backgroundColor='white'>
+        <div>
+          <Flex
+            align="center"
+            justify="center"
+          >
+            <Avatar size='2xl' name='' src={src} mb='1' />
+          </Flex>
+        </div>
         <Wrap>
-          <Avatar size='2xl' name='' src={src} mb='1' />{' '}
-          <Text>{name?.[0]?.value?.value}</Text>
-          <Text>{ticker?.[0]?.value?.value}</Text>
+          <Editable defaultValue={name} style={{flex: '1 0 auto'}}>
+            <EditablePreview />
+            <EditableInput />
+          </Editable>
         </Wrap>
+        <Wrap>
+          <Editable defaultValue={ticker}>
+            <EditablePreview />
+            <EditableInput />
+          </Editable>
+        </Wrap>
+        <Editable defaultValue={description}>
+          <EditablePreview />
+          <EditableTextarea />
+        </Editable>
       </Box>
     </div>;
   }
