@@ -45,6 +45,9 @@ export const createTransactionTests = async (
   const AssetAvatarId = await deep.id('@suenot/asset', 'Avatar');
   const AssetDescriptionId = await deep.id('@suenot/asset', 'Description');
   const WalletId = await deep.id('@suenot/wallet', 'Wallet');
+  const WalletNameId = await deep.id('@suenot/wallet', 'Name');
+  const WalletDescriptionId = await deep.id('@suenot/wallet', 'Description');
+  const WalletAvatarId = await deep.id('@suenot/wallet', 'Avatar');
   const ContainAssetId = await deep.id('@suenot/wallet', 'ContainAsset');
   const TransactionId = await deep.id('@suenot/transaction', 'Transaction');
   // END TODO
@@ -56,7 +59,7 @@ export const createTransactionTests = async (
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'assetId1' } },
+        string: { data: { value: 'asset1' } },
       },
     ] },
     out: { data: [
@@ -73,7 +76,7 @@ export const createTransactionTests = async (
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'asset1NameId' } },
+        string: { data: { value: 'asset1Name' } },
       },
     ] },
     from_id: assetId1,
@@ -89,7 +92,7 @@ export const createTransactionTests = async (
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'asset1TickerId' } },
+        string: { data: { value: 'asset1Ticker' } },
       },
     ] },
     out: { data: [
@@ -107,7 +110,7 @@ export const createTransactionTests = async (
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'asset1AvatarId' } },
+        string: { data: { value: 'asset1Avatar' } },
       },
     ] },
     out: { data: [
@@ -125,7 +128,7 @@ export const createTransactionTests = async (
         {
           type_id: ContainId,
           from_id: packageId,
-          string: { data: { value: 'asset1DescriptionId' } },
+          string: { data: { value: 'asset1Description' } },
         },
       ] },
       out: { data: [
@@ -143,7 +146,7 @@ export const createTransactionTests = async (
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'walletId1' } },
+        string: { data: { value: 'wallet1' } },
       },
     ] },
     out: { data: [
@@ -155,6 +158,54 @@ export const createTransactionTests = async (
     number: { data: { value: 333 } },
   });
   console.log({walletId1});
+
+  // Создаем wallet1 name
+  const { data: [{ id: wallet1NameId }] } = await deep.insert({
+    type_id: WalletNameId,
+    from_id: walletId1,
+    to_id: walletId1,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'wallet1Name' } },
+      },
+    ] },
+    string: { data: { value: "For cat's toys" } },
+  });
+  console.log({wallet1NameId});
+
+  // Создаем wallet1 description
+  const { data: [{ id: wallet1DescriptionId }] } = await deep.insert({
+    type_id: WalletNameId,
+    from_id: walletId1,
+    to_id: walletId1,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'wallet1Description' } },
+      },
+    ] },
+    string: { data: { value: "Buying toys for cats is essential for their physical and mental well-being, and it enhances the quality of their life while fostering a closer connection with their human companions." } },
+  });
+  console.log({wallet1DescriptionId});
+
+    // Создаем wallet1 avatar
+    const { data: [{ id: wallet1AvatarId }] } = await deep.insert({
+      type_id: WalletNameId,
+      from_id: walletId1,
+      to_id: walletId1,
+      in: { data: [
+        {
+          type_id: ContainId,
+          from_id: packageId,
+          string: { data: { value: 'wallet1Avatar' } },
+        },
+      ] },
+      string: { data: { value: "https://github.com/suenot/portfolio-icons/blob/main/cat.jpeg?raw=true" } },
+    });
+    console.log({wallet1AvatarId});
 
   // Создаем wallet2
   const { data: [{ id: walletId2 }] } = await deep.insert({
