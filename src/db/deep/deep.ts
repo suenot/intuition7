@@ -14,6 +14,7 @@ import { createTransaction } from './transaction';
 import { createEmission } from './emission';
 import { createTransactionTests } from './transaction-tests';
 import { createEmissionTests } from './emission-tests';
+import { createPortfolioTests } from './portfolio-tests';
 import { removePackage } from "./remove-package";
 
 const apolloClient = generateApolloClient({
@@ -134,7 +135,7 @@ const f = async () => {
   // Создаем пакет transaction-tests
   const resultRemoveTransactionTests = await removePackage({ deep, packageName: '@suenot/transaction-tests' });
   console.log({resultRemoveTransactionTests})
-  
+
   const resultCreateTransactionTests = await createTransactionTests({deep, PackageId, ContainId, JoinId, SymbolId, TypeId, NumberId, StringId, ValueId})
   console.log({resultCreateTransactionTests})
 
@@ -144,6 +145,13 @@ const f = async () => {
 
   const resultCreateEmissionTests = await createEmissionTests({deep, PackageId, ContainId, JoinId, SymbolId, TypeId, NumberId, StringId, ValueId})
   console.log({resultCreateEmissionTests})
+
+  // Создаем пакет portfolio-tests
+  const resultRemovePortfolioTests = await removePackage({ deep, packageName: '@suenot/portfolio-tests' });
+  console.log({resultRemovePortfolioTests})
+
+  const resultCreatePortfolioTests = await createPortfolioTests({deep, PackageId, ContainId, JoinId, SymbolId, TypeId, NumberId, StringId, ValueId})
+  console.log({resultCreatePortfolioTests})
 
 }
 f();

@@ -2,7 +2,7 @@ import { DeepClient } from "@deep-foundation/deeplinks/imports/client";
 import debug from "debug";
 const log = debug("portfolio");
 
-export const createTransactionTests = async (
+export const createPortfolioTests = async (
   {deep, PackageId, ContainId, JoinId, SymbolId, TypeId, NumberId, StringId, ValueId}:
   {
     deep: DeepClient,
@@ -18,7 +18,7 @@ export const createTransactionTests = async (
   
   const { data: [{ id: packageId }] } = await deep.insert({
     type_id: PackageId,
-    string: { data: { value: `@suenot/transaction-tests` } },
+    string: { data: { value: `@suenot/portfolio-tests` } },
     in: { data: [
       {
         type_id: ContainId,
