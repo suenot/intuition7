@@ -1,6 +1,7 @@
 async ({ deep, require }) => {
   const React = require('react');
-  const { Box, Text, Avatar, Wrap, WrapItem, Editable, EditablePreview, EditableInput, EditableTextarea, Center, Flex } = require('@chakra-ui/react');
+  const { useState } = React;
+  const { Box, Text, Avatar, Wrap, WrapItem, Editable, EditablePreview, EditableInput, EditableTextarea, Center, Flex, Divider } = require('@chakra-ui/react');
   const asyncFileTypeId = await deep.id("@deep-foundation/core", "AsyncFile");
   const assetNameTypeId = await deep.id("@suenot/asset", "Name");
   const assetDescriptionTypeId = await deep.id("@suenot/asset", "Description");
@@ -53,16 +54,30 @@ async ({ deep, require }) => {
       to_id: link.id,
       type_id: assetAvatarTypeId
     });
-    const file = fileData?.[0]?.id && `/api/file?linkId=${fileData?.[0]?.id}`;
-    const avatar = avatarData?.[0]?.value?.value;
+    const assetFileValue = fileData?.[0]?.id && `/api/file?linkId=${fileData?.[0]?.id}`;
+    const assetAvatarValue = avatarData?.[0]?.value?.value;
+    const assetAvatarId = avatarData?.[0]?.id;
     // File has more priority than avatar (url)
-    const src = file || avatar || "";
+    const assetSrcValue = assetFileValue || assetAvatarValue || "";
 
-    const name = nameData?.[0]?.value?.value || '';
-    const ticker = tickerData?.[0]?.value?.value || '';
-    const description = assetDescriptionData?.[0]?.value?.value || "";
+    const assetNameValue = nameData?.[0]?.value?.value || '';
+    const assetNameId = nameData?.[0]?.id;
+    const assetTickerValue = tickerData?.[0]?.value?.value || '';
+    const assetTickerId = tickerData?.[0]?.id;
+    const assetDescriptionValue = assetDescriptionData?.[0]?.value?.value || "";
+    const assetDescriptionId = assetDescriptionData?.[0]?.id;
     console.log({data});
-    console.log({fileData, file, name, ticker, avatarData, avatar, src});
+
+
+
+    const [assetName, setAssetName] = useState(assetNameValue);
+    const [assetTicker, setAssetTicker] = useState(assetTickerValue);
+    const [assetDescription, setAssetDescription] = useState(assetDescriptionValue);
+    const [assetFile, setAssetFile] = useState(assetFileValue);
+    const [assetAvatar, setAssetAvatar] = useState(assetAvatarValue);
+    const [assetSrc, setAssetSrc] = useState(assetSrcValue);
+
+
     return <div>
       <Box maxW='sm' minW='sm' w='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' p='4' backgroundColor='white'>
         <div>
@@ -70,24 +85,62 @@ async ({ deep, require }) => {
             align="center"
             justify="center"
           >
-            <Avatar size='2xl' name='' src={src} mb='1' />
+            <Avatar size='2xl' name='' src={assetSrc} mb='1' />
           </Flex>
         </div>
-        <Wrap>
-          <Editable defaultValue={name} style={{flex: '1 0 auto'}}>
-            <EditablePreview />
-            <EditableInput />
-          </Editable>
-        </Wrap>
-        <Wrap>
-          <Editable defaultValue={ticker}>
-            <EditablePreview />
-            <EditableInput />
-          </Editable>
-        </Wrap>
-        <Editable defaultValue={description}>
+        <Editable defaultValue="Insert name" value={assetName} onChange={async (value) => {
+          setAssetName(value)
+          const { data: [{ link: assetNameLink }] } = await deep.update(
+            { link_id: assetNameId },
+            { value },
+            { table: 'strings', returning: `link { ${deep.selectReturning} }` }
+          );
+          console.log({assetNameLink});
+          deep.minilinks.apply([assetNameLink]);
+        }}>
+          <EditablePreview />
+          <EditableInput />
+        </Editable>
+        <Editable defaultValue="Insert ticker" value={assetTicker} onChange={async (value) => {
+          setAssetTicker(value)
+          const { data: [{ link: assetTickerLink }] } = await deep.update(
+              { link_id: assetTickerId },
+              { value },
+              { table: 'strings', returning: `link { ${deep.selectReturning} }` }
+            );
+            console.log({assetTickerLink});
+            deep.minilinks.apply([assetTickerLink]);
+        }}>
+          <EditablePreview />
+          <EditableInput />
+        </Editable>
+        <Editable defaultValue="Insert description" value={assetDescription} onChange={async (value) => {
+            setAssetDescription(value)
+            const { data: [{ link: assetDescriptionLink }] } = await deep.update(
+              { link_id: assetDescriptionId },
+              { value },
+              { table: 'strings', returning: `link { ${deep.selectReturning} }` }
+            );
+            console.log({assetDescriptionLink});
+          }}>
           <EditablePreview />
           <EditableTextarea />
+        </Editable>
+        <Divider />
+        <Editable defaultValue="Insert avatar url" value={assetAvatar} onChange={async (value) => {
+          setAssetAvatar(value);
+          const newSrc = assetFile || value || "";
+          setAssetSrc(newSrc);
+          const { data: [{ link: assetAvatarLink }] } = await deep.update(
+            { link_id: assetAvatarId },
+            { value: newSrc },
+            { table: 'strings', returning: `link { ${deep.selectReturning} }` }
+          );
+          console.log({assetAvatarLink});
+          deep.minilinks.apply([assetAvatarLink]);
+        }}>
+          <EditablePreview />
+          <EditableInput />
         </Editable>
       </Box>
     </div>;

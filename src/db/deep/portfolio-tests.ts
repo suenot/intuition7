@@ -199,7 +199,6 @@ export const createPortfolioTests = async (
         to_id: walletId2,
       }
     ] },
-    number: { data: { value: 333 } },
   });
   console.log({portfolio1Id});
 
