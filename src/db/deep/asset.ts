@@ -2,6 +2,8 @@ import { DeepClient } from "@deep-foundation/deeplinks/imports/client";
 import debug from "debug";
 const log = debug("asset");
 
+const PACKAGE_VERSION = '0.0.1';
+
 export const createAsset = async (
   {deep, PackageId, ContainId, JoinId, SymbolId, TypeId, StringId, ValueId}:
   {
@@ -15,6 +17,14 @@ export const createAsset = async (
     ValueId: number
   }) => {
   
+  const PackageNamespaceId = await await deep.id('@deep-foundation/core', 'PackageNamespace');
+  const PackageVersionId = await await deep.id('@deep-foundation/core', 'PackageVersion');
+  const PackageActiveId = await await deep.id('@deep-foundation/core', 'PackageActive');
+  const reservedIdList = await deep.reserve(3);
+  const packageNamespaceId = reservedIdList.pop();
+  const packageVersionId = reservedIdList.pop();
+  const packageActiveId = reservedIdList.pop();
+
   // package
   const { data: [{ id: packageId }] } = await deep.insert({
     type_id: PackageId,
@@ -23,6 +33,22 @@ export const createAsset = async (
       {
         type_id: ContainId,
         from_id: deep.linkId,
+      },
+      {
+        type_id: ContainId,
+        from: {
+          id: packageNamespaceId,
+          type_id: PackageNamespaceId,
+        },
+      },
+      {
+        type_id: PackageVersionId,
+        from_id: packageNamespaceId,
+        string: { data: { value: PACKAGE_VERSION } },
+      },
+      {
+        type_id: PackageActiveId,
+        from_id: packageNamespaceId,
       },
     ] },
     out: { data: [
@@ -37,6 +63,33 @@ export const createAsset = async (
     ] },
   });
   log({packageId});
+
+    // @deep-foundation/core PackageNamespace
+  // @deep-foundation/core PackageActive
+  // @deep-foundation/core PackageVersion
+
+
+  // const { data: [{ id: packageId }] } = await deep.insert({
+  //   type_id: PackageId,
+  //   string: { data: { value: `@suenot/asset` } },
+  //   in: { data: [
+  //     {
+  //       type_id: ContainId,
+  //       from_id: deep.linkId,
+  //     },
+  //   ] },
+  //   out: { data: [
+  //     {
+  //       type_id: JoinId,
+  //       to_id: await deep.id('deep', 'users', 'packages'),
+  //     },
+  //     {
+  //       type_id: JoinId,
+  //       to_id: await deep.id('deep', 'admin'),
+  //     },
+  //   ] },
+  // });
+  // log({packageId});
 
   // Asset
   const { data: [{ id: AssetId }] } = await deep.insert({
