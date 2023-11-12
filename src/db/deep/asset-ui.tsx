@@ -89,14 +89,16 @@ async ({ deep, require }) => {
       console.log({assetNameId, assetName});
       const insertUpdateAssetName = async () => {
         if (!assetNameId) {
+          console.log('!assetNameId')
           const { data: [{ id: _assetNameId }] } = await deep.insert({
-            type_id: assetNameId,
+            type_id: AssetNameId,
             from_id: link.id,
             to_id: link.id,
             string: { data: { value: assetName } },
           })
           assetNameId = _assetNameId;
         } else {
+          console.log('else');
           const { data: [{ link: _assetNameId }] } = await deep.update(
             { link_id: assetNameId },
             { value: assetName },
@@ -112,8 +114,9 @@ async ({ deep, require }) => {
       console.log({assetDescriptionId, assetDescription});
       const insertUpdateAssetDescription = async () => {
         if (!assetDescriptionId) {
+          console.log("Description doesn't exist")
           const { data: [{ id: _assetDescriptionId }] } = await deep.insert({
-            type_id: assetDescriptionId,
+            type_id: AssetDescriptionId,
             from_id: link.id,
             to_id: link.id,
             string: { data: { value: assetDescription } },
@@ -121,6 +124,7 @@ async ({ deep, require }) => {
           assetDescriptionId = _assetDescriptionId;
           deep.minilinks.apply([_assetDescriptionId]);
         } else {
+          console.log("Description exist")
           const { data: [{ link: _assetDescriptionId }] } = await deep.update(
             { link_id: assetDescriptionId },
             { value: assetDescription },
@@ -136,7 +140,7 @@ async ({ deep, require }) => {
       const insertUpdateAssetTicker = async () => {
         if (!assetTickerId) {
           const { data: [{ id: _assetTickerId }] } = await deep.insert({
-            type_id: assetTickerId,
+            type_id: AssetTickerId,
             from_id: link.id,
             to_id: link.id,
             string: { data: { value: assetTicker } },
@@ -157,7 +161,7 @@ async ({ deep, require }) => {
       const insertUpdateAssetAvatar = async () => {
         if (!assetAvatarId) {
           const { data: [{ id: _assetAvatarId }] } = await deep.insert({
-            type_id: assetAvatarId,
+            type_id: AssetAvatarId,
             from_id: link.id,
             to_id: link.id,
             string: { data: { value: assetAvatar } },
