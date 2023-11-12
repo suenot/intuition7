@@ -1,8 +1,11 @@
+import latestVersion from 'latest-version';
+import { incrementPatchVersion } from './incrementPatchVersion';
 import { DeepClient } from "@deep-foundation/deeplinks/imports/client";
 import debug from "debug";
 const log = debug("asset");
 
-const PACKAGE_VERSION = '0.0.1';
+const PACKAGE_NAME = '@suenot/asset';
+const PACKAGE_VERSION = incrementPatchVersion(await latestVersion(PACKAGE_NAME));
 
 export const createAsset = async (
   {deep, PackageId, ContainId, JoinId, SymbolId, TypeId, StringId, ValueId}:
@@ -28,7 +31,7 @@ export const createAsset = async (
   // package
   const { data: [{ id: packageId }] } = await deep.insert({
     type_id: PackageId,
-    string: { data: { value: `@suenot/asset` } },
+    string: { data: { value: PACKAGE_NAME } },
     in: { data: [
       {
         type_id: ContainId,
@@ -39,6 +42,7 @@ export const createAsset = async (
         from: {
           id: packageNamespaceId,
           type_id: PackageNamespaceId,
+          string: { data: { value: PACKAGE_NAME } },
         },
       },
       {
