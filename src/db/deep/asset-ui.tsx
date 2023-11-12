@@ -59,7 +59,7 @@ async ({ deep, require }) => {
 
 
     var assetFileValue = fileData?.[0]?.id && `/api/file?linkId=${fileData?.[0]?.id}`;
-    var assetAvatarValue = avatarData?.[0]?.value?.value;
+    var assetAvatarValue = avatarData?.[0]?.value?.value || "";
     var assetAvatarId = avatarData?.[0]?.id;
     // File has more priority than avatar (url)
     var assetSrcValue = assetFileValue || assetAvatarValue || "";
@@ -110,7 +110,7 @@ async ({ deep, require }) => {
         <Divider />
         <Editable placeholder="Insert avatar url" value={assetAvatar} onChange={async (value) => {
           setAssetAvatar(value);
-          const newSrc = assetFile || value || undefined;
+          const newSrc = assetFile || value || "";
           setAssetSrc(newSrc);
         }}>
           <EditablePreview w={'100%'} />
@@ -120,7 +120,7 @@ async ({ deep, require }) => {
           if (assetName === undefined) setAssetName("");
           if (assetDescription === undefined) setAssetDescription("");
           if (assetTicker === undefined) setAssetTicker("");
-          if (assetAvatar === undefined) setAssetAvatar("");
+          if (assetAvatar === undefined || assetAvatar === null) setAssetAvatar("");
 
           if (!assetNameId) {
             console.log("Asset doesn't exist")
