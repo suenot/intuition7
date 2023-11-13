@@ -7,6 +7,7 @@ const log = debug("asset");
 const PACKAGE_NAME = '@suenot/asset';
 const PACKAGE_VERSION = incrementPatchVersion(await latestVersion(PACKAGE_NAME));
 
+
 export const createAsset = async (
   {deep, PackageId, ContainId, JoinId, SymbolId, TypeId, StringId, ValueId}:
   {
@@ -19,14 +20,13 @@ export const createAsset = async (
     StringId: number,
     ValueId: number
   }) => {
+  console.log({PACKAGE_NAME, PACKAGE_VERSION});
   
-  const PackageNamespaceId = await await deep.id('@deep-foundation/core', 'PackageNamespace');
-  const PackageVersionId = await await deep.id('@deep-foundation/core', 'PackageVersion');
-  const PackageActiveId = await await deep.id('@deep-foundation/core', 'PackageActive');
-  const reservedIdList = await deep.reserve(3);
-  const packageNamespaceId = reservedIdList.pop();
-  const packageVersionId = reservedIdList.pop();
-  const packageActiveId = reservedIdList.pop();
+  const PackageNamespaceId = await deep.id('@deep-foundation/core', 'PackageNamespace');
+  const PackageVersionId = await deep.id('@deep-foundation/core', 'PackageVersion');
+  const PackageActiveId = await deep.id('@deep-foundation/core', 'PackageActive');
+  const PublishId = await deep.id('@deep-foundation/npm-packager', 'Publish');
+  const PackageQueryId = await deep.id('@deep-foundation/core', 'PackageQuery');
 
   // package
   const { data: [{ id: packageId }] } = await deep.insert({
@@ -36,23 +36,6 @@ export const createAsset = async (
       {
         type_id: ContainId,
         from_id: deep.linkId,
-      },
-      {
-        type_id: ContainId,
-        from: {
-          id: packageNamespaceId,
-          type_id: PackageNamespaceId,
-          string: { data: { value: PACKAGE_NAME } },
-        },
-      },
-      {
-        type_id: PackageVersionId,
-        from_id: packageNamespaceId,
-        string: { data: { value: PACKAGE_VERSION } },
-      },
-      {
-        type_id: PackageActiveId,
-        from_id: packageNamespaceId,
       },
     ] },
     out: { data: [
@@ -68,32 +51,50 @@ export const createAsset = async (
   });
   log({packageId});
 
-    // @deep-foundation/core PackageNamespace
-  // @deep-foundation/core PackageActive
-  // @deep-foundation/core PackageVersion
+  // package namespace
+  const { data: [{ id: packageNamespaceId }] } = await deep.insert({
+    type_id: PackageNamespaceId,
+    string: { data: { value: PACKAGE_NAME } },
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: deep.linkId,
+      },
+    ] },
+    out: { data: [
+      {
+        type_id: ContainId,
+        to_id: packageId,
+      },
+      {
+        type_id: PackageVersionId,
+        to_id: packageId,
+        string: { data: { value: PACKAGE_VERSION } },
+      },
+      {
+        type_id: PackageActiveId,
+        to_id: packageId,
+      },
+    ] },
+  });
+  console.log({packageNamespaceId});
 
-
-  // const { data: [{ id: packageId }] } = await deep.insert({
-  //   type_id: PackageId,
-  //   string: { data: { value: `@suenot/asset` } },
-  //   in: { data: [
-  //     {
-  //       type_id: ContainId,
-  //       from_id: deep.linkId,
-  //     },
-  //   ] },
-  //   out: { data: [
-  //     {
-  //       type_id: JoinId,
-  //       to_id: await deep.id('deep', 'users', 'packages'),
-  //     },
-  //     {
-  //       type_id: JoinId,
-  //       to_id: await deep.id('deep', 'admin'),
-  //     },
-  //   ] },
-  // });
-  // log({packageId});
+  // publish
+  const { data: [{ id: publishId }] } = await deep.insert({
+    type_id: PublishId,
+    from_id: packageId,
+    to: {
+      type_id: PackageQueryId,
+      string: { data: { value: PACKAGE_NAME } },
+    },
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: deep.linkId,
+      },
+    ] },
+  });
+  console.log({publishId});
 
   // Asset
   const { data: [{ id: AssetId }] } = await deep.insert({

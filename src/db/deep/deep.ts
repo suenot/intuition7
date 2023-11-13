@@ -98,6 +98,65 @@ const f = async () => {
 
   await delay(1000);
 
+  const packages = [
+    {
+      name: '@suenot/profitmaker',
+      version_update: false,
+    },
+    {
+      name: '@suenot/asset',
+      version_update: false,
+    },
+    {
+      name: '@suenot/asset-ui',
+      version_update: false,
+    },
+    {
+      name: '@suenot/wallet',
+      version_update: false,
+    },
+    {
+      name: '@suenot/wallet-ui',
+      version_update: false,
+    },
+    {
+      name: '@suenot/portfolio',
+      version_update: false,
+    },
+    {
+      name: '@suenot/portfolio-ui',
+      version_update: false,
+    },
+    {
+      name: '@suenot/transaction',
+      version_update: false,
+    },
+    {
+      name: '@suenot/emission',
+      version_update: false,
+    },
+    {
+      name: '@suenot/transaction-tests',
+      version_update: true,
+    },
+    {
+      name: '@suenot/emission-tests',
+      version_update: true,
+    },
+    {
+      name: '@suenot/portfolio-tests',
+      version_update: true,
+    },
+  ]
+
+  // for (const deepPackage of packages) {
+  //   // remove old package
+  //   const resultRemovePackage = await removePackage({ deep, packageName: deepPackage.name });
+  //   console.log({deepPackage, resultRemovePackage})
+
+  //   // insert new package
+  // }
+
   // Создаем пакет profitmaker
   await createProfitmaker({ deep, PackageId, ContainId, JoinId });
   
