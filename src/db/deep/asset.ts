@@ -1,37 +1,34 @@
-import latestVersion from 'latest-version';
-import { incrementPatchVersion } from './incrementPatchVersion';
 import { DeepClient } from "@deep-foundation/deeplinks/imports/client";
+import { TypesStore } from "./types-store";
 import debug from "debug";
 const log = debug("asset");
 
-const PACKAGE_NAME = '@suenot/asset';
-const PACKAGE_VERSION = incrementPatchVersion(await latestVersion(PACKAGE_NAME));
-
-
-export const createAsset = async (
-  {deep, PackageId, ContainId, JoinId, SymbolId, TypeId, StringId, ValueId}:
-  {
-    deep: DeepClient,
-    PackageId: number,
-    ContainId: number,
-    JoinId: number,
-    SymbolId: number,
-    TypeId: number,
-    StringId: number,
-    ValueId: number
-  }) => {
-  console.log({PACKAGE_NAME, PACKAGE_VERSION});
-  
-  const PackageNamespaceId = await deep.id('@deep-foundation/core', 'PackageNamespace');
-  const PackageVersionId = await deep.id('@deep-foundation/core', 'PackageVersion');
-  const PackageActiveId = await deep.id('@deep-foundation/core', 'PackageActive');
-  const PublishId = await deep.id('@deep-foundation/npm-packager', 'Publish');
-  const PackageQueryId = await deep.id('@deep-foundation/core', 'PackageQuery');
+export const createAsset = async ({deep, Types, packageName, packageVersion}: {
+  deep: DeepClient,
+  packageName: string,
+  packageVersion: string,
+  Types: TypesStore,
+}) => {
+  const {
+    PackageNamespaceId,
+    PackageVersionId,
+    PackageActiveId,
+    PublishId,
+    PackageQueryId,
+    PackageId,
+    ContainId,
+    JoinId,
+    SymbolId,
+    TypeId,
+    StringId,
+    ValueId,
+  } = Types;
+  console.log({packageName, packageVersion, PackageId, ContainId, JoinId, SymbolId, TypeId, StringId, ValueId});
 
   // package
   const { data: [{ id: packageId }] } = await deep.insert({
     type_id: PackageId,
-    string: { data: { value: PACKAGE_NAME } },
+    string: { data: { value: packageName } },
     in: { data: [
       {
         type_id: ContainId,
@@ -54,7 +51,7 @@ export const createAsset = async (
   // package namespace
   const { data: [{ id: packageNamespaceId }] } = await deep.insert({
     type_id: PackageNamespaceId,
-    string: { data: { value: PACKAGE_NAME } },
+    string: { data: { value: packageName } },
     in: { data: [
       {
         type_id: ContainId,
@@ -69,7 +66,7 @@ export const createAsset = async (
       {
         type_id: PackageVersionId,
         to_id: packageId,
-        string: { data: { value: PACKAGE_VERSION } },
+        string: { data: { value: packageVersion } },
       },
       {
         type_id: PackageActiveId,
@@ -85,7 +82,7 @@ export const createAsset = async (
     from_id: packageId,
     to: {
       type_id: PackageQueryId,
-      string: { data: { value: PACKAGE_NAME } },
+      string: { data: { value: packageName } },
     },
     in: { data: [
       {

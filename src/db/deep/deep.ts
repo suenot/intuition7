@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import 'dotenv/config';
+import latestVersion from 'latest-version';
+import { incrementPatchVersion } from './incrementPatchVersion';
 
 import { DeepClient } from "@deep-foundation/deeplinks/imports/client";
 import { generateApolloClient } from "@deep-foundation/hasura/client";
@@ -16,6 +18,7 @@ import { createTransactionTests } from './transaction-tests';
 import { createEmissionTests } from './emission-tests';
 import { createPortfolioTests } from './portfolio-tests';
 import { removePackage } from "./remove-package";
+import { createTypesStore } from "./types-store";
 
 const apolloClient = generateApolloClient({
   path: process.env.PUBLIC_GQL_PATH,
@@ -28,189 +31,101 @@ const guestDeep = new DeepClient({ deep: unloginedDeep, ...guest });
 const admin = await guestDeep.login({
   linkId: await guestDeep.id('deep', 'admin'),
 });
-const deep = new DeepClient({ deep: guestDeep, ...admin });
-
-const delay = (time = 1000) => new Promise(res => setTimeout(res, time));
+export const deep = new DeepClient({ deep: guestDeep, ...admin });
 
 const f = async () => {
-  const UserId = await deep.id('@deep-foundation/core', 'User');
-  const TypeId = await deep.id('@deep-foundation/core', 'Type');
-  const AnyId = await deep.id('@deep-foundation/core', 'Any');
-  const JoinId = await deep.id('@deep-foundation/core', 'Join');
-  const ContainId = await deep.id('@deep-foundation/core', 'Contain');
-  const ValueId = await deep.id('@deep-foundation/core', 'Value');
-  const StringId = await deep.id('@deep-foundation/core', 'String');
-  const NumberId = await deep.id('@deep-foundation/core', 'Number');
-  const PackageId = await deep.id('@deep-foundation/core', 'Package');
-  const SymbolId = await deep.id('@deep-foundation/core', 'Symbol');
+  console.log('initStore');
+  const Types = await createTypesStore({deep});
+  console.log('end initStore');
 
-  const SyncTextFileId = await deep.id('@deep-foundation/core', 'SyncTextFile');
-  const dockerSupportsJsId = await deep.id('@deep-foundation/core', 'dockerSupportsJs');
-  const dockerSupportsBunJsId = await deep.id('@archer-lotos/bun-js-docker-isolation-provider', 'dockerSupportsBunJs');
-  const HandlerId = await deep.id('@deep-foundation/core', 'Handler');
-  const HandleInsertId = await deep.id('@deep-foundation/core', 'HandleInsert');
-  const HandleDeleteId = await deep.id('@deep-foundation/core', 'HandleDelete');
-
-  const TreeId = await deep.id('@deep-foundation/core', 'Tree');
-  const TreeIncludeNodeId = await deep.id('@deep-foundation/core', 'TreeIncludeNode');
-  const TreeIncludeUpId = await deep.id('@deep-foundation/core', 'TreeIncludeUp');
-  const TreeIncludeFromCurrentId = await deep.id('@deep-foundation/core', 'TreeIncludeFromCurrent');
-
-  const RuleId = await deep.id('@deep-foundation/core', 'Rule');
-  const RuleSubjectId = await deep.id('@deep-foundation/core', 'RuleSubject');
-  const RuleObjectId = await deep.id('@deep-foundation/core', 'RuleObject');
-  const RuleActionId = await deep.id('@deep-foundation/core', 'RuleAction');
-  const SelectorId = await deep.id('@deep-foundation/core', 'Selector');
-  const SelectorIncludeId = await deep.id('@deep-foundation/core', 'SelectorInclude');
-  const SelectorExcludeId = await deep.id('@deep-foundation/core', 'SelectorExclude');
-  const SelectorTreeId = await deep.id('@deep-foundation/core', 'SelectorTree');
-  const containTreeId = await deep.id('@deep-foundation/core', 'containTree');
-  const AllowInsertTypeId = await deep.id('@deep-foundation/core', 'AllowInsertType');
-  const AllowDeleteTypeId = await deep.id('@deep-foundation/core', 'AllowDeleteType');
-  const SelectorFilterId = await deep.id('@deep-foundation/core', 'SelectorFilter');
-  const QueryId = await deep.id('@deep-foundation/core', 'Query');
-  const TsxId = await deep.id('@deep-foundation/tsx', 'TSX');
-  const HandleClientId = await deep.id('@deep-foundation/core', 'HandleClient');
-  const clientSupportsJsId = await deep.id('@deep-foundation/core', 'clientSupportsJs');
-  // const AssetId = await deep.id('@suenot/portfolios', 'Asset');
-  // const HandlerContainId = await deep.id('@deep-foundation/core', 'HandlerContain');
-  const usersId = await deep.id('deep', 'users');
-
-  // Удаляем пакеты для чистой разработки
-  const resultRemoveProfitmaker = await removePackage({ deep, packageName: '@suenot/profitmaker' });
-  console.log({resultRemoveProfitmaker})
-  const resultRemoveAsset = await removePackage({ deep, packageName: '@suenot/asset' });
-  console.log({resultRemoveAsset})
-  const resultRemoveAssetUi = await removePackage({ deep, packageName: '@suenot/asset-ui' });
-  console.log({resultRemoveAssetUi})
-  const resultRemoveWallet = await removePackage({ deep, packageName: '@suenot/wallet' });
-  console.log({resultRemoveWallet})
-  const resultRemoveWalletUi = await removePackage({ deep, packageName: '@suenot/wallet-ui' });
-  console.log({resultRemoveWalletUi})
-  const resultRemovePortfolio = await removePackage({ deep, packageName: '@suenot/portfolio' });
-  console.log({resultRemovePortfolio})
-  const resultRemovePortfolioUi = await removePackage({ deep, packageName: '@suenot/portfolio-ui' });
-  console.log({resultRemovePortfolioUi})
-  const resultRemoveTransaction = await removePackage({ deep, packageName: '@suenot/transaction' });
-  console.log({resultRemoveTransaction})
-  const resultRemoveEmission = await removePackage({ deep, packageName: '@suenot/emission' });
-  console.log({resultRemoveEmission});
-
-  await delay(1000);
-
-  const packages = [
-    {
-      name: '@suenot/profitmaker',
-      version_update: false,
-    },
+  const packages: any[] = [
+    // {
+    //   name: '@suenot/profitmaker',
+    //   versionUpdate: false,
+    //   createFn: createProfitmaker,
+    //   path: './profitmaker',
+    // },
     {
       name: '@suenot/asset',
-      version_update: false,
+      versionUpdate: false,
+      createFn: createAsset,
+      path: './asset',
     },
-    {
-      name: '@suenot/asset-ui',
-      version_update: false,
-    },
-    {
-      name: '@suenot/wallet',
-      version_update: false,
-    },
-    {
-      name: '@suenot/wallet-ui',
-      version_update: false,
-    },
-    {
-      name: '@suenot/portfolio',
-      version_update: false,
-    },
-    {
-      name: '@suenot/portfolio-ui',
-      version_update: false,
-    },
-    {
-      name: '@suenot/transaction',
-      version_update: false,
-    },
-    {
-      name: '@suenot/emission',
-      version_update: false,
-    },
-    {
-      name: '@suenot/transaction-tests',
-      version_update: true,
-    },
-    {
-      name: '@suenot/emission-tests',
-      version_update: true,
-    },
-    {
-      name: '@suenot/portfolio-tests',
-      version_update: true,
-    },
+    // {
+    //   name: '@suenot/asset-ui',
+    //   versionUpdate: false,
+    //   createFn: createAssetUi,
+    //   path: './asset-ui',
+    // },
+    // {
+    //   name: '@suenot/wallet',
+    //   versionUpdate: false,
+    //   createFn: createWallet,
+    //   path: './wallet',
+    // },
+    // {
+    //   name: '@suenot/wallet-ui',
+    //   versionUpdate: false,
+    //   createFn: createWalletUi,
+    //   path: './wallet-ui',
+    // },
+    // {
+    //   name: '@suenot/portfolio',
+    //   versionUpdate: false,
+    //   createFn: createPortfolio,
+    //   path: './portfolio',
+    // },
+    // {
+    //   name: '@suenot/portfolio-ui',
+    //   versionUpdate: false,
+    //   createFn: createPortfolioUi,
+    //   path: './portfolio-ui',
+    // },
+    // {
+    //   name: '@suenot/transaction',
+    //   versionUpdate: false,
+    //   createFn: createTransaction,
+    //   path: './transaction',
+    // },
+    // {
+    //   name: '@suenot/emission',
+    //   versionUpdate: false,
+    //   createFn: createEmission,
+    //   path: './emission',
+    // },
+    // {
+    //   name: '@suenot/transaction-tests',
+    //   versionUpdate: true,
+    //   createFn: createTransactionTests,
+    //   path: './transaction-tests',
+    // },
+    // {
+    //   name: '@suenot/emission-tests',
+    //   versionUpdate: true,
+    //   createFn: createEmissionTests,
+    //   path: './emission-tests',
+    // },
+    // {
+    //   name: '@suenot/portfolio-tests',
+    //   versionUpdate: true,
+    //   createFn: createPortfolioTests,
+    //   path: './portfolio-tests',
+    // },
   ]
 
-  // for (const deepPackage of packages) {
-  //   // remove old package
-  //   const resultRemovePackage = await removePackage({ deep, packageName: deepPackage.name });
-  //   console.log({deepPackage, resultRemovePackage})
+  for (const deepPackage of packages) {
+    // remove old package
+    const resultRemovePackage = await removePackage({ deep, packageName: deepPackage.name });
+    console.log({deepPackage, resultRemovePackage})
 
-  //   // insert new package
-  // }
-
-  // Создаем пакет profitmaker
-  await createProfitmaker({ deep, PackageId, ContainId, JoinId });
-  
-  // Создаем пакет assets
-  const resultCreateAsset = await createAsset({ deep, PackageId, ContainId, JoinId, SymbolId, TypeId, StringId, ValueId });
-  console.log({resultCreateAsset})
-
-  // Создаем пакет assets-ui
-  const resultCreateAssetUi = await createAssetUi({ deep, PackageId, ContainId, JoinId, TsxId, HandleClientId, clientSupportsJsId, HandlerId });
-  console.log({resultCreateAssetUi})
-
-  // Создаем пакет wallets
-  const resultCreateWallet = await createWallet({ deep, PackageId, ContainId, JoinId, SymbolId, TypeId, StringId, NumberId, ValueId });
-  console.log({resultCreateWallet})
-
-  // Создаем пакет wallets-ui
-  const resultCreateWalletUi = await createWalletUi({ deep, PackageId, ContainId, JoinId, TsxId, HandleClientId, clientSupportsJsId, HandlerId });
-  console.log({resultCreateWalletUi})
-
-  // Создаем пакет portfolio
-  const resultCreatePortfolio = await createPortfolio({ deep, PackageId, ContainId, JoinId, SymbolId, TypeId, StringId, NumberId, ValueId });
-  console.log({resultCreatePortfolio})
-
-  // Создаем пакет portfolio-ui
-  const resultCreatePortfolioUi = await createPortfolioUi({ deep, PackageId, ContainId, JoinId, TsxId, HandleClientId, clientSupportsJsId, HandlerId });
-
-  // Создаем пакет transaction (wallets required)
-  const resultCreateTransaction = await createTransaction({deep, PackageId, ContainId, JoinId, SymbolId, TypeId, NumberId, StringId, ValueId, SyncTextFileId, HandlerId, HandleInsertId, dockerSupportsBunJsId});
-  console.log({resultCreateTransaction})
-
-  // Создаем пакет emission (assets and wallet required)
-  const resultCreateEmission = await createEmission({deep, PackageId, ContainId, JoinId, SymbolId, TypeId, NumberId, StringId, ValueId, SyncTextFileId, HandlerId, HandleInsertId, dockerSupportsBunJsId});
-  console.log({resultCreateEmission})
-
-  // Создаем пакет transaction-tests
-  const resultRemoveTransactionTests = await removePackage({ deep, packageName: '@suenot/transaction-tests' });
-  console.log({resultRemoveTransactionTests})
-
-  const resultCreateTransactionTests = await createTransactionTests({deep, PackageId, ContainId, JoinId, SymbolId, TypeId, NumberId, StringId, ValueId})
-  console.log({resultCreateTransactionTests})
-
-  // Создаем пакет emission-tests
-  const resultRemoveEmissionTests = await removePackage({ deep, packageName: '@suenot/emission-tests' });
-  console.log({resultRemoveEmissionTests})
-
-  const resultCreateEmissionTests = await createEmissionTests({deep, PackageId, ContainId, JoinId, SymbolId, TypeId, NumberId, StringId, ValueId})
-  console.log({resultCreateEmissionTests})
-
-  // Создаем пакет portfolio-tests
-  const resultRemovePortfolioTests = await removePackage({ deep, packageName: '@suenot/portfolio-tests' });
-  console.log({resultRemovePortfolioTests})
-
-  const resultCreatePortfolioTests = await createPortfolioTests({deep, PackageId, ContainId, JoinId, SymbolId, TypeId, NumberId, StringId, ValueId})
-  console.log({resultCreatePortfolioTests})
-
+    // insert new package
+    const packageName = deepPackage.name;
+    var lastPackageVersion = '0.0.0';
+    try {
+      lastPackageVersion = await latestVersion(packageName);
+    } catch (error) {}
+    const packageVersion = deepPackage.versionUpdate ? incrementPatchVersion(lastPackageVersion) : lastPackageVersion;
+    deepPackage.createFn({deep, Types, packageName, packageVersion});
+  }
 }
 f();
