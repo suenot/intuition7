@@ -1,6 +1,7 @@
 import { DeepClient } from "@deep-foundation/deeplinks/imports/client";
+import { TypesStore } from "./typesStore";
 import debug from "debug";
-const log = debug("portfolio");
+const log = debug("portfolio-tests");
 
 export const createPortfolioTests = async (
   {deep, PackageId, ContainId, JoinId, SymbolId, TypeId, NumberId, StringId, ValueId}:

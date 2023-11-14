@@ -1,4 +1,5 @@
 import { DeepClient } from "@deep-foundation/deeplinks/imports/client";
+import { TypesStore } from "./typesStore";
 import debug from "debug";
 import * as fs from "fs";
 import * as path from 'path';

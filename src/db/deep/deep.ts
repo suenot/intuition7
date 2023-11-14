@@ -49,7 +49,7 @@ const f = async () => {
     // },
     {
       name: '@suenot/unit',
-      versionUpdate: true,
+      versionUpdate: false,
       createFn: createUnit,
       path: './unit',
     },
@@ -61,16 +61,16 @@ const f = async () => {
     },
     {
       name: '@suenot/wallet',
-      versionUpdate: false,
+      versionUpdate: true,
       createFn: createWallet,
       path: './wallet',
     },
-    // {
-    //   name: '@suenot/wallet-ui',
-    //   versionUpdate: false,
-    //   createFn: createWalletUi,
-    //   path: './wallet-ui',
-    // },
+    {
+      name: '@suenot/wallet-ui',
+      versionUpdate: true,
+      createFn: createWalletUi,
+      path: './wallet-ui',
+    },
     // {
     //   name: '@suenot/portfolio',
     //   versionUpdate: false,
@@ -132,8 +132,10 @@ const f = async () => {
     // если успешно, то создавай типы для пакета
     deepPackage.createFn({deep, Types, packageName, packageId});
     // если успешно, то публикуй пакет
-    const {publishId} = await publishPackage({deep, Types, packageName, packageId});
-    console.log({publishId});
+    if (deepPackage.versionUpdate) {
+      const {publishId} = await publishPackage({deep, Types, packageName, packageId});
+      console.log({publishId});
+    }
   }
 }
 f();
