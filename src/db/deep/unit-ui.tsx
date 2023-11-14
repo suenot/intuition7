@@ -3,10 +3,10 @@ async ({ deep, require }) => {
   const { useState, useEffect } = React;
   const { Box, Text, Avatar, Wrap, WrapItem, Editable, EditablePreview, EditableInput, EditableTextarea, Center, Flex, Divider, Button } = require('@chakra-ui/react');
   const AsyncFileId = await deep.idLocal("@deep-foundation/core", "AsyncFile");
-  var AssetNameId = await deep.id("@suenot/asset", "Name");
-  var AssetDescriptionId = await deep.id("@suenot/asset", "Description");
-  var AssetTickerId = await deep.id("@suenot/asset", "Ticker");
-  var AssetAvatarId = await deep.id("@suenot/asset", "Avatar");
+  var UnitNameId = await deep.id("@suenot/unit", "Name");
+  var UnitDescriptionId = await deep.id("@suenot/unit", "Description");
+  var UnitTickerId = await deep.id("@suenot/unit", "Ticker");
+  var UnitAvatarId = await deep.id("@suenot/unit", "Avatar");
   
   return ({ fillSize, style, link }) => {
 
@@ -18,19 +18,19 @@ async ({ deep, require }) => {
           },
           {
             to_id: link.id,
-            type_id: { _id: ["@suenot/asset", "Name"] }
+            type_id: { _id: ["@suenot/unit", "Name"] }
           },
           {
             to_id: link.id,
-            type_id: { _id: ["@suenot/asset", "Description"] }
+            type_id: { _id: ["@suenot/unit", "Description"] }
           },
           {
             to_id: link.id,
-            type_id: { _id: ["@suenot/asset", "Ticker"] }
+            type_id: { _id: ["@suenot/unit", "Ticker"] }
           },
           {
             to_id: link.id,
-            type_id: { _id: ["@suenot/asset", "Avatar"] }
+            type_id: { _id: ["@suenot/unit", "Avatar"] }
           }
         ]
       }
@@ -41,43 +41,43 @@ async ({ deep, require }) => {
     });
     const nameData = deep.minilinks.query({
       to_id: link.id,
-      type_id: AssetNameId
+      type_id: UnitNameId
     });
-    const assetDescriptionData = deep.minilinks.query({
+    const unitDescriptionData = deep.minilinks.query({
       to_id: link.id,
-      type_id: AssetDescriptionId
+      type_id: UnitDescriptionId
     });
     const tickerData = deep.minilinks.query({
       to_id: link.id,
-      type_id: AssetTickerId
+      type_id: UnitTickerId
     });
     const avatarData = deep.minilinks.query({
       to_id: link.id,
-      type_id: AssetAvatarId
+      type_id: UnitAvatarId
     });
 
 
 
-    var assetFileValue = fileData?.[0]?.id && `/api/file?linkId=${fileData?.[0]?.id}`;
-    var assetAvatarValue = avatarData?.[0]?.value?.value || "";
-    var assetAvatarId = avatarData?.[0]?.id;
+    var unitFileValue = fileData?.[0]?.id && `/api/file?linkId=${fileData?.[0]?.id}`;
+    var unitAvatarValue = avatarData?.[0]?.value?.value || "";
+    var unitAvatarId = avatarData?.[0]?.id;
     // File has more priority than avatar (url)
-    var assetSrcValue = assetFileValue || assetAvatarValue || "";
+    var unitSrcValue = unitFileValue || unitAvatarValue || "";
 
-    var assetNameValue = nameData?.[0]?.value?.value || '';
-    var assetNameId = nameData?.[0]?.id;
-    var assetTickerValue = tickerData?.[0]?.value?.value || '';
-    var assetTickerId = tickerData?.[0]?.id;
-    var assetDescriptionValue = assetDescriptionData?.[0]?.value?.value || "";
-    var assetDescriptionId = assetDescriptionData?.[0]?.id;
+    var unitNameValue = nameData?.[0]?.value?.value || '';
+    var unitNameId = nameData?.[0]?.id;
+    var unitTickerValue = tickerData?.[0]?.value?.value || '';
+    var unitTickerId = tickerData?.[0]?.id;
+    var unitDescriptionValue = unitDescriptionData?.[0]?.value?.value || "";
+    var unitDescriptionId = unitDescriptionData?.[0]?.id;
     console.log({data});
 
-    const [assetName, setAssetName] = useState(assetNameValue);
-    const [assetTicker, setAssetTicker] = useState(assetTickerValue);
-    const [assetDescription, setAssetDescription] = useState(assetDescriptionValue);
-    const [assetFile, setAssetFile] = useState(assetFileValue);
-    const [assetAvatar, setAssetAvatar] = useState(assetAvatarValue);
-    const [assetSrc, setAssetSrc] = useState(assetSrcValue);
+    const [unitName, setUnitName] = useState(unitNameValue);
+    const [unitTicker, setUnitTicker] = useState(unitTickerValue);
+    const [unitDescription, setUnitDescription] = useState(unitDescriptionValue);
+    const [unitFile, setUnitFile] = useState(unitFileValue);
+    const [unitAvatar, setUnitAvatar] = useState(unitAvatarValue);
+    const [unitSrc, setUnitSrc] = useState(unitSrcValue);
 
     return <div>
       <Box maxW='sm' minW='sm' w='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' p='4' backgroundColor='white'>
@@ -86,108 +86,108 @@ async ({ deep, require }) => {
             align="center"
             justify="center"
           >
-            <Avatar size='2xl' name='' src={assetSrc} mb='1' />
+            <Avatar size='2xl' name='' src={unitSrc} mb='1' />
           </Flex>
         </div>
-        <Editable placeholder="Insert name" value={assetName} onChange={async (value) => {
-          setAssetName(value)
+        <Editable placeholder="Insert name" value={unitName} onChange={async (value) => {
+          setUnitName(value)
         }}>
           <EditablePreview w={'100%'} />
           <EditableInput />
         </Editable>
-        <Editable placeholder="Insert ticker" value={assetTicker} onChange={async (value) => {
-          setAssetTicker(value)
+        <Editable placeholder="Insert ticker" value={unitTicker} onChange={async (value) => {
+          setUnitTicker(value)
         }}>
           <EditablePreview w={'100%'} />
           <EditableInput />
         </Editable>
-        <Editable placeholder="Insert description" value={assetDescription} onChange={async (value) => {
-          setAssetDescription(value)
+        <Editable placeholder="Insert description" value={unitDescription} onChange={async (value) => {
+          setUnitDescription(value)
         }}>
           <EditablePreview w={'100%'} />
           <EditableTextarea />
         </Editable>
         <Divider />
-        <Editable placeholder="Insert avatar url" value={assetAvatar} onChange={async (value) => {
-          setAssetAvatar(value);
-          const newSrc = assetFile || value || "";
-          setAssetSrc(newSrc);
+        <Editable placeholder="Insert avatar url" value={unitAvatar} onChange={async (value) => {
+          setUnitAvatar(value);
+          const newSrc = unitFile || value || "";
+          setUnitSrc(newSrc);
         }}>
           <EditablePreview w={'100%'} />
           <EditableInput />
         </Editable>
         <Button colorScheme='teal' size='md' variant='outline' onClick={async () => {
-          if (assetName === undefined) setAssetName("");
-          if (assetDescription === undefined) setAssetDescription("");
-          if (assetTicker === undefined) setAssetTicker("");
-          if (assetAvatar === undefined || assetAvatar === null) setAssetAvatar("");
+          if (unitName === undefined) setUnitName("");
+          if (unitDescription === undefined) setUnitDescription("");
+          if (unitTicker === undefined) setUnitTicker("");
+          if (unitAvatar === undefined || unitAvatar === null) setUnitAvatar("");
 
-          if (!assetNameId) {
-            console.log("Asset doesn't exist")
-            const { data: [{ id: _assetNameId }] } = await deep.insert({
-              type_id: AssetNameId,
+          if (!unitNameId) {
+            console.log("Unit doesn't exist")
+            const { data: [{ id: _unitNameId }] } = await deep.insert({
+              type_id: UnitNameId,
               from_id: link.id,
               to_id: link.id,
-              string: { data: { value: assetName } },
+              string: { data: { value: unitName } },
             })
-            assetNameId = _assetNameId;
+            unitNameId = _unitNameId;
           } else {
-            console.log("Asset exist", {assetNameId, AssetNameId, assetName})
-            const { data: [{ link: _assetNameId }] } = await deep.update(
-              { link_id: assetNameId },
-              { value: assetName },
+            console.log("Unit exist", {unitNameId, UnitNameId, unitName})
+            const { data: [{ link: _unitNameId }] } = await deep.update(
+              { link_id: unitNameId },
+              { value: unitName },
               { table: 'strings', returning: `link { ${deep.selectReturning} }` }
             );
-            console.log({_assetNameId});
+            console.log({_unitNameId});
           }
 
-          if (!assetDescriptionId) {
+          if (!unitDescriptionId) {
             console.log("Description doesn't exist")
-            const { data: [{ id: _assetDescriptionId }] } = await deep.insert({
-              type_id: AssetDescriptionId,
+            const { data: [{ id: _unitDescriptionId }] } = await deep.insert({
+              type_id: UnitDescriptionId,
               from_id: link.id,
               to_id: link.id,
-              string: { data: { value: assetDescription } },
+              string: { data: { value: unitDescription } },
             })
-            assetDescriptionId = _assetDescriptionId;
+            unitDescriptionId = _unitDescriptionId;
           } else {
             console.log("Description exist")
-            const { data: [{ link: _assetDescriptionId }] } = await deep.update(
-              { link_id: assetDescriptionId },
-              { value: assetDescription },
+            const { data: [{ link: _unitDescriptionId }] } = await deep.update(
+              { link_id: unitDescriptionId },
+              { value: unitDescription },
               { table: 'strings', returning: `link { ${deep.selectReturning} }` }
             );
-            console.log({_assetDescriptionId});
+            console.log({_unitDescriptionId});
           }
 
-          if (!assetTickerId) {
-            const { data: [{ id: _assetTickerId }] } = await deep.insert({
-              type_id: AssetTickerId,
+          if (!unitTickerId) {
+            const { data: [{ id: _unitTickerId }] } = await deep.insert({
+              type_id: UnitTickerId,
               from_id: link.id,
               to_id: link.id,
-              string: { data: { value: assetTicker } },
+              string: { data: { value: unitTicker } },
             })
-            assetTickerId = _assetTickerId;
+            unitTickerId = _unitTickerId;
           } else {
-            const { data: [{ link: _assetTickerId }] } = await deep.update(
-              { link_id: assetTickerId },
-              { value: assetTicker },
+            const { data: [{ link: _unitTickerId }] } = await deep.update(
+              { link_id: unitTickerId },
+              { value: unitTicker },
               { table: 'strings', returning: `link { ${deep.selectReturning} }` }
             );
           }
 
-          if (!assetAvatarId) {
-            const { data: [{ id: _assetAvatarId }] } = await deep.insert({
-              type_id: AssetAvatarId,
+          if (!unitAvatarId) {
+            const { data: [{ id: _unitAvatarId }] } = await deep.insert({
+              type_id: UnitAvatarId,
               from_id: link.id,
               to_id: link.id,
-              string: { data: { value: assetAvatar } },
+              string: { data: { value: unitAvatar } },
             })
-            assetAvatarId = _assetAvatarId;
+            unitAvatarId = _unitAvatarId;
           } else {
-            const { data: [{ link: _assetAvatarId }] } = await deep.update(
-              { link_id: assetAvatarId },
-              { value: assetAvatar },
+            const { data: [{ link: _unitAvatarId }] } = await deep.update(
+              { link_id: unitAvatarId },
+              { value: unitAvatar },
               { table: 'strings', returning: `link { ${deep.selectReturning} }` }
             );
           }

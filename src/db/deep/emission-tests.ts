@@ -39,25 +39,25 @@ export const createEmissionTests = async (
   console.log({packageId});
 
   // TODO: перенести в deep.ts
-  const AssetId = await deep.id('@suenot/asset', 'Asset');
+  const UnitId = await deep.id('@suenot/unit', 'Unit');
   const WalletId = await deep.id('@suenot/wallet', 'Wallet');
   const EmissionId = await deep.id('@suenot/emission', 'Emission');
   // TODO: END
 
-  // Создаем asset1
-  const { data: [{ id: assetId1 }] } = await deep.insert({
-    type_id: AssetId,
+  // Создаем unit1
+  const { data: [{ id: unitId1 }] } = await deep.insert({
+    type_id: UnitId,
     in: { data: [
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'assetId1' } },
+        string: { data: { value: 'unitId1' } },
       },
     ] },
     out: { data: [
     ] },
   });
-  console.log({assetId1});
+  console.log({unitId1});
 
   // Создаем wallet1
   const { data: [{ id: walletId1 }] } = await deep.insert({
@@ -77,7 +77,7 @@ export const createEmissionTests = async (
   // Создаем emission1
   const { data: [{ id: emissionId1 }] } = await deep.insert({
     type_id: EmissionId,
-    from_id: assetId1,
+    from_id: unitId1,
     to_id: walletId1,
     in: { data: [
       {
@@ -90,5 +90,5 @@ export const createEmissionTests = async (
   });
   console.log({emissionId1});
 
-  return {packageId, assetId1, walletId1, emissionId1};
+  return {packageId, unitId1, walletId1, emissionId1};
 };

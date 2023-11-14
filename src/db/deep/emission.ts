@@ -46,15 +46,15 @@ export const createEmission = async (
   });
   log({packageId});
 
-  const AssetId = await deep.id('@suenot/asset', 'Asset');
+  const UnitId = await deep.id('@suenot/unit', 'Unit');
   const WalletId = await deep.id('@suenot/wallet', 'Wallet');
 
   // Emission
   const { data: [{ id: EmissionId }] } = await deep.insert({
     type_id: TypeId,
-    // ASK: можно добавить, что она от Asset к Wallet, а так Any к Any
+    // ASK: можно добавить, что она от Unit к Wallet, а так Any к Any
     // ASK: может эмиссия это просто один из видов транзакций? Но у нее свои хендлеры (она не снимает деньги с ассета, но эту логику можно объединить в одном insert handler)
-    from_id: AssetId, // AssetId,
+    from_id: UnitId, // UnitId,
     to_id: WalletId,
     in: { data: [
       {

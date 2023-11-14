@@ -7,7 +7,7 @@ import { DeepClient } from "@deep-foundation/deeplinks/imports/client";
 import { generateApolloClient } from "@deep-foundation/hasura/client";
 import { createProfitmaker } from "./profitmaker";
 import { createUnit } from "./unit";
-import { createUnitUi } from "./unit-ui";
+import { createUnitUi }from "./unit-ui";
 import { createWallet } from "./wallet";
 import { createWalletUi } from "./wallet-ui";
 import { createPortfolio } from './portfolio';
@@ -49,22 +49,22 @@ const f = async () => {
     // },
     {
       name: '@suenot/unit',
-      versionUpdate: false,
-      createFn: createAsset,
+      versionUpdate: true,
+      createFn: createUnit,
       path: './unit',
     },
-    // {
-    //   name: '@suenot/asset-ui',
-    //   versionUpdate: false,
-    //   createFn: createAssetUi,
-    //   path: './asset-ui',
-    // },
-    // {
-    //   name: '@suenot/wallet',
-    //   versionUpdate: false,
-    //   createFn: createWallet,
-    //   path: './wallet',
-    // },
+    {
+      name: '@suenot/unit-ui',
+      versionUpdate: true,
+      createFn: createUnitUi,
+      path: './unit-ui',
+    },
+    {
+      name: '@suenot/wallet',
+      versionUpdate: false,
+      createFn: createWallet,
+      path: './wallet',
+    },
     // {
     //   name: '@suenot/wallet-ui',
     //   versionUpdate: false,

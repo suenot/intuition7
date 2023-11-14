@@ -39,105 +39,105 @@ export const createTransactionTests = async (
   console.log({packageId});
 
   // TODO: перенести в deep.ts
-  const AssetId = await deep.id('@suenot/asset', 'Asset');
-  const AssetNameId = await deep.id('@suenot/asset', 'Name');
-  const AssetTickerId = await deep.id('@suenot/asset', 'Ticker');
-  const AssetAvatarId = await deep.id('@suenot/asset', 'Avatar');
-  const AssetDescriptionId = await deep.id('@suenot/asset', 'Description');
+  const UnitId = await deep.id('@suenot/unit', 'Unit');
+  const UnitNameId = await deep.id('@suenot/unit', 'Name');
+  const UnitTickerId = await deep.id('@suenot/unit', 'Ticker');
+  const UnitAvatarId = await deep.id('@suenot/unit', 'Avatar');
+  const UnitDescriptionId = await deep.id('@suenot/unit', 'Description');
   const WalletId = await deep.id('@suenot/wallet', 'Wallet');
   const WalletNameId = await deep.id('@suenot/wallet', 'Name');
   const WalletDescriptionId = await deep.id('@suenot/wallet', 'Description');
   const WalletAvatarId = await deep.id('@suenot/wallet', 'Avatar');
-  const ContainAssetId = await deep.id('@suenot/wallet', 'ContainAsset');
+  const ContainUnitId = await deep.id('@suenot/wallet', 'ContainUnit');
   const TransactionId = await deep.id('@suenot/transaction', 'Transaction');
   // END TODO
 
-  // Создаем asset1
-  const { data: [{ id: assetId1 }] } = await deep.insert({
-    type_id: AssetId,
+  // Создаем unit1
+  const { data: [{ id: unitId1 }] } = await deep.insert({
+    type_id: UnitId,
     in: { data: [
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'asset1' } },
+        string: { data: { value: 'unit1' } },
       },
     ] },
     out: { data: [
     ] },
   });
-  console.log({assetId1});
+  console.log({unitId1});
 
-  console.log({AssetNameId});
+  console.log({UnitNameId});
 
-  // Создаем asset1 name
-  const { data: [{ id: asset1NameId }] } = await deep.insert({
-    type_id: AssetNameId,
+  // Создаем unit1 name
+  const { data: [{ id: unit1NameId }] } = await deep.insert({
+    type_id: UnitNameId,
     in: { data: [
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'asset1Name' } },
+        string: { data: { value: 'unit1Name' } },
       },
     ] },
-    from_id: assetId1,
-    to_id: assetId1,
+    from_id: unitId1,
+    to_id: unitId1,
     string: { data: { value: 'Dogecoin' } },
   });
-  console.log({asset1NameId});
+  console.log({unit1NameId});
 
-  // Создаем asset1 ticker
-  const { data: [{ id: asset1TickerId }] } = await deep.insert({
-    type_id: AssetTickerId,
+  // Создаем unit1 ticker
+  const { data: [{ id: unit1TickerId }] } = await deep.insert({
+    type_id: UnitTickerId,
     in: { data: [
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'asset1Ticker' } },
+        string: { data: { value: 'unit1Ticker' } },
       },
     ] },
     out: { data: [
     ] },
-    from_id: assetId1,
-    to_id: assetId1,
+    from_id: unitId1,
+    to_id: unitId1,
     string: { data: { value: 'DOGE' } },
   });
-  console.log({asset1TickerId});
+  console.log({unit1TickerId});
 
-  // Создаем asset1 avatar
-  const { data: [{ id: asset1AvatarId }] } = await deep.insert({
-    type_id: AssetAvatarId,
+  // Создаем unit1 avatar
+  const { data: [{ id: unit1AvatarId }] } = await deep.insert({
+    type_id: UnitAvatarId,
     in: { data: [
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'asset1Avatar' } },
+        string: { data: { value: 'unit1Avatar' } },
       },
     ] },
     out: { data: [
     ] },
-    from_id: assetId1,
-    to_id: assetId1,
+    from_id: unitId1,
+    to_id: unitId1,
     string: { data: { value: 'https://w7.pngwing.com/pngs/305/230/png-transparent-shiba-inu-dogecoin-akita-cryptocurrency-bitcoin-mammal-cat-like-mammal-carnivoran-thumbnail.png' } },
   });
-  console.log({asset1AvatarId});
+  console.log({unit1AvatarId});
 
-    // Создаем asset1 description
-    const { data: [{ id: asset1DescriptionId }] } = await deep.insert({
-      type_id: AssetDescriptionId,
+    // Создаем unit1 description
+    const { data: [{ id: unit1DescriptionId }] } = await deep.insert({
+      type_id: UnitDescriptionId,
       in: { data: [
         {
           type_id: ContainId,
           from_id: packageId,
-          string: { data: { value: 'asset1Description' } },
+          string: { data: { value: 'unit1Description' } },
         },
       ] },
       out: { data: [
       ] },
-      from_id: assetId1,
-      to_id: assetId1,
+      from_id: unitId1,
+      to_id: unitId1,
       string: { data: { value: 'Dogecoin is a popular cryptocurrency that started as a playful meme in 2013. It features the Shiba Inu dog from the "Doge" internet meme as its console.logo. Despite its humorous origins, Dogecoin has gained a dedicated following and is used for tipping content creators, charitable donations, and as a digital currency for various online transactions. It distinguishes itself with a vibrant and welcoming community and relatively low transaction fees.' } },
     });
-    console.log({asset1DescriptionId});
+    console.log({unit1DescriptionId});
 
   // Создаем wallet1
   const { data: [{ id: walletId1 }] } = await deep.insert({
@@ -151,8 +151,8 @@ export const createTransactionTests = async (
     ] },
     out: { data: [
       {
-        type_id: ContainAssetId,
-        to_id: assetId1,
+        type_id: ContainUnitId,
+        to_id: unitId1,
       }
     ] },
     number: { data: { value: 333 } },
@@ -219,8 +219,8 @@ export const createTransactionTests = async (
     ] },
     out: { data: [
       {
-        type_id: ContainAssetId,
-        to_id: assetId1,
+        type_id: ContainUnitId,
+        to_id: unitId1,
       }
     ] },
     number: { data: { value: 444 } },
@@ -246,5 +246,5 @@ export const createTransactionTests = async (
   });
   console.log({transactionId1});
 
-  return {packageId, assetId1, walletId1, walletId2, transactionId1};
+  return {packageId, unitId1, walletId1, walletId2, transactionId1};
 };

@@ -22,21 +22,21 @@ export const createUnit = async ({deep, Types, packageName, packageVersion, pack
   console.log({packageName, packageVersion, PackageId, ContainId, JoinId, SymbolId, TypeId, StringId, ValueId});
 
   // Unit
-  const { data: [{ id: AssetId }] } = await deep.insert({
+  const { data: [{ id: UnitId }] } = await deep.insert({
     type_id: TypeId,
     in: { data: [
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'Asset' } },
+        string: { data: { value: 'Unit' } },
       },
     ] },
     out: { data: [
     ] },
   });
-  console.log({AssetId});
+  console.log({UnitId});
 
-  // SymbolId (петличка от Asset к Asset)
+  // SymbolId
   const { data: [{ id: symbolId }] } = await deep.insert({
     type_id: SymbolId,
     string: { data: { value: '💎' } },
@@ -47,8 +47,8 @@ export const createUnit = async ({deep, Types, packageName, packageVersion, pack
         string: { data: { value: 'symbol' } },
       },
     ] },
-    from_id: AssetId,
-    to_id: AssetId,
+    from_id: UnitId,
+    to_id: UnitId,
   });
   console.log({symbolId});
 
@@ -62,8 +62,8 @@ export const createUnit = async ({deep, Types, packageName, packageVersion, pack
         string: { data: { value: 'Name' } },
       },
     ] },
-    from_id: AssetId,
-    to_id: AssetId,
+    from_id: UnitId,
+    to_id: UnitId,
   });
   console.log({NameId});
 
@@ -108,8 +108,8 @@ export const createUnit = async ({deep, Types, packageName, packageVersion, pack
         string: { data: { value: 'Ticker' } },
       },
     ] },
-    from_id: AssetId,
-    to_id: AssetId,
+    from_id: UnitId,
+    to_id: UnitId,
   });
   console.log({TickerId});
 
@@ -154,8 +154,8 @@ export const createUnit = async ({deep, Types, packageName, packageVersion, pack
         string: { data: { value: 'Avatar' } },
       },
     ] },
-    from_id: AssetId,
-    to_id: AssetId,
+    from_id: UnitId,
+    to_id: UnitId,
   });
   console.log({AvatarId});
 
@@ -200,8 +200,8 @@ export const createUnit = async ({deep, Types, packageName, packageVersion, pack
         string: { data: { value: 'Description' } },
       },
     ] },
-    from_id: AssetId,
-    to_id: AssetId,
+    from_id: UnitId,
+    to_id: UnitId,
   });
   console.log({DescriptionId});
 
@@ -236,5 +236,5 @@ export const createUnit = async ({deep, Types, packageName, packageVersion, pack
   });
   console.log({descriptionValueId});
 
-  return { packageId, AssetId, symbolId, NameId, nameSymbolId, TickerId, tickerSymbolId, AvatarId, avatarSymbolId, avatarValueId, DescriptionId, descriptionSymbolId, descriptionValueId };
+  return { packageId, UnitId, symbolId, NameId, nameSymbolId, TickerId, tickerSymbolId, AvatarId, avatarSymbolId, avatarValueId, DescriptionId, descriptionSymbolId, descriptionValueId };
 };

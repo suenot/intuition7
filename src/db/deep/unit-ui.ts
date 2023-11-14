@@ -1,48 +1,33 @@
 import { DeepClient } from "@deep-foundation/deeplinks/imports/client";
+import { TypesStore } from "./typesStore";
 import debug from "debug";
 import * as fs from "fs";
 import * as path from 'path';
-const log = debug("asset-ui");
+const log = debug("unit-ui");
 const __dirname = path.resolve();
 
-export const createUnitUi = async (
-  {deep, PackageId, ContainId, JoinId, TsxId, HandleClientId, HandlerId, clientSupportsJsId}:
-  {
-    deep: DeepClient,
-    PackageId: number,
-    ContainId: number,
-    JoinId: number,
-    TsxId: number,
-    HandleClientId: number,
-    HandlerId: number,
-    clientSupportsJsId: number
-  }) => {
-    console.log('createAssetUi')
-  
-  // package
-  const { data: [{ id: packageId }] } = await deep.insert({
-    type_id: PackageId,
-    string: { data: { value: `@suenot/asset-ui` } },
-    in: { data: [
-      {
-        type_id: ContainId,
-        from_id: deep.linkId,
-      },
-    ] },
-    out: { data: [
-      {
-        type_id: JoinId,
-        to_id: await deep.id('deep', 'users', 'packages'),
-      },
-      {
-        type_id: JoinId,
-        to_id: await deep.id('deep', 'admin'),
-      },
-    ] },
-  });
-  log({packageId});
+export const createUnitUi = async ({deep, Types, packageName, packageVersion, packageId}: {
+  deep: DeepClient,
+  packageName: string,
+  packageVersion: string,
+  Types: TypesStore,
+  packageId: number,
+}) => {
+  const {
+    PackageId,
+    ContainId,
+    JoinId,
+    SymbolId,
+    TypeId,
+    StringId,
+    ValueId,
+    TsxId,
+    clientSupportsJsId,
+    HandleClientId,
+    HandlerId,
+  } = Types;
+  console.log({packageName, packageVersion, PackageId, ContainId, JoinId, SymbolId, TypeId, StringId, ValueId});
 
-  
   // tsxId
   // const reservedIds = await deep.reserve(1);
   const { data: [{ id: tsxId }] } = await deep.insert({
@@ -57,7 +42,7 @@ export const createUnitUi = async (
       data: {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: "assetTsx" } },
+        string: { data: { value: "unitTsx" } },
       }
     }
   });
@@ -65,8 +50,9 @@ export const createUnitUi = async (
   console.log({clientSupportsJsId});
   console.log({HandleClientId});
   console.log({HandlerId});
-  const AssetId = await deep.id('@suenot/asset', 'Asset');
-  console.log({AssetId});
+
+  const UnitId = await deep.id('@suenot/unit', 'Unit');
+  console.log({UnitId});
 
   // handler
   const { data: [{ id: handlerId }] } = await deep.insert({
@@ -75,7 +61,7 @@ export const createUnitUi = async (
       data: {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: "assetHandler" } },
+        string: { data: { value: "unitHandler" } },
       }
     },
     from_id: clientSupportsJsId,
@@ -90,10 +76,10 @@ export const createUnitUi = async (
       data: {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: "assetHandleClient" } },
+        string: { data: { value: "unitHandleClient" } },
       }
     },
-    from_id: AssetId,
+    from_id: UnitId,
     to_id: handlerId,
   });
   log({handleClientId});

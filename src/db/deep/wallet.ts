@@ -69,7 +69,7 @@ export const createWallet = async (
   });
   log({waletValueId});
 
-  // SymbolId (петличка от Asset к Asset)
+  // SymbolId (петличка от Unit к Unit)
   const { data: [{ id: symbolId }] } = await deep.insert({
     type_id: SymbolId,
     string: { data: { value: '👛' } },
@@ -131,22 +131,22 @@ export const createWallet = async (
   });
   log({nameValueId});
 
-  const AssetId = await deep.id('@suenot/asset', 'Asset');
+  const UnitId = await deep.id('@suenot/unit', 'Unit');
 
-  // ContainAsset
-  const { data: [{ id: ContainAssetId }] } = await deep.insert({
+  // ContainUnit
+  const { data: [{ id: ContainUnitId }] } = await deep.insert({
     type_id: TypeId,
     in: { data: [
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'ContainAsset' } },
+        string: { data: { value: 'ContainUnit' } },
       },
     ] },
     from_id: WalletId,
-    to_id: AssetId,
+    to_id: UnitId,
   });
-  log({ContainAssetId});
+  log({ContainUnitId});
 
   // Avatar
   const { data: [{ id: AvatarId }] } = await deep.insert({
@@ -240,5 +240,5 @@ export const createWallet = async (
   });
   log({descriptionValueId});
 
-  return {packageId, WalletId, waletValueId, symbolId, NameId, nameSymbolId, ContainAssetId, AvatarId, avatarSymbolId, avatarValueId, DescriptionId, descriptionSymbolId, descriptionValueId};
+  return {packageId, WalletId, waletValueId, symbolId, NameId, nameSymbolId, ContainUnitId, AvatarId, avatarSymbolId, avatarValueId, DescriptionId, descriptionSymbolId, descriptionValueId};
 };
