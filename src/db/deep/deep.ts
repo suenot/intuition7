@@ -17,8 +17,10 @@ import { createEmission } from './emission';
 import { createTransactionTests } from './transaction-tests';
 import { createEmissionTests } from './emission-tests';
 import { createPortfolioTests } from './portfolio-tests';
-import { removePackage } from "./remove-package";
-import { createTypesStore } from "./types-store";
+import { removePackage } from "./removePackage";
+import { createEmptyPackage } from './createEmptyPackage';
+import { publishPackage } from './publishPackage';
+import { TypesStore, createTypesStore } from "./types-store";
 
 const apolloClient = generateApolloClient({
   path: process.env.PUBLIC_GQL_PATH,
@@ -35,7 +37,7 @@ export const deep = new DeepClient({ deep: guestDeep, ...admin });
 
 const f = async () => {
   console.log('initStore');
-  const Types = await createTypesStore({deep});
+  const Types: TypesStore = await createTypesStore({deep});
   console.log('end initStore');
 
   const packages: any[] = [
@@ -125,7 +127,13 @@ const f = async () => {
       lastPackageVersion = await latestVersion(packageName);
     } catch (error) {}
     const packageVersion = deepPackage.versionUpdate ? incrementPatchVersion(lastPackageVersion) : lastPackageVersion;
-    deepPackage.createFn({deep, Types, packageName, packageVersion});
+    const {packageId, packageNamespaceId} = await createEmptyPackage({deep, Types, packageName, packageVersion});
+    console.log(packageId, packageNamespaceId);
+    // если успешно, то создавай типы для пакета
+    deepPackage.createFn({deep, Types, packageName, packageId});
+    // если успешно, то публикуй пакет
+    const {publishId} = await publishPackage({deep, Types, packageName, packageId});
+    console.log({publishId});
   }
 }
 f();
