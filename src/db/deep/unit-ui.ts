@@ -6,27 +6,20 @@ import * as path from 'path';
 const log = debug("unit-ui");
 const __dirname = path.resolve();
 
-export const createUnitUi = async ({deep, Types, packageName, packageVersion, packageId}: {
+export const createUnitUi = async ({deep, Types, packageName, packageId}: {
   deep: DeepClient,
   packageName: string,
-  packageVersion: string,
   Types: TypesStore,
   packageId: number,
 }) => {
   const {
-    PackageId,
     ContainId,
-    JoinId,
-    SymbolId,
-    TypeId,
-    StringId,
-    ValueId,
     TsxId,
     clientSupportsJsId,
     HandleClientId,
     HandlerId,
   } = Types;
-  console.log({packageName, packageVersion, PackageId, ContainId, JoinId, SymbolId, TypeId, StringId, ValueId});
+  console.log({packageName, ContainId, TsxId, clientSupportsJsId, HandleClientId, HandlerId});
 
   // tsxId
   // const reservedIds = await deep.reserve(1);

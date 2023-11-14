@@ -6,46 +6,25 @@ import * as path from 'path';
 const __dirname = path.resolve();
 const log = debug("emission");
 
-export const createEmission = async (
-  {deep, PackageId, ContainId, JoinId, SymbolId, TypeId, NumberId, StringId, ValueId, SyncTextFileId, HandlerId, HandleInsertId, dockerSupportsBunJsId}:
-  {
-    deep: DeepClient,
-    PackageId: number,
-    ContainId: number,
-    JoinId: number,
-    SymbolId: number,
-    TypeId: number,
-    StringId: number,
-    NumberId: number,
-    ValueId: number,
-    SyncTextFileId: number,
-    HandlerId: number,
-    HandleInsertId: number,
-    dockerSupportsBunJsId: number
-  }) => {
-  
-  // package
-  const { data: [{ id: packageId }] } = await deep.insert({
-    type_id: PackageId,
-    string: { data: { value: `@suenot/emission` } },
-    in: { data: [
-      {
-        type_id: ContainId,
-        from_id: deep.linkId,
-      },
-    ] },
-    out: { data: [
-      {
-        type_id: JoinId,
-        to_id: await deep.id('deep', 'users', 'packages'),
-      },
-      {
-        type_id: JoinId,
-        to_id: await deep.id('deep', 'admin'),
-      },
-    ] },
-  });
-  log({packageId});
+export const createEmission = async ({deep, Types, packageName, packageId}: {
+  deep: DeepClient,
+  packageName: string,
+  Types: TypesStore,
+  packageId: number,
+}) => {
+  const {
+    ContainId,
+    SymbolId,
+    TypeId,
+    StringId,
+    ValueId,
+    NumberId,
+    SyncTextFileId,
+    HandlerId,
+    HandleInsertId,
+    dockerSupportsBunJsId,
+  } = Types;
+  console.log({ContainId, SymbolId, TypeId, StringId, ValueId, NumberId, SyncTextFileId, HandlerId, HandleInsertId, dockerSupportsBunJsId});
 
   const UnitId = await deep.id('@suenot/unit', 'Unit');
   const WalletId = await deep.id('@suenot/wallet', 'Wallet');

@@ -3,43 +3,16 @@ import { TypesStore } from "./typesStore";
 import debug from "debug";
 const log = debug("portfolio-tests");
 
-export const createPortfolioTests = async (
-  {deep, PackageId, ContainId, JoinId, SymbolId, TypeId, NumberId, StringId, ValueId}:
-  {
-    deep: DeepClient,
-    PackageId: number,
-    ContainId: number,
-    JoinId: number,
-    SymbolId: number,
-    TypeId: number,
-    StringId: number,
-    NumberId: number,
-    ValueId: number
-  }) => {
-  
-  const { data: [{ id: packageId }] } = await deep.insert({
-    type_id: PackageId,
-    string: { data: { value: `@suenot/portfolio-tests` } },
-    in: { data: [
-      {
-        type_id: ContainId,
-        from_id: deep.linkId,
-      },
-    ] },
-    out: { data: [
-      {
-        type_id: JoinId,
-        to_id: await deep.id('deep', 'users', 'packages'),
-      },
-      {
-        type_id: JoinId,
-        to_id: await deep.id('deep', 'admin'),
-      },
-    ] },
-  });
-  console.log({packageId});
+export const createPortfolioTests = async ({deep, Types, packageName, packageId}: {
+  deep: DeepClient,
+  packageName: string,
+  Types: TypesStore,
+  packageId: number,
+}) => {
+  const {
+    ContainId,
+  } = Types;
 
-  // TODO: перенести в deep.ts
   const UnitId = await deep.id('@suenot/unit', 'Unit');
   const UnitNameId = await deep.id('@suenot/unit', 'Name');
   const UnitTickerId = await deep.id('@suenot/unit', 'Ticker');
@@ -47,8 +20,8 @@ export const createPortfolioTests = async (
   const UnitDescriptionId = await deep.id('@suenot/unit', 'Description');
   const WalletId = await deep.id('@suenot/wallet', 'Wallet');
   const ContainUnitId = await deep.id('@suenot/wallet', 'ContainUnit');
-  const TransactionId = await deep.id('@suenot/transaction', 'Transaction');
-  // END TODO
+  // const TransactionId = await deep.id('@suenot/transaction', 'Transaction');
+  console.log({packageName, ContainId, UnitId, UnitNameId, UnitTickerId, UnitAvatarId, UnitDescriptionId, WalletId, ContainUnitId});
 
   // Создаем unit1
   const { data: [{ id: unitId1 }] } = await deep.insert({

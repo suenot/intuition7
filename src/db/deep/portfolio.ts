@@ -3,42 +3,21 @@ import { TypesStore } from "./typesStore";
 import debug from "debug";
 const log = debug("portfolio");
 
-export const createPortfolio = async (
-  {deep, PackageId, ContainId, JoinId, SymbolId, TypeId, NumberId, StringId, ValueId}:
-  {
-    deep: DeepClient,
-    PackageId: number,
-    ContainId: number,
-    JoinId: number,
-    SymbolId: number,
-    TypeId: number,
-    StringId: number,
-    NumberId: number,
-    ValueId: number
-  }) => {
-  
-  // package
-  const { data: [{ id: packageId }] } = await deep.insert({
-    type_id: PackageId,
-    string: { data: { value: `@suenot/portfolio` } },
-    in: { data: [
-      {
-        type_id: ContainId,
-        from_id: deep.linkId,
-      },
-    ] },
-    out: { data: [
-      {
-        type_id: JoinId,
-        to_id: await deep.id('deep', 'users', 'packages'),
-      },
-      {
-        type_id: JoinId,
-        to_id: await deep.id('deep', 'admin'),
-      },
-    ] },
-  });
-  log({packageId});
+export const createPortfolio = async ({deep, Types, packageName, packageId}: {
+  deep: DeepClient,
+  packageName: string,
+  Types: TypesStore,
+  packageId: number,
+}) => {
+  const {
+    ContainId,
+    SymbolId,
+    TypeId,
+    StringId,
+    ValueId,
+    NumberId,
+  } = Types;
+  console.log({packageName, ContainId, SymbolId, TypeId, StringId, ValueId, NumberId});
 
   // Portfolio
   const { data: [{ id: PortfolioId }] } = await deep.insert({

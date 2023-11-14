@@ -3,23 +3,20 @@ import { TypesStore } from "./typesStore";
 import debug from "debug";
 const log = debug("unit");
 
-export const createUnit = async ({deep, Types, packageName, packageVersion, packageId}: {
+export const createUnit = async ({deep, Types, packageName, packageId}: {
   deep: DeepClient,
   packageName: string,
-  packageVersion: string,
   Types: TypesStore,
   packageId: number,
 }) => {
   const {
-    PackageId,
     ContainId,
-    JoinId,
     SymbolId,
     TypeId,
     StringId,
     ValueId,
   } = Types;
-  console.log({packageName, packageVersion, PackageId, ContainId, JoinId, SymbolId, TypeId, StringId, ValueId});
+  console.log({packageName, ContainId, SymbolId, TypeId, StringId, ValueId});
 
   // Unit
   const { data: [{ id: UnitId }] } = await deep.insert({

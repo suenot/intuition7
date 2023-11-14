@@ -1,9 +1,9 @@
 import { DeepClient } from "@deep-foundation/deeplinks/imports/client";
 import { TypesStore } from "./typesStore";
 import debug from "debug";
-const log = debug("wallet");
+const log = debug("unit");
 
-export const createWallet = async ({deep, Types, packageName, packageId}: {
+export const createUnit = async ({deep, Types, packageName, packageId}: {
   deep: DeepClient,
   packageName: string,
   Types: TypesStore,
@@ -15,43 +15,28 @@ export const createWallet = async ({deep, Types, packageName, packageId}: {
     TypeId,
     StringId,
     ValueId,
-    NumberId,
   } = Types;
-
-  // Wallet
-  const { data: [{ id: WalletId }] } = await deep.insert({
+  console.log({packageName, ContainId, SymbolId, TypeId, StringId, ValueId});
+  
+  // Unit
+  const { data: [{ id: UnitId }] } = await deep.insert({
     type_id: TypeId,
     in: { data: [
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'Wallet' } },
+        string: { data: { value: 'Unit' } },
       },
     ] },
     out: { data: [
     ] },
   });
-  log({WalletId});
+  console.log({UnitId});
 
-  // waletValue
-  const { data: [{ id: waletValueId }] } = await deep.insert({
-    type_id: ValueId,
-    in: { data: [
-      {
-        type_id: ContainId,
-        from_id: packageId,
-        string: { data: { value: 'waletValue' } },
-      },
-    ] },
-    from_id: WalletId,
-    to_id: NumberId,
-  });
-  log({waletValueId});
-
-  // SymbolId (петличка от Unit к Unit)
+  // SymbolId
   const { data: [{ id: symbolId }] } = await deep.insert({
     type_id: SymbolId,
-    string: { data: { value: '👛' } },
+    string: { data: { value: '💎' } },
     in: { data: [
       {
         type_id: ContainId,
@@ -59,10 +44,10 @@ export const createWallet = async ({deep, Types, packageName, packageId}: {
         string: { data: { value: 'symbol' } },
       },
     ] },
-    from_id: WalletId,
-    to_id: WalletId,
+    from_id: UnitId,
+    to_id: UnitId,
   });
-  log({symbolId});
+  console.log({symbolId});
 
   // Name
   const { data: [{ id: NameId }] } = await deep.insert({
@@ -74,10 +59,10 @@ export const createWallet = async ({deep, Types, packageName, packageId}: {
         string: { data: { value: 'Name' } },
       },
     ] },
-    from_id: WalletId,
-    to_id: WalletId,
+    from_id: UnitId,
+    to_id: UnitId,
   });
-  log({NameId});
+  console.log({NameId});
 
   // nameSymbol (петличка от Name к Name)
   const { data: [{ id: nameSymbolId }] } = await deep.insert({
@@ -93,7 +78,7 @@ export const createWallet = async ({deep, Types, packageName, packageId}: {
     from_id: NameId,
     to_id: NameId,
   });
-  log({nameSymbolId});
+  console.log({nameSymbolId});
 
   // nameValue
   const { data: [{ id: nameValueId }] } = await deep.insert({
@@ -108,24 +93,53 @@ export const createWallet = async ({deep, Types, packageName, packageId}: {
     from_id: NameId,
     to_id: StringId,
   });
-  log({nameValueId});
+  console.log({nameValueId});
 
-  const UnitId = await deep.id('@suenot/unit', 'Unit');
-
-  // ContainUnit
-  const { data: [{ id: ContainUnitId }] } = await deep.insert({
+  // Ticker
+  const { data: [{ id: TickerId }] } = await deep.insert({
     type_id: TypeId,
     in: { data: [
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'ContainUnit' } },
+        string: { data: { value: 'Ticker' } },
       },
     ] },
-    from_id: WalletId,
+    from_id: UnitId,
     to_id: UnitId,
   });
-  log({ContainUnitId});
+  console.log({TickerId});
+
+  // tickerSymbol
+  const { data: [{ id: tickerSymbolId }] } = await deep.insert({
+    type_id: SymbolId,
+    string: { data: { value: '📛' } },
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'tickerSymbol' } },
+      },
+    ] },
+    from_id: TickerId,
+    to_id: TickerId,
+  });
+  console.log({tickerSymbolId});
+
+  // tickerValue
+  const { data: [{ id: tickerValueId }] } = await deep.insert({
+    type_id: ValueId,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'tickerValue' } },
+      },
+    ] },
+    from_id: TickerId,
+    to_id: StringId,
+  });
+  console.log({tickerValueId});
 
   // Avatar
   const { data: [{ id: AvatarId }] } = await deep.insert({
@@ -137,10 +151,10 @@ export const createWallet = async ({deep, Types, packageName, packageId}: {
         string: { data: { value: 'Avatar' } },
       },
     ] },
-    from_id: WalletId,
-    to_id: WalletId,
+    from_id: UnitId,
+    to_id: UnitId,
   });
-  log({AvatarId});
+  console.log({AvatarId});
 
   // avatarSymbol
   const { data: [{ id: avatarSymbolId }] } = await deep.insert({
@@ -156,7 +170,7 @@ export const createWallet = async ({deep, Types, packageName, packageId}: {
     from_id: AvatarId,
     to_id: AvatarId,
   });
-  log({avatarSymbolId});
+  console.log({avatarSymbolId});
 
   // avatarValue
   const { data: [{ id: avatarValueId }] } = await deep.insert({
@@ -171,7 +185,7 @@ export const createWallet = async ({deep, Types, packageName, packageId}: {
     from_id: AvatarId,
     to_id: StringId,
   });
-  log({avatarValueId});
+  console.log({avatarValueId});
 
   // Description
   const { data: [{ id: DescriptionId }] } = await deep.insert({
@@ -183,10 +197,10 @@ export const createWallet = async ({deep, Types, packageName, packageId}: {
         string: { data: { value: 'Description' } },
       },
     ] },
-    from_id: WalletId,
-    to_id: WalletId,
+    from_id: UnitId,
+    to_id: UnitId,
   });
-  log({DescriptionId});
+  console.log({DescriptionId});
 
   // descriptionSymbol
   const { data: [{ id: descriptionSymbolId }] } = await deep.insert({
@@ -202,7 +216,7 @@ export const createWallet = async ({deep, Types, packageName, packageId}: {
     from_id: DescriptionId,
     to_id: DescriptionId,
   });
-  log({descriptionSymbolId});
+  console.log({descriptionSymbolId});
 
   // descriptionValue
   const { data: [{ id: descriptionValueId }] } = await deep.insert({
@@ -217,7 +231,7 @@ export const createWallet = async ({deep, Types, packageName, packageId}: {
     from_id: DescriptionId,
     to_id: StringId,
   });
-  log({descriptionValueId});
+  console.log({descriptionValueId});
 
-  return {packageId, WalletId, waletValueId, symbolId, NameId, nameSymbolId, ContainUnitId, AvatarId, avatarSymbolId, avatarValueId, DescriptionId, descriptionSymbolId, descriptionValueId};
+  return { packageId, UnitId, symbolId, NameId, nameSymbolId, TickerId, tickerSymbolId, AvatarId, avatarSymbolId, avatarValueId, DescriptionId, descriptionSymbolId, descriptionValueId };
 };

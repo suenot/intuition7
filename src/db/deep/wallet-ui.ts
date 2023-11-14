@@ -6,44 +6,21 @@ import * as path from 'path';
 const log = debug("wallet-ui");
 const __dirname = path.resolve();
 
-export const createWalletUi = async (
-  {deep, PackageId, ContainId, JoinId, TsxId, HandleClientId, HandlerId, clientSupportsJsId}:
-  {
-    deep: DeepClient,
-    PackageId: number,
-    ContainId: number,
-    JoinId: number,
-    TsxId: number,
-    HandleClientId: number,
-    HandlerId: number,
-    clientSupportsJsId: number
-  }) => {
-    console.log('createWalletUi')
-  
-  // package
-  const { data: [{ id: packageId }] } = await deep.insert({
-    type_id: PackageId,
-    string: { data: { value: `@suenot/wallet-ui` } },
-    in: { data: [
-      {
-        type_id: ContainId,
-        from_id: deep.linkId,
-      },
-    ] },
-    out: { data: [
-      {
-        type_id: JoinId,
-        to_id: await deep.id('deep', 'users', 'packages'),
-      },
-      {
-        type_id: JoinId,
-        to_id: await deep.id('deep', 'admin'),
-      },
-    ] },
-  });
-  log({packageId});
+export const createWalletUi = async ({deep, Types, packageName, packageId}: {
+  deep: DeepClient,
+  packageName: string,
+  Types: TypesStore,
+  packageId: number,
+}) => {
+  console.log('createWalletUi')
+  const {
+    ContainId,
+    TsxId,
+    clientSupportsJsId,
+    HandleClientId,
+    HandlerId,
+  } = Types;
 
-  
   // tsxId
   // const reservedIds = await deep.reserve(1);
   const { data: [{ id: tsxId }] } = await deep.insert({

@@ -6,43 +6,21 @@ import * as path from 'path';
 const log = debug("portfolio-ui");
 const __dirname = path.resolve();
 
-export const createPortfolioUi = async (
-  {deep, PackageId, ContainId, JoinId, TsxId, HandleClientId, HandlerId, clientSupportsJsId}:
-  {
-    deep: DeepClient,
-    PackageId: number,
-    ContainId: number,
-    JoinId: number,
-    TsxId: number,
-    HandleClientId: number,
-    HandlerId: number,
-    clientSupportsJsId: number
-  }) => {
-    console.log('createPortfolioUi')
-  
-  // package
-  const { data: [{ id: packageId }] } = await deep.insert({
-    type_id: PackageId,
-    string: { data: { value: `@suenot/portfolio-ui` } },
-    in: { data: [
-      {
-        type_id: ContainId,
-        from_id: deep.linkId,
-      },
-    ] },
-    out: { data: [
-      {
-        type_id: JoinId,
-        to_id: await deep.id('deep', 'users', 'packages'),
-      },
-      {
-        type_id: JoinId,
-        to_id: await deep.id('deep', 'admin'),
-      },
-    ] },
-  });
-  log({packageId});
-
+export const createPortfolioUi = async ({deep, Types, packageName, packageId}: {
+  deep: DeepClient,
+  packageName: string,
+  Types: TypesStore,
+  packageId: number,
+}) => {
+  const {
+    ContainId,
+    HandleClientId,
+    HandlerId,
+    TsxId,
+    clientSupportsJsId
+  } = Types;
+  console.log('createPortfolioUi')
+  console.log({packageName, ContainId, HandleClientId, HandlerId, TsxId, clientSupportsJsId});
   
   // tsxId
   // const reservedIds = await deep.reserve(1);
