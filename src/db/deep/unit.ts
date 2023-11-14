@@ -1,20 +1,16 @@
 import { DeepClient } from "@deep-foundation/deeplinks/imports/client";
-import { TypesStore } from "./types-store";
+import { TypesStore } from "./typesStore";
 import debug from "debug";
-const log = debug("asset");
+const log = debug("unit");
 
-export const createAsset = async ({deep, Types, packageName, packageVersion}: {
+export const createUnit = async ({deep, Types, packageName, packageVersion, packageId}: {
   deep: DeepClient,
   packageName: string,
   packageVersion: string,
   Types: TypesStore,
+  packageId: number,
 }) => {
   const {
-    PackageNamespaceId,
-    PackageVersionId,
-    PackageActiveId,
-    PublishId,
-    PackageQueryId,
     PackageId,
     ContainId,
     JoinId,
@@ -25,7 +21,7 @@ export const createAsset = async ({deep, Types, packageName, packageVersion}: {
   } = Types;
   console.log({packageName, packageVersion, PackageId, ContainId, JoinId, SymbolId, TypeId, StringId, ValueId});
 
-  // Asset
+  // Unit
   const { data: [{ id: AssetId }] } = await deep.insert({
     type_id: TypeId,
     in: { data: [
@@ -38,7 +34,7 @@ export const createAsset = async ({deep, Types, packageName, packageVersion}: {
     out: { data: [
     ] },
   });
-  log({AssetId});
+  console.log({AssetId});
 
   // SymbolId (петличка от Asset к Asset)
   const { data: [{ id: symbolId }] } = await deep.insert({
@@ -54,7 +50,7 @@ export const createAsset = async ({deep, Types, packageName, packageVersion}: {
     from_id: AssetId,
     to_id: AssetId,
   });
-  log({symbolId});
+  console.log({symbolId});
 
   // Name
   const { data: [{ id: NameId }] } = await deep.insert({
@@ -69,7 +65,7 @@ export const createAsset = async ({deep, Types, packageName, packageVersion}: {
     from_id: AssetId,
     to_id: AssetId,
   });
-  log({NameId});
+  console.log({NameId});
 
   // nameSymbol (петличка от Name к Name)
   const { data: [{ id: nameSymbolId }] } = await deep.insert({
@@ -85,7 +81,7 @@ export const createAsset = async ({deep, Types, packageName, packageVersion}: {
     from_id: NameId,
     to_id: NameId,
   });
-  log({nameSymbolId});
+  console.log({nameSymbolId});
 
   // nameValue
   const { data: [{ id: nameValueId }] } = await deep.insert({
@@ -100,7 +96,7 @@ export const createAsset = async ({deep, Types, packageName, packageVersion}: {
     from_id: NameId,
     to_id: StringId,
   });
-  log({nameValueId});
+  console.log({nameValueId});
 
   // Ticker
   const { data: [{ id: TickerId }] } = await deep.insert({
@@ -115,7 +111,7 @@ export const createAsset = async ({deep, Types, packageName, packageVersion}: {
     from_id: AssetId,
     to_id: AssetId,
   });
-  log({TickerId});
+  console.log({TickerId});
 
   // tickerSymbol
   const { data: [{ id: tickerSymbolId }] } = await deep.insert({
@@ -131,7 +127,7 @@ export const createAsset = async ({deep, Types, packageName, packageVersion}: {
     from_id: TickerId,
     to_id: TickerId,
   });
-  log({tickerSymbolId});
+  console.log({tickerSymbolId});
 
   // tickerValue
   const { data: [{ id: tickerValueId }] } = await deep.insert({
@@ -146,7 +142,7 @@ export const createAsset = async ({deep, Types, packageName, packageVersion}: {
     from_id: TickerId,
     to_id: StringId,
   });
-  log({tickerValueId});
+  console.log({tickerValueId});
 
   // Avatar
   const { data: [{ id: AvatarId }] } = await deep.insert({
@@ -161,7 +157,7 @@ export const createAsset = async ({deep, Types, packageName, packageVersion}: {
     from_id: AssetId,
     to_id: AssetId,
   });
-  log({AvatarId});
+  console.log({AvatarId});
 
   // avatarSymbol
   const { data: [{ id: avatarSymbolId }] } = await deep.insert({
@@ -177,7 +173,7 @@ export const createAsset = async ({deep, Types, packageName, packageVersion}: {
     from_id: AvatarId,
     to_id: AvatarId,
   });
-  log({avatarSymbolId});
+  console.log({avatarSymbolId});
 
   // avatarValue
   const { data: [{ id: avatarValueId }] } = await deep.insert({
@@ -192,7 +188,7 @@ export const createAsset = async ({deep, Types, packageName, packageVersion}: {
     from_id: AvatarId,
     to_id: StringId,
   });
-  log({avatarValueId});
+  console.log({avatarValueId});
 
   // Description
   const { data: [{ id: DescriptionId }] } = await deep.insert({
@@ -207,7 +203,7 @@ export const createAsset = async ({deep, Types, packageName, packageVersion}: {
     from_id: AssetId,
     to_id: AssetId,
   });
-  log({DescriptionId});
+  console.log({DescriptionId});
 
   // descriptionSymbol
   const { data: [{ id: descriptionSymbolId }] } = await deep.insert({
@@ -223,7 +219,7 @@ export const createAsset = async ({deep, Types, packageName, packageVersion}: {
     from_id: DescriptionId,
     to_id: DescriptionId,
   });
-  log({descriptionSymbolId});
+  console.log({descriptionSymbolId});
 
   // descriptionValue
   const { data: [{ id: descriptionValueId }] } = await deep.insert({
@@ -238,7 +234,7 @@ export const createAsset = async ({deep, Types, packageName, packageVersion}: {
     from_id: DescriptionId,
     to_id: StringId,
   });
-  log({descriptionValueId});
+  console.log({descriptionValueId});
 
   return { packageId, AssetId, symbolId, NameId, nameSymbolId, TickerId, tickerSymbolId, AvatarId, avatarSymbolId, avatarValueId, DescriptionId, descriptionSymbolId, descriptionValueId };
 };

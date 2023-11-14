@@ -6,8 +6,8 @@ import { incrementPatchVersion } from './incrementPatchVersion';
 import { DeepClient } from "@deep-foundation/deeplinks/imports/client";
 import { generateApolloClient } from "@deep-foundation/hasura/client";
 import { createProfitmaker } from "./profitmaker";
-import { createAsset } from "./asset";
-import { createAssetUi } from "./asset-ui";
+import { createUnit } from "./unit";
+import { createUnitUi } from "./unit-ui";
 import { createWallet } from "./wallet";
 import { createWalletUi } from "./wallet-ui";
 import { createPortfolio } from './portfolio';
@@ -20,7 +20,7 @@ import { createPortfolioTests } from './portfolio-tests';
 import { removePackage } from "./removePackage";
 import { createEmptyPackage } from './createEmptyPackage';
 import { publishPackage } from './publishPackage';
-import { TypesStore, createTypesStore } from "./types-store";
+import { TypesStore, createTypesStore } from "./typesStore";
 
 const apolloClient = generateApolloClient({
   path: process.env.PUBLIC_GQL_PATH,
@@ -37,7 +37,7 @@ export const deep = new DeepClient({ deep: guestDeep, ...admin });
 
 const f = async () => {
   console.log('initStore');
-  const Types: TypesStore = await createTypesStore({deep});
+  const Types: any = await createTypesStore({deep});
   console.log('end initStore');
 
   const packages: any[] = [
@@ -48,10 +48,10 @@ const f = async () => {
     //   path: './profitmaker',
     // },
     {
-      name: '@suenot/asset',
+      name: '@suenot/unit',
       versionUpdate: false,
       createFn: createAsset,
-      path: './asset',
+      path: './unit',
     },
     // {
     //   name: '@suenot/asset-ui',
@@ -122,7 +122,7 @@ const f = async () => {
 
     // insert new package
     const packageName = deepPackage.name;
-    var lastPackageVersion = '0.0.0';
+    var lastPackageVersion = '0.0.1';
     try {
       lastPackageVersion = await latestVersion(packageName);
     } catch (error) {}

@@ -1,5 +1,5 @@
 import { DeepClient } from "@deep-foundation/deeplinks/imports/client";
-import { TypesStore } from "./types-store";
+import { TypesStore } from "./typesStore";
 import debug from "debug";
 const log = debug("create-empty-package");
 

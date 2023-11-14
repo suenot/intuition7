@@ -5,7 +5,7 @@ import * as path from 'path';
 const log = debug("asset-ui");
 const __dirname = path.resolve();
 
-export const createAssetUi = async (
+export const createUnitUi = async (
   {deep, PackageId, ContainId, JoinId, TsxId, HandleClientId, HandlerId, clientSupportsJsId}:
   {
     deep: DeepClient,
@@ -50,7 +50,7 @@ export const createAssetUi = async (
     type_id: TsxId,
     string: {
       data: {
-        value: fs.readFileSync(path.join(__dirname, 'src', 'db', 'deep', 'asset-ui.tsx'), { encoding: 'utf-8' })
+        value: fs.readFileSync(path.join(__dirname, 'src', 'db', 'deep', 'unit-ui.tsx'), { encoding: 'utf-8' })
       },
     },
     in: {
