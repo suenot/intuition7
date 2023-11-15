@@ -23,6 +23,7 @@ export const createTransaction = async ({deep, Types, packageName, packageId}: {
     SyncTextFileId,
     HandlerId,
     HandleInsertId,
+    HandleUpdateId,
     dockerSupportsBunJsId,
   } = Types;
   console.log({packageName, ContainId, SymbolId, TypeId, StringId, ValueId, NumberId, SyncTextFileId, HandlerId, HandleInsertId, dockerSupportsBunJsId});
@@ -92,7 +93,7 @@ export const createTransaction = async ({deep, Types, packageName, packageId}: {
   });
   log({DescriptionId});
 
-  // descriptionSymbol (петличка от Name к Name)
+  // descriptionSymbol
   const { data: [{ id: descriptionSymbolId }] } = await deep.insert({
     type_id: SymbolId,
     string: { data: { value: '✍️' } },
@@ -169,6 +170,67 @@ export const createTransaction = async ({deep, Types, packageName, packageId}: {
   });
   log({handleInsertId});
 
-  return {packageId, TransactionId, transactionValueId, symbolId, DescriptionId, descriptionSymbolId, descriptionValueId, syncTextFile, handlerId, handleInsertId};
+  // handleUpdate
+  const { data: [{ id: handleUpdateId }] } = await deep.insert({
+    type_id: HandleUpdateId,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'transactionHandleUpdate' } },
+      },
+    ] },
+    from_id: TransactionId,
+    to_id: handlerId,
+  });
+  log({handleUpdateId});
+
+  // Status
+  const { data: [{ id: StatusId }] } = await deep.insert({
+    type_id: TypeId,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'Status' } },
+      },
+    ] },
+    from_id: TransactionId,
+    to_id: TransactionId,
+  });
+  log({StatusId});
+
+  // statusSymbol
+  const { data: [{ id: statusSymbolId }] } = await deep.insert({
+    type_id: SymbolId,
+    string: { data: { value: '🔄' } },
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'statusSymbol' } },
+      },
+    ] },
+    from_id: StatusId,
+    to_id: StatusId,
+  });
+  log({statusSymbolId});
+
+  // statusValue
+  const { data: [{ id: statusValueId }] } = await deep.insert({
+    type_id: ValueId,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'statusValue' } },
+      },
+    ] },
+    from_id: StatusId,
+    to_id: StringId,
+  });
+  log({statusValueId});
+
+  return {packageId, TransactionId, transactionValueId, symbolId, DescriptionId, descriptionSymbolId, descriptionValueId, syncTextFile, handlerId, handleInsertId, handleUpdateId, StatusId, statusSymbolId, statusValueId};
 };
 

@@ -1,7 +1,7 @@
 async ({ deep, require }) => {
   const React = require('react');
   const { useState, useEffect } = React;
-  const { Box, Text, Avatar, Wrap, WrapItem, Editable, EditablePreview, EditableInput, EditableTextarea, Center, Flex, Divider, Button } = require('@chakra-ui/react');
+  const { Box, Text, Avatar, Wrap, WrapItem, Editable, EditablePreview, EditableInput, EditableTextarea, Center, Flex, Divider, Button, Tooltip } = require('@chakra-ui/react');
   const AsyncFileId = await deep.idLocal("@deep-foundation/core", "AsyncFile");
   var UnitId = await deep.id("@suenot/unit", "Unit");
   var UnitNameId = await deep.id("@suenot/unit", "Name");
@@ -212,7 +212,9 @@ async ({ deep, require }) => {
           <EditablePreview w={'100%'} />
           <EditableInput />
         </Editable>
-        <Text>Amount: {amountFixed} {unitTickerValue?.[0]?.value?.value} <Avatar size='sm' name='' src={unitSrc} mb='1' /></Text>
+        
+          <Text>Amount: {amountFixed} {unitTickerValue} <Tooltip label={unitNameValue}><Avatar size='sm' name='' src={unitSrc} mb='1'/></Tooltip></Text>
+        
         <Editable placeholder="Insert description" value={walletDescription} onChange={async (value) => {
           setWalletDescription(value)
         }}>

@@ -22,6 +22,7 @@ export const createEmission = async ({deep, Types, packageName, packageId}: {
     SyncTextFileId,
     HandlerId,
     HandleInsertId,
+    HandleUpdateId,
     dockerSupportsBunJsId,
   } = Types;
   console.log({ContainId, SymbolId, TypeId, StringId, ValueId, NumberId, SyncTextFileId, HandlerId, HandleInsertId, dockerSupportsBunJsId});
@@ -171,7 +172,22 @@ export const createEmission = async ({deep, Types, packageName, packageId}: {
   });
   log({handleInsertId});
 
+  // handleUpdate
+  const { data: [{ id: handleUpdateId }] } = await deep.insert({
+    type_id: HandleUpdateId,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'transactionHandleUpdate' } },
+      },
+    ] },
+    from_id: EmissionId,
+    to_id: handlerId,
+  });
+  log({handleUpdateId});
 
-  return {packageId, EmissionId, emissionValueId, symbolId, DescriptionId, descriptionSymbolId, descriptionValueId, syncTextFile, handlerId, handleInsertId};
+
+  return {packageId, EmissionId, emissionValueId, symbolId, DescriptionId, descriptionSymbolId, descriptionValueId, syncTextFile, handlerId, handleInsertId, handleUpdateId};
 };
 
