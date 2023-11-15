@@ -8,6 +8,8 @@ import { generateApolloClient } from "@deep-foundation/hasura/client";
 import { createProfitmaker } from "./profitmaker";
 import { createUnit } from "./unit";
 import { createUnitUi }from "./unit-ui";
+import { createUnitUiEn } from './unit-ui-en';
+import { createUnitUiRu } from './unit-ui-ru';
 import { createWallet } from "./wallet";
 import { createWalletUi } from "./wallet-ui";
 import { createPortfolio } from './portfolio';
@@ -22,6 +24,8 @@ import { createPortfolioTests } from './portfolio-tests';
 import { createPair } from './pair';
 import { createExchange } from './exchange';
 import { createInstrument } from './instrument';
+import { createLanguage } from './language';
+import { createLocale } from './locale';
 import { removePackage } from "./removePackage";
 import { createEmptyPackage } from './createEmptyPackage';
 import { publishPackage } from './publishPackage';
@@ -51,6 +55,18 @@ const f = async () => {
       versionUpdate: false,
       createFn: createProfitmaker,
       path: './profitmaker',
+    },
+    {
+      name: '@suenot/language',
+      versionUpdate: false,
+      createFn: createLanguage,
+      path: './language',
+    },
+    {
+      name: '@suenot/locale',
+      versionUpdate: false,
+      createFn: createLocale,
+      path: './locale',
     },
     {
       name: '@suenot/unit',
@@ -96,7 +112,7 @@ const f = async () => {
     },
     {
       name: '@suenot/transaction-ui',
-      versionUpdate: true,
+      versionUpdate: false,
       createFn: createTransactionUi,
       path: './transaction-ui',
     },
@@ -108,7 +124,7 @@ const f = async () => {
     },
     {
       name: '@suenot/emission-ui',
-      versionUpdate: true,
+      versionUpdate: false,
       createFn: createEmissionUi,
       path: './emission-ui',
     },
@@ -144,9 +160,21 @@ const f = async () => {
     },
     {
       name: '@suenot/instrument',
-      versionUpdate: true,
+      versionUpdate: false,
       createFn: createInstrument,
       path: './instrument',
+    },
+    {
+      name: '@suenot/unit-ui-en',
+      versionUpdate: true,
+      createFn: createUnitUiEn,
+      path: './unit-ui-en',
+    },
+    {
+      name: '@suenot/unit-ui-ru',
+      versionUpdate: true,
+      createFn: createUnitUiRu,
+      path: './unit-ui-ru',
     },
   ]
 
