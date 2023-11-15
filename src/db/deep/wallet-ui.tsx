@@ -1,186 +1,294 @@
 async ({ deep, require }) => {
   const React = require('react');
-  const { Box, Text, Avatar, Wrap, Editable, EditablePreview, EditableInput, EditableTextarea, Icon, Flex, Spacer } = require('@chakra-ui/react');
-  const walletTypeId = await deep.id("@suenot/wallet", "Wallet");
-  const containUnitTypeId = await deep.id("@suenot/wallet", "ContainUnit");
-  const walletAvatarTypeId = await deep.id("@suenot/wallet", "Avatar");
-  const walletDescriptionTypeId = await deep.id("@suenot/wallet", "Description");
-  const walletNameTypeId = await deep.id("@suenot/wallet", "Name");
+  const { useState, useEffect } = React;
+  const { Box, Text, Avatar, Wrap, WrapItem, Editable, EditablePreview, EditableInput, EditableTextarea, Center, Flex, Divider, Button } = require('@chakra-ui/react');
+  const AsyncFileId = await deep.idLocal("@deep-foundation/core", "AsyncFile");
+  var UnitId = await deep.id("@suenot/unit", "Unit");
+  var UnitNameId = await deep.id("@suenot/unit", "Name");
+  var UnitDescriptionId = await deep.id("@suenot/unit", "Description");
+  var UnitTickerId = await deep.id("@suenot/unit", "Ticker");
+  var UnitAvatarId = await deep.id("@suenot/unit", "Avatar");
 
-  const unitTypeId = await deep.id("@suenot/unit", "Unit");
-  const asyncFileTypeId = await deep.id("@deep-foundation/core", "AsyncFile");
-  const unitNameTypeId = await deep.id("@suenot/unit", "Name");
-  const unitTickerTypeId = await deep.id("@suenot/unit", "Ticker");
-  const unitAvatarTypeId = await deep.id("@suenot/unit", "Avatar");
-  console.log({unitTypeId, containUnitTypeId, asyncFileTypeId, unitNameTypeId, unitTickerTypeId, unitAvatarTypeId, walletTypeId});
-
+  const WalletId = await deep.id("@suenot/wallet", "Wallet");
+  const ContainUnitId = await deep.id("@suenot/wallet", "ContainUnit");
+  const WalletAvatarId = await deep.id("@suenot/wallet", "Avatar");
+  const WalletDescriptionId = await deep.id("@suenot/wallet", "Description");
+  const WalletNameId = await deep.id("@suenot/wallet", "Name");
+  
   return ({ fillSize, style, link }) => {
-    const amount = link?.value?.value || 0;
-    const data = deep.useDeepQuery({
-        _or: [
-          // get async file for Wallet
-          {
-            type_id: asyncFileTypeId,
-            to_id: link.id,
+
+    const data = deep.useDeepSubscription({
+      _or: [
+        // get async file for Wallet
+        {
+          type_id: AsyncFileId,
+          to_id: link.id,
+        },
+        // get avatar for Wallet
+        {
+          type_id: WalletAvatarId,
+          to_id: link.id,
+        },
+        // get description for Wallet
+        {
+          type_id: WalletDescriptionId,
+          to_id: link.id,
+        },
+        // get name for Wallet
+        {
+          type_id: WalletNameId,
+          to_id: link.id,
+        },
+        // Wallet contain units
+        {
+          type_id: ContainUnitId,
+          to: {
+            type_id: UnitId,
           },
-          // get avatar for Wallet
-          {
-            type_id: walletAvatarTypeId,
-            to_id: link.id,
-          },
-          // get description for Wallet
-          {
-            type_id: walletDescriptionTypeId,
-            to_id: link.id,
-          },
-          // get name for Wallet
-          {
-            type_id: walletNameTypeId,
-            to_id: link.id,
-          },
-          // Wallet contain units
-          {
-            type_id: containUnitTypeId,
-            to: {
-              type_id: unitTypeId,
-            },
-            from: {
-              type_id: walletTypeId
+          from: {
+            type_id: WalletId
+          }
+        },
+
+        // get async file for Unit
+        {
+          type_id: AsyncFileId,
+          to: {
+            type_id: UnitId,
+            in: {
+              type_id: ContainUnitId,
+              from_id: link.id
             }
           },
-
-
-          // get async file for Unit
-          {
-            type_id: asyncFileTypeId,
-            to: {
-              type_id: unitTypeId,
-              in: {
-                type_id: containUnitTypeId,
-                from_id: link.id
-              }
-            },
+        },
+        // get avatar for Unit
+        {
+          type_id: UnitAvatarId,
+          to: {
+            type_id: UnitId,
+            in: {
+              type_id: ContainUnitId,
+              from_id: link.id
+            }
           },
-          // get avatar for Unit
-          {
-            type_id: unitAvatarTypeId,
-            to: {
-              type_id: unitTypeId,
-              in: {
-                type_id: containUnitTypeId,
-                from_id: link.id
-              }
-            },
+        },
+        // get ticker for Unit
+        {
+          type_id: UnitTickerId,
+          to: {
+            type_id: UnitId,
+            in: {
+              type_id: ContainUnitId,
+              from_id: link.id
+            }
           },
-          // get ticker for Unit
-          {
-            type_id: unitTickerTypeId,
-            to: {
-              type_id: unitTypeId,
-              in: {
-                type_id: containUnitTypeId,
-                from_id: link.id
-              }
-            },
+        },
+        // get name for Unit
+        {
+          type_id: UnitNameId,
+          to: {
+            type_id: UnitId,
+            in: {
+              type_id: ContainUnitId,
+              from_id: link.id
+            }
           },
-          // get name for Unit
-          {
-            type_id: unitNameTypeId,
-            to: {
-              type_id: unitTypeId,
-              in: {
-                type_id: containUnitTypeId,
-                from_id: link.id
-              }
-            },
-          },
-        ]
-      }
-    );
+        },
+      ]
+    });
 
     const unitFileData = deep.minilinks.query({
       to: {
-        type_id: unitTypeId,
+        type_id: UnitId,
         in: {
-          type_id: containUnitTypeId,
+          type_id: ContainUnitId,
           from_id: link.id
         }
       },
-      type_id: asyncFileTypeId
+      type_id: AsyncFileId,
     });
 
-    const ticker = deep.minilinks.query({
+    const unitNameData = deep.minilinks.query({
       to: {
-        type_id: unitTypeId,
+        type_id: UnitId,
         in: {
-          type_id: containUnitTypeId,
+          type_id: ContainUnitId,
           from_id: link.id
         }
       },
-      type_id: unitTickerTypeId
+      type_id: UnitNameId,
+    });
+    const unitTickerData = deep.minilinks.query({
+      to: {
+        type_id: UnitId,
+        in: {
+          type_id: ContainUnitId,
+          from_id: link.id
+        }
+      },
+      type_id: UnitTickerId,
     });
     const unitAvatarData = deep.minilinks.query({
       to: {
-        type_id: unitTypeId,
+        type_id: UnitId,
         in: {
-          type_id: containUnitTypeId,
+          type_id: ContainUnitId,
           from_id: link.id
         }
       },
-      type_id: unitAvatarTypeId
+      type_id: UnitAvatarId,
     });
 
-    const walletAvatarData = deep.minilinks.query({
-      type_id: walletAvatarTypeId,
-      to_id: link.id,
-    })
 
     const walletNameData = deep.minilinks.query({
-      type_id: walletNameTypeId,
+      type_id: WalletNameId,
       to_id: link.id,
     })
 
     const walletDescriptionData = deep.minilinks.query({
-      type_id: walletDescriptionTypeId,
+      type_id: WalletDescriptionId,
+      to_id: link.id,
+    })
+
+    const walletAvatarData = deep.minilinks.query({
+      type_id: WalletAvatarId,
       to_id: link.id,
     })
 
     const walletFileData = deep.minilinks.query({
-      type_id: asyncFileTypeId,
+      type_id: AsyncFileId,
       to_id: link.id,
     })
 
 
-    
-    const unitFile = unitFileData?.[0]?.id && `/api/file?linkId=${unitFileData?.[0]?.id}`;
-    const unitAvatar = unitAvatarData?.[0]?.value?.value;
-
-    const walletFile = walletFileData?.[0]?.id && `/api/file?linkId=${walletFileData?.[0]?.id}`;
-    const walletAvatar = walletAvatarData?.[0]?.value?.value;
-
+    var unitFileValue = unitFileData?.[0]?.id && `/api/file?linkId=${unitFileData?.[0]?.id}`;
+    var unitAvatarValue = unitAvatarData?.[0]?.value?.value || "";
+    var unitAvatarId = unitAvatarData?.[0]?.id;
     // File has more priority than avatar (url)
-    const unitSrc = unitFile || unitAvatar || "";
-    const walletSrc = walletFile || walletAvatar || "";
-    const src = walletSrc || unitSrc || "";
-    
-    console.log({data});
-    console.log({unitFileData, unitFile, ticker, unitAvatarData, unitAvatar, unitSrc, walletFileData, walletFile, walletAvatarData, walletAvatar, walletSrc, src});
+    var unitSrcValue = unitFileValue || unitAvatarValue || "";
+
+    var unitNameValue = unitNameData?.[0]?.value?.value || '';
+    var unitNameId = unitNameData?.[0]?.id;
+    var unitTickerValue = unitTickerData?.[0]?.value?.value || "";
+    var unitTickerId = unitTickerData?.[0]?.id;
+    var unitSrc = unitFileValue || unitAvatarValue || "";
+
+
+    var walletFileValue = walletFileData?.[0]?.id && `/api/file?linkId=${walletFileData?.[0]?.id}`;
+    var walletAvatarValue = walletAvatarData?.[0]?.value?.value || "";
+    var walletAvatarId = walletAvatarData?.[0]?.id;
+    // File has more priority than avatar (url)
+    const _walletSrcValue = walletFileValue || walletAvatarValue || "";
+    // If wallet doesn't have avatar, use unit avatar
+    const walletSrcValue = _walletSrcValue || unitSrcValue || "";
+
+    var walletNameValue = walletNameData?.[0]?.value?.value || '';
+    var walletNameId = walletNameData?.[0]?.id;
+    var walletDescriptionValue = walletDescriptionData?.[0]?.value?.value || "";
+    var walletDescriptionId = walletDescriptionData?.[0]?.id;
+
+    const [walletName, setWalletName] = useState(walletNameValue);
+    const [walletDescription, setWalletDescription] = useState(walletDescriptionValue);
+    const [walletFile, setWalletFile] = useState(walletFileValue);
+    const [walletAvatar, setWalletAvatar] = useState(walletAvatarValue);
+    const [walletSrc, setWalletSrc] = useState(walletSrcValue);
+
+    const amount = link?.value?.value || 0;
     const amountFixed = typeof(amount) === 'number' ? amount.toFixed(8) : "";
+
     return <div>
       <Box maxW='sm' minW='sm' w='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' p='4' backgroundColor='white'>
-        
-        <Avatar size='2xl' name='' src={src} mb='1' />
-
-        <Editable defaultValue={walletNameData?.[0]?.value?.value} style={{flex: '1 0 auto'}}>
-          <EditablePreview />
+        <div>
+          <Flex
+            align="center"
+            justify="center"
+          >
+            <Avatar size='2xl' name='' src={walletSrc} mb='1' />
+          </Flex>
+        </div>
+        <Editable placeholder="Insert name" value={walletName} onChange={async (value) => {
+          setWalletName(value)
+        }}>
+          <EditablePreview w={'100%'} />
           <EditableInput />
         </Editable>
-        <Text>{amountFixed} {ticker?.[0]?.value?.value} <Avatar size='sm' name='' src={unitSrc} mb='1' /></Text>
-        <Editable defaultValue={walletDescriptionData?.[0]?.value?.value}>
-          <EditablePreview />
+        <Text>Amount: {amountFixed} {unitTickerValue?.[0]?.value?.value} <Avatar size='sm' name='' src={unitSrc} mb='1' /></Text>
+        <Editable placeholder="Insert description" value={walletDescription} onChange={async (value) => {
+          setWalletDescription(value)
+        }}>
+          <EditablePreview w={'100%'} />
           <EditableTextarea />
         </Editable>
+        <Divider />
+        <Editable placeholder="Insert avatar url" value={walletAvatar} onChange={async (value) => {
+          setWalletAvatar(value);
+          const newSrc = walletFile || value || "";
+          setWalletSrc(newSrc);
+        }}>
+          <EditablePreview w={'100%'} />
+          <EditableInput />
+        </Editable>
+        <Button colorScheme='teal' size='md' variant='outline' onClick={async () => {
+          if (walletName === undefined) setWalletName("");
+          if (walletDescription === undefined) setWalletDescription("");
+          if (walletAvatar === undefined || walletAvatar === null) setWalletAvatar("");
 
+          if (!walletNameId) {
+            console.log("Wallet doesn't exist")
+            const { data: [{ id: _walletNameId }] } = await deep.insert({
+              type_id: WalletNameId,
+              from_id: link.id,
+              to_id: link.id,
+              string: { data: { value: walletName } },
+            })
+            walletNameId = _walletNameId;
+          } else {
+            console.log("Wallet exist", {walletNameId, WalletNameId, walletName})
+            const { data: [{ link: _walletNameId }] } = await deep.update(
+              { link_id: walletNameId },
+              { value: walletName },
+              { table: 'strings', returning: `link { ${deep.selectReturning} }` }
+            );
+            console.log({_walletNameId});
+          }
+
+          if (!walletDescriptionId) {
+            console.log("Description doesn't exist")
+            const { data: [{ id: _walletDescriptionId }] } = await deep.insert({
+              type_id: WalletDescriptionId,
+              from_id: link.id,
+              to_id: link.id,
+              string: { data: { value: walletDescription } },
+            })
+            walletDescriptionId = _walletDescriptionId;
+          } else {
+            console.log("Description exist")
+            const { data: [{ link: _walletDescriptionId }] } = await deep.update(
+              { link_id: walletDescriptionId },
+              { value: walletDescription },
+              { table: 'strings', returning: `link { ${deep.selectReturning} }` }
+            );
+            console.log({_walletDescriptionId});
+          }
+
+          if (!walletAvatarId) {
+            const { data: [{ id: _walletAvatarId }] } = await deep.insert({
+              type_id: WalletAvatarId,
+              from_id: link.id,
+              to_id: link.id,
+              string: { data: { value: walletAvatar } },
+            })
+            walletAvatarId = _walletAvatarId;
+          } else {
+            const { data: [{ link: _walletAvatarId }] } = await deep.update(
+              { link_id: walletAvatarId },
+              { value: walletAvatar },
+              { table: 'strings', returning: `link { ${deep.selectReturning} }` }
+            );
+          }
+        }}>
+          Save
+        </Button>
       </Box>
     </div>;
   }

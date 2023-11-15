@@ -13,7 +13,9 @@ import { createWalletUi } from "./wallet-ui";
 import { createPortfolio } from './portfolio';
 import { createPortfolioUi } from './portfolio-ui';
 import { createTransaction } from './transaction';
+import { createTransactionUi } from './transaction-ui';
 import { createEmission } from './emission';
+import { createEmissionUi } from './emission-ui';
 import { createTransactionTests } from './transaction-tests';
 import { createEmissionTests } from './emission-tests';
 import { createPortfolioTests } from './portfolio-tests';
@@ -93,10 +95,22 @@ const f = async () => {
       path: './transaction',
     },
     {
+      name: '@suenot/transaction-ui',
+      versionUpdate: true,
+      createFn: createTransactionUi,
+      path: './transaction-ui',
+    },
+    {
       name: '@suenot/emission',
       versionUpdate: false,
       createFn: createEmission,
       path: './emission',
+    },
+    {
+      name: '@suenot/emission-ui',
+      versionUpdate: true,
+      createFn: createEmissionUi,
+      path: './emission-ui',
     },
     {
       name: '@suenot/transaction-tests',
