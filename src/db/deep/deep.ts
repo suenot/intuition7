@@ -17,6 +17,9 @@ import { createEmission } from './emission';
 import { createTransactionTests } from './transaction-tests';
 import { createEmissionTests } from './emission-tests';
 import { createPortfolioTests } from './portfolio-tests';
+import { createPair } from './pair';
+import { createExchange } from './exchange';
+import { createInstrument } from './instrument';
 import { removePackage } from "./removePackage";
 import { createEmptyPackage } from './createEmptyPackage';
 import { publishPackage } from './publishPackage';
@@ -41,12 +44,12 @@ const f = async () => {
   console.log('end initStore');
 
   const packages: any[] = [
-    // {
-    //   name: '@suenot/profitmaker',
-    //   versionUpdate: false,
-    //   createFn: createProfitmaker,
-    //   path: './profitmaker',
-    // },
+    {
+      name: '@suenot/profitmaker',
+      versionUpdate: false,
+      createFn: createProfitmaker,
+      path: './profitmaker',
+    },
     {
       name: '@suenot/unit',
       versionUpdate: false,
@@ -97,21 +100,39 @@ const f = async () => {
     },
     {
       name: '@suenot/transaction-tests',
-      versionUpdate: true,
+      versionUpdate: false,
       createFn: createTransactionTests,
       path: './transaction-tests',
     },
     {
       name: '@suenot/emission-tests',
-      versionUpdate: true,
+      versionUpdate: false,
       createFn: createEmissionTests,
       path: './emission-tests',
     },
     {
       name: '@suenot/portfolio-tests',
-      versionUpdate: true,
+      versionUpdate: false,
       createFn: createPortfolioTests,
       path: './portfolio-tests',
+    },
+    {
+      name: '@suenot/pair',
+      versionUpdate: false,
+      createFn: createPair,
+      path: './pair',
+    },
+    {
+      name: '@suenot/exchange',
+      versionUpdate: false,
+      createFn: createExchange,
+      path: './exchange',
+    },
+    {
+      name: '@suenot/instrument',
+      versionUpdate: true,
+      createFn: createInstrument,
+      path: './instrument',
     },
   ]
 
