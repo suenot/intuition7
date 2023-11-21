@@ -45,7 +45,7 @@ http://localhost:7771/instruments?id=LTC/BTC/binance
 ## Включить инструмент
 http://localhost:7771/instruments?id=LTC/BTC/binance&active=true
 
-# Алгоритм
+## Алгоритм
 - есть функция работы парсеров, которая перезапускается, если меняется конфиг
   - получение ордербука в ccxt формате
   - перевод в стандартный формат
@@ -61,10 +61,11 @@ http://149.102.136.233:7771/orderbook-history?base=ETH&quote=BTC?from=1111&to=11
 ```
 
 To get all pairs where base is ETH:
-```
+```bash
 http://149.102.136.233:7771/orderbook-history?base=ETH?from=1111&to=1112
 ```
-
+http://149.102.136.233:7771/orderbook-history?base=ETH&quote=BTC?from=1111&to=1112
+```
 Example of the orderbooksHistory data structure:
 ```json
 [
@@ -94,5 +95,5 @@ Example of the orderbooksHistory data structure:
   ...
  }
 ]
-```
+```bash
 
