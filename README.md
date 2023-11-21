@@ -53,32 +53,41 @@ http://localhost:7771/instruments?id=LTC/BTC/binance&active=true
   - сохранение в store истории ордербука
 
 
-# Планируемах схема для исторических данных
+## Planned Schema for Historical Data
 
-http://149.102.136.233:7771/orderbook-history?base=ETH&quote=BTC?from=1111&to=1112 - чтобы получить все пары, где base ETH и quote BTC
-
-http://149.102.136.233:7771/orderbook-history?base=ETH?from=1111&to=1112 - чтобы получить все пары, где base ETH
-
+To get all pairs where base is ETH and quote is BTC:
 ```
-const orderbooksHistory = [
+http://149.102.136.233:7771/orderbook-history?base=ETH&quote=BTC?from=1111&to=1112
+```
+
+To get all pairs where base is ETH:
+```
+http://149.102.136.233:7771/orderbook-history?base=ETH?from=1111&to=1112
+```
+
+Example of the orderbooksHistory data structure:
+```json
+[
  {
-  timestamp: 1111,
-  orderbooks: {
-   'ETH/BTC/binance': {
-    baseId: 'ETH',
-    quoteId: 'BTC',
-    exchangeId: 'binance',
-    asks: Asks[],
-    bids: Bids[],
+  "timestamp": 1111,
+  "orderbooks": {
+   "ETH/BTC/binance": {
+    "baseId": "ETH",
+    "quoteId": "BTC",
+    "exchangeId": "binance",
+    "asks": "Asks[]",
+    "bids": "Bids[]"
    },
-   'ETH/BTC/okex': {
-    baseId: 'ETH',
-    quoteId: 'BTC',
-    exchangeId: 'binance',
-    asks: Asks[],
-    bids: Bids[],
-   },
+   "ETH/BTC/okex": {
+    "baseId": "ETH",
+    "quoteId": "BTC",
+    "exchangeId": "binance",
+    "asks": "Asks[]",
+    "bids": "Bids[]"
+   }
   }
+]
+```
  },
  {
   timestamp: 1112,
