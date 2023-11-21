@@ -3,69 +3,127 @@ import debug from "debug";
 const log = debug("remove-package");
 
 export const removePackage =  async ({deep, packageName}: {deep: DeepClient, packageName: string}) => {
+  console.log('removePackage', {packageName});
   var packageId: number | undefined = undefined;
   var packageNamespaceId: number | undefined = undefined;
   var deletedLinks: any[] = [];
+  const PackageNamespaceId = await deep.id('@deep-foundation/core', 'PackageNamespace');
+  const PackageQueryId = await deep.id('@deep-foundation/core', 'PackageQuery');
+  const PublishId = await deep.id('@deep-foundation/npm-packager', 'Publish');
+  const ContainId = await deep.id('@deep-foundation/core', 'Contain');
+  const containTreeId = await deep.id('@deep-foundation/core', 'containTree');
+  log({PackageNamespaceId, ContainId, containTreeId});
+
   do {
 
     try {
       packageId = await deep.id(packageName);
     } catch (error) {}
+    console.log({packageName, packageId});
 
     try {
-      const { data: [{ id: packageNamespaceId }] } = await deep.select({
-        to_id: packageId,
-        type_id: {
-          _id: [
-            '@deep-foundation/core', 'PackageNamespace'
-          ]
-        }
+      const { data: publishContains } = await deep.select({
+        type_id: ContainId,
+        to_id: PublishId,
       });
-      console.log({packageId, packageNamespaceId});
+      log({publishContains});
 
-      const resultDelete = await deep.delete({
-        up: {
-          tree_id: {
-            _id: ['@deep-foundation/core', 'containTree'],
-          },
-          parent: {
-            type_id: {
-              _id: ['@deep-foundation/core', 'Contain'],
-            },
-            to_id: packageNamespaceId,
-          },
-        },
+      const publishContainIds = publishContains.map((link) => link.id);
+      log({publishContainIds});
+
+      for (const publishContainId of publishContainIds) {
+        const resultDelete = await deep.delete({
+          id: publishContainId
+        });
+        log({resultDelete})
+        deletedLinks = [...deletedLinks, ...resultDelete?.data]
+      }
+    } catch (error) {}
+
+    try {
+      const { data: publishPackageQueries } = await deep.select({
+        type_id: ContainId,
+        to_id: PublishId,
       });
-      console.log({resultDelete})
-      deletedLinks = [...deletedLinks, ...resultDelete?.data]
+      log({publishPackageQueries});
+
+      const publishPackageQueriesIds = publishPackageQueries.map((link) => link.id);
+      log({publishPackageQueriesIds});
+
+      for (const publishPackageQueryId of publishPackageQueriesIds) {
+        const resultDelete = await deep.delete({
+          id: publishPackageQueryId
+        });
+        log({resultDelete})
+        deletedLinks = [...deletedLinks, ...resultDelete?.data]
+      }
+    } catch (error) {}
+
+    try {
+      const { data: publishLinks } = await deep.select({
+        type_id: ContainId,
+        to_id: PublishId,
+      });
+      log({publishLinks});
+
+      const publishIds = publishLinks.map((link) => link.id);
+      log({publishIds});
+
+      for (const publishId of publishIds) {
+        const resultDelete = await deep.delete({
+          id: publishId
+        });
+        log({resultDelete})
+        deletedLinks = [...deletedLinks, ...resultDelete?.data]
+      }
+    } catch (error) {}
+
+    try {
+      const { data: packageNamespaceLinks } = await deep.select({
+        type_id: PackageNamespaceId,
+        value: packageName,
+      });
+      log({packageId, packageNamespaceLinks});
+
+      const packageNamespaceIds = packageNamespaceLinks.map((link) => link.id);
+      console.log({packageNamespaceIds});
+
+      for (const packageNamespaceId of packageNamespaceIds) {
+        const resultDelete = await deep.delete({
+          type_id: ContainId,
+          to_id: packageNamespaceId,
+        });
+        log({resultDelete})
+        deletedLinks = [...deletedLinks, ...resultDelete?.data]
+      }
+
+      for (const packageNamespaceId of packageNamespaceIds) {
+        const resultDelete = await deep.delete({
+          id: packageNamespaceId,
+        });
+        log({resultDelete})
+        deletedLinks = [...deletedLinks, ...resultDelete?.data]
+      }
 
     } catch (error) {}
 
     try {
       const { data: [{ id: containerLinkId }] } = await deep.select({
         to_id: packageId,
-        type_id: {
-          _id: [
-            '@deep-foundation/core', 'Contain'
-          ]
-        }
+        type_id: ContainId,
       });
-      console.log({packageId, containerLinkId});
+      log({packageId, containerLinkId});
       
       const resultDelete = await deep.delete({
         up: {
-          tree_id: {
-            _id: ['@deep-foundation/core', 'containTree'],
-          },
+          tree_id: containTreeId,
           parent: {
-            type_id: {
-              _id: ['@deep-foundation/core', 'Contain'],
-            },
+            type_id: ContainId,
             to_id: packageId,
           },
         },
       });
-      console.log({resultDelete})
+      log({resultDelete})
       deletedLinks = [...deletedLinks, ...resultDelete?.data]
     } catch (error) {
       packageId = undefined;
@@ -74,6 +132,6 @@ export const removePackage =  async ({deep, packageName}: {deep: DeepClient, pac
       packageId = await deep.id(packageName);
     } catch (error) {}
   } while (packageId || packageNamespaceId)
-  console.log({deletedLinks})
+  log({deletedLinks})
   return deletedLinks;
 }

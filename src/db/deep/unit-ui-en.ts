@@ -20,15 +20,17 @@ export const createUnitUiEn = async ({deep, Types, packageName, packageId}: {
     ValueId,
     SyncTextFileId
   } = Types;
-  console.log({packageName, ContainId, SymbolId, TypeId, StringId, ValueId});
+  log('createUnitUiEn');
+  log({packageName, ContainId, SymbolId, TypeId, StringId, ValueId});
 
-  const LocaleId = await deep.id('@suenot/unit-ui', 'UnitUi');
+  const LocaleId = await deep.id('@suenot/locale', 'Locale');
+  log({LocaleId});
 
   // syncTextFile
   const { data: [{ id: syncTextFile }] } = await deep.insert({
     type_id: SyncTextFileId,
     string: { data: {
-      value: fs.readFileSync(path.join(__dirname, 'src', 'db', 'deep', 'unit-ui-ru-locale.ts'), { encoding: 'utf-8' })
+      value: fs.readFileSync(path.join(__dirname, 'src', 'db', 'deep', 'unit-ui-en-locale.ts'), { encoding: 'utf-8' })
     } },
     in: { data: [
       {

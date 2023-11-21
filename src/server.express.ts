@@ -16,20 +16,32 @@ const log = debug("index");
   const exchangeIds = ['binance', 'okex', 'kucoin'];
   const pairIds = ['ETH/BTC', 'LTC/BTC', 'BTC/USDT', 'ETH/USDT', 'DOGE/USDT'];
   for (const exchangeId of exchangeIds) {
-    await upsertExchange({ dbs: ['store', 'nedb'], exchange: {...store.exchanges[exchangeId], active: true}});
+    await upsertExchange({ dbs: ['store'], exchange: {...store.exchanges[exchangeId], active: true}});
   }
   for (const pairId of pairIds) {
-    await upsertPair({ dbs: ['store', 'nedb'], pair: {...store.pairs[pairId], active: true}});
+    await upsertPair({ dbs: ['store'], pair: {...store.pairs[pairId], active: true}});
   }
 
+    // TODO: вынести эту логику выше, так как она повторяется в сборе трейдов и свечек
+    // получаем список пар, которые есть на бирже
+    // const exchangePairs = store.exchanges[exchangeId].pairs;
+    // console.log({exchangePairs});
 
+    // ОТЛАДКА:
+    // выводим список пар на бирже okex (почему-то пустой список)
+    // const exchangePairsOkex = store.exchanges['okex'].pairs;
+    // console.log(exchangePairsOkex);
+
+    // получаем список активных пар
+    // const exchangePairsActive = _.filter(exchangePairs, pair => pair.active === true); // TODO: не работает, так как в store нет active
 
   // Сбор ордербуков, тиков, свечей, трейдов вебсокетами
-  parseOrderBooks({exchangeIds, pairIds});
+  parseOrderBooks({exchangeIds, pairIds}); // где-то здесь проблема
 
   // Раз в 1 секунду собирать исторические данные
-  saveOrderBookHistoryByTimer(1000)
+  // saveOrderBookHistoryByTimer(1000)
 
+  console.log('*******************************');
   // Сбор ассетов, пар, инструментов, бирж в цикле
   // setInterval(async () => {
   //   await intervalFn();
@@ -43,6 +55,10 @@ const app = express()
     console.log("pong");
     res.send("pong");
   })
+  // /store - вся база данных (для отладки)
+  .get('/store', (req: any, res: any) => {
+    res.json(store);
+  })
   .get('/exchanges', (req: any, res: any) => {
     res.json(store.exchanges);
   })
@@ -50,7 +66,7 @@ const app = express()
     const { id } = req.params;
     const { active } = req.query;
     if (active === 'true' || active === 'false') {
-      upsertExchange({ dbs: ['store', 'nedb'], exchange: {...store.exchanges[id], active: JSON.parse(active)}});
+      upsertExchange({ dbs: ['store'], exchange: {...store.exchanges[id], active: JSON.parse(active)}});
     }
     res.json(store.exchanges[id]);
   })
@@ -67,12 +83,12 @@ const app = express()
       res.json(store.orderBooksByBase || {});
     }
   })
-  .get(/orderbook-timestamp/, (req: any, res: any) => {
-    const { from, to, base, quote, exchange }: { from: number, to: number, base: string, quote: string, exchange: string } = req.query;
-    log("orderbook-timestamp", {from, to, base, quote, exchange});
+  // .get("/orderbook-timestamp/", (req: any, res: any) => {
+  //   const { from, to, base, quote, exchange }: { from: number, to: number, base: string, quote: string, exchange: string } = req.query;
+  //   log("orderbook-timestamp", {from, to, base, quote, exchange});
 
 
-  })
+  // })
   .get("/orderbook-history", (req: any, res: any) => {
     const { exchange, base, quote } = req.query;
     log("orderbook-history", exchange, base, quote);
@@ -90,7 +106,7 @@ const app = express()
     const { id, active } = req.query;
 
     if (id && (active === 'true' || active === 'false')) {
-      upsertAsset({ dbs: ['store', 'nedb'], asset: {...store.assets[id], active: JSON.parse(active)}});
+      upsertAsset({ dbs: ['store'], asset: {...store.assets[id], active: JSON.parse(active)}});
     } else {
       if (id) {
         res.json( store.assets[id] );
@@ -105,7 +121,7 @@ const app = express()
   .get("/instruments", (req: any, res: any) => {
     const { id, active } = req.query;
     if (id && (active === 'true' || active === 'false')) {
-      upsertInstrument({ dbs: ['store', 'nedb'], instrument: {...store.instruments[id], active: JSON.parse(active)}});
+      upsertInstrument({ dbs: ['store'], instrument: {...store.instruments[id], active: JSON.parse(active)}});
     } else {
       if (id) {
         return store.instruments[id];
@@ -133,7 +149,7 @@ const app = express()
   .post("/pairs", (req: any, res: any) => {
     const { id, active } = req.query;
     if (id && (active === 'true' || active === 'false')) {
-      upsertPair({ dbs: ['store', 'nedb'], pair: {...store.pairs[id], active: JSON.parse(active)}});
+      upsertPair({ dbs: ['store'], pair: {...store.pairs[id], active: JSON.parse(active)}});
     }
   })
   .get("/trades", () => store.trades)

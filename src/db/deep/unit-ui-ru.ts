@@ -20,9 +20,11 @@ export const createUnitUiRu = async ({deep, Types, packageName, packageId}: {
     ValueId,
     SyncTextFileId
   } = Types;
-  console.log({packageName, ContainId, SymbolId, TypeId, StringId, ValueId});
+  log('createUnitUiRu');
+  log({packageName, ContainId, SymbolId, TypeId, StringId, ValueId});
 
-  const LocaleId = await deep.id('@suenot/unit-ui', 'UnitUi');
+  const LocaleId = await deep.id('@suenot/locale', 'Locale');
+  log({LocaleId});
 
   // syncTextFile
   const { data: [{ id: syncTextFile }] } = await deep.insert({

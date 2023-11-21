@@ -10,7 +10,7 @@
     "prod:node:fastify": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm ./src/server.fastify.ts",
     "dev:node:express": "nodemon --experimental-specifier-resolution=node ./src/server.express.ts",
     "prod:node:express": "DEBUG=index node --experimental-specifier-resolution=node --loader ts-node/esm ./src/server.express.ts",
-    "deep:profitmaker": "DEBUG=index node --experimental-specifier-resolution=node --loader ts-node/esm  ./src/db/deep/deep.ts"
+    "deep:profitmaker": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm  ./src/db/deep/deep.ts"
   },
   "dependencies": {
     "@deep-foundation/deeplinks": "^0.0.322",

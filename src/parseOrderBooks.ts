@@ -14,33 +14,13 @@ export const parseOrderBooks = async ({exchangeIds, pairIds}: {exchangeIds: stri
   console.log({exchangeIds, pairIds})
   // для каждой биржи свой цикл
   for (const exchangeId of exchangeIds) {
-    console.log(exchangeId)
-
-    // TODO: вынести эту логику выше, так как она повторяется в сборе трейдов и свечек
-    // получаем список пар, которые есть на бирже
-    const exchangePairs = store.exchanges[exchangeId].pairs;
-    // console.log({exchangePairs});
-
-    // ОТЛАДКА:
-    // выводим список пар на бирже okex (почему-то пустой список)
-    // const exchangePairsOkex = store.exchanges['okex'].pairs;
-    // console.log(exchangePairsOkex);
-
-    // получаем список активных пар
-    // const exchangePairsActive = _.filter(exchangePairs, pair => pair.active === true); // TODO: не работает, так как в store нет active
-    const exchangePairsActive = _.filter(exchangePairs, pair => _.has(exchangePairs, pair.id));
-    console.log({exchangePairsActive});
-    // поулчаем их id
-    const exchangePairsActiveIds = _.map(exchangePairsActive, pair => pair.id);
-    console.log({exchangePairsActiveIds});
-    // запускаем парсинг
-    parseOrderBooksOne({exchangeId, pairIds: exchangePairsActiveIds});
+    parseOrderBooksOneExchange({exchangeId, pairIds});
 
   }
-
+  sleep(5000); // TODO: временно, так как без пар уходило в бесконечный цикл
 }
 
-export const parseOrderBooksOne = async ({exchangeId, pairIds}: {exchangeId: string, pairIds: string[]}) => {
+export const parseOrderBooksOneExchange = async ({exchangeId, pairIds}: {exchangeId: string, pairIds: string[]}) => {
   const exchangeInstance = new (ccxt.pro as any)[exchangeId]({});
   if (exchangeId in ccxt.pro) {
     while (true) {

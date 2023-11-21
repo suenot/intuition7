@@ -31,6 +31,9 @@ import { createEmptyPackage } from './createEmptyPackage';
 import { publishPackage } from './publishPackage';
 import { TypesStore, createTypesStore } from "./typesStore";
 
+import debug from "debug";
+const log = debug("deep");
+
 const apolloClient = generateApolloClient({
   path: process.env.PUBLIC_GQL_PATH,
   ssl: Boolean(process.env.PUBLIC_GQL_SSL),
@@ -45,11 +48,17 @@ const admin = await guestDeep.login({
 export const deep = new DeepClient({ deep: guestDeep, ...admin });
 
 const f = async () => {
-  console.log('initStore');
+  log('initStore');
   const Types: any = await createTypesStore({deep});
-  console.log('end initStore');
+  log('end initStore');
 
   const packages: any[] = [
+    {
+      name: '@suenot/asset',
+    },
+    {
+      name: '@suenot/asset-ui',
+    },
     {
       name: '@suenot/profitmaker',
       versionUpdate: false,
@@ -166,7 +175,7 @@ const f = async () => {
     },
     {
       name: '@suenot/unit-ui-en',
-      versionUpdate: true,
+      versionUpdate: false,
       createFn: createUnitUiEn,
       path: './unit-ui-en',
     },
@@ -181,24 +190,29 @@ const f = async () => {
   for (const deepPackage of packages) {
     // remove old package
     const resultRemovePackage = await removePackage({ deep, packageName: deepPackage.name });
-    console.log({deepPackage, resultRemovePackage})
+    log({deepPackage, resultRemovePackage})
 
-    // insert new package
+    // // insert new package
     const packageName = deepPackage.name;
     var lastPackageVersion = '0.0.1';
     try {
       lastPackageVersion = await latestVersion(packageName);
     } catch (error) {}
+    log('Generating package version #️⃣');
     const packageVersion = deepPackage.versionUpdate ? incrementPatchVersion(lastPackageVersion) : lastPackageVersion;
+    log(`Package ${packageName} version is #️⃣${packageVersion}`);
+    log('Generating package 📦 and namespace 🎁');
     const {packageId, packageNamespaceId} = await createEmptyPackage({deep, Types, packageName, packageVersion});
-    console.log(packageId, packageNamespaceId);
-    // если успешно, то создавай типы для пакета
+    log(packageId, packageNamespaceId);
+    // TODO: если успешно, то создавай типы для пакета
+    log('Creating package types ⭐', {packageName, packageId, packageNamespaceId})
     deepPackage.createFn({deep, Types, packageName, packageId});
-    // если успешно, то публикуй пакет
-    if (deepPackage.versionUpdate) {
-      const {publishId} = await publishPackage({deep, Types, packageName, packageId});
-      console.log({publishId});
-    }
+    // TODO: если успешно, то публикуй пакет
+    // log('Publishing package 🚀', {packageName, packageId});
+    // if (deepPackage.versionUpdate) {
+    //   const {publishId} = await publishPackage({deep, Types, packageName, packageId});
+    //   log({publishId});
+    // }
   }
 }
 f();
