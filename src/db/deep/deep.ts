@@ -47,6 +47,9 @@ const admin = await guestDeep.login({
 });
 export const deep = new DeepClient({ deep: guestDeep, ...admin });
 
+/**
+ * Main function to initialize the store, create packages and handle their versions.
+ */
 const f = async () => {
   log('initStore');
   const Types: any = await createTypesStore({deep});
@@ -188,11 +191,11 @@ const f = async () => {
   ]
 
   for (const deepPackage of packages) {
-    // remove old package
+    // Remove old package
     const resultRemovePackage = await removePackage({ deep, packageName: deepPackage.name });
     log({deepPackage, resultRemovePackage})
 
-    // // insert new package
+    // Insert new package
     const packageName = deepPackage.name;
     var lastPackageVersion = '0.0.1';
     try {
@@ -204,10 +207,10 @@ const f = async () => {
     log('Generating package 📦 and namespace 🎁');
     const {packageId, packageNamespaceId} = await createEmptyPackage({deep, Types, packageName, packageVersion});
     log(packageId, packageNamespaceId);
-    // TODO: если успешно, то создавай типы для пакета
+    // TODO: If successful, create types for the package
     log('Creating package types ⭐', {packageName, packageId, packageNamespaceId})
     deepPackage.createFn({deep, Types, packageName, packageId});
-    // TODO: если успешно, то публикуй пакет
+    // TODO: If successful, publish the package
     // log('Publishing package 🚀', {packageName, packageId});
     // if (deepPackage.versionUpdate) {
     //   const {publishId} = await publishPackage({deep, Types, packageName, packageId});
