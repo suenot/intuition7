@@ -1,4 +1,4 @@
-const svgo = require('svgo');
+const svgo = require("svgo");
 
 const svgoConfig = {
   plugins: [
