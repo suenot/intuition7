@@ -6,6 +6,15 @@ import * as fs from "fs";
 import * as path from 'path';
 const __dirname = path.resolve();
 
+/**
+ * This function creates a unit UI in Russian.
+ * @param {Object} params - The parameters for creating a unit UI.
+ * @param {DeepClient} params.deep - The DeepClient instance.
+ * @param {TypesStore} params.Types - The TypesStore instance.
+ * @param {string} params.packageName - The name of the package.
+ * @param {number} params.packageId - The ID of the package.
+ * @returns {Object} The package ID.
+ */
 export const createUnitUiRu = async ({deep, Types, packageName, packageId}: {
   deep: DeepClient,
   packageName: string,
@@ -26,7 +35,7 @@ export const createUnitUiRu = async ({deep, Types, packageName, packageId}: {
   const LocaleId = await deep.id('@suenot/locale', 'Locale');
   log({LocaleId});
 
-  // syncTextFile
+  // This section is for syncing the text file.
   const { data: [{ id: syncTextFile }] } = await deep.insert({
     type_id: SyncTextFileId,
     string: { data: {
