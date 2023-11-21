@@ -1,3 +1,4 @@
+<!-- This is the main SVG element that contains all the other SVG elements. -->
 <svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="141px" height="31px" viewBox="-0.5 -0.5 141 31" content="&lt;mxfile&gt;&lt;diagram id=&quot;qtWcfG_dWzKhk8IgHuCj&quot; name=&quot;Page-1&quot;&gt;jZLBboMwDIafJsdKkHQru5a122WnHnbOiEeihhilYcCefqEYKKoqTeIQPv+O499mIq+6Ny9r/YEKLOOJ6ph4ZZynCeds+BLVj2Szy4iU3ihSLeBkfmFKJdoYBZeVMCDaYOo1LNA5KMKKSe+xXcu+0a6r1rKEO3AqpL2nn0YFPdKM7xb+DqbUU+X0+WWMVHISUycXLRW2N0gcmMg9YhhPVZeDHdybfBnzjg+i88M8uPCfBPL9R9qGemPb5NKAiw/gx8aZsGkMPTX0U/8eG6dguCJlYt9qE+BUy2KItnHkkelQWQpb+QV2L4tzeU3L0aKPIYcu6vdUH3yA7mEP6exM3CnACoLvo4QSMvKStinl2dMI2mU26ZZE+mYugpikdSjnqxfH4oFMm36X4VxjNzsuDn8=&lt;/diagram&gt;&lt;/mxfile&gt;">
     <defs/>
     <g>
@@ -13,6 +14,7 @@
                         </div>
                     </div>
                 </foreignObject>
+                <text x="70" y="19" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
                 <text x="70" y="19" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
                     @suenot/unit-ui
                 </text>
