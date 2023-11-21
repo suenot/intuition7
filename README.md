@@ -25,25 +25,37 @@ http://localhost:7771/exchanges/binance
 http://localhost:7771/exchanges/binance?active=true
 
 ## Получение информации о парах
+```bash
 http://localhost:7771/pairs
 http://localhost:7771/pairs?id=LTC/BTC
+```
 
 ## Включить пару
+```bash
 http://localhost:7771/pairs?id=LTC/BTC&active=true
+```
 
 ## Получение информации об ассетах
+```bash
 http://localhost:7771/assets
 http://localhost:7771/assets?id=LTC
+```
 
 ## Включить ассет
+```bash
 http://localhost:7771/pairs?id=LTC&active=true
+```
 
 ## Получение информации об инструментах
+```bash
 http://localhost:7771/instruments
 http://localhost:7771/instruments?id=LTC/BTC/binance
+```
 
 ## Включить инструмент
+```bash
 http://localhost:7771/instruments?id=LTC/BTC/binance&active=true
+```
 
 ## Алгоритм
 - есть функция работы парсеров, которая перезапускается, если меняется конфиг
@@ -56,14 +68,13 @@ http://localhost:7771/instruments?id=LTC/BTC/binance&active=true
 ## Planned Schema for Historical Data
 
 To get all pairs where base is ETH and quote is BTC:
-```
+```bash
 http://149.102.136.233:7771/orderbook-history?base=ETH&quote=BTC?from=1111&to=1112
 ```
-
 To get all pairs where base is ETH:
-```bash
 http://149.102.136.233:7771/orderbook-history?base=ETH?from=1111&to=1112
 ```
+```bash
 http://149.102.136.233:7771/orderbook-history?base=ETH&quote=BTC?from=1111&to=1112
 ```
 Example of the orderbooksHistory data structure:
@@ -88,12 +99,12 @@ Example of the orderbooksHistory data structure:
    }
   }
 ]
-```
+```json
  },
  {
-  timestamp: 1112,
+  "timestamp": 1112,
   ...
  }
 ]
-```bash
+```
 
