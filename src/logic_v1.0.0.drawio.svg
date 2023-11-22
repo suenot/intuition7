@@ -1,0 +1,144 @@
+<svg host="65bd71144e" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="481px" height="616px" viewBox="-0.5 -0.5 481 616" content="&lt;mxfile&gt;&lt;diagram id=&quot;qtWcfG_dWzKhk8IgHuCj&quot; name=&quot;Page-1&quot;&gt;3VhLc5swEP41XD08DMZHA3bTQyYHH3pWjGo0xsgj5Fd+fRchCQmwm8y0HrcXRexqV4/v209ynCDdX74xdCheaY5Lx3fzixNkju97QRTAn8ZybS1RMG8NW0ZyOagzrMkHlkZXWo8kx7U1kFNacnKwjRtaVXjDLRtijJ7tYT9pac96QFs8MKw3qBxaf5CcF6019med/QWTbaFm9iK5vz1Sg+VO6gLl9GyYgqUTpIxS3vb2lxSXzeGpc2njVje8emEMV/wzAX4bcELlUe4NYmv8xnLMEkp3teNHJWRK3hn0tk3PyVxnPmvaxBXtysk8Jw5E6wnLAlIqVzsMXK4xIBZtJtpAjpEhSzUY+lPRhobFU3OJWeR4aH17xiV8Asi+mSYRoStl9I3ltDOEyqXXqKeNlCse35kfof0BzqZ6r5s/Elt+VYRh9FjluDlzD9zngnC8PqBN4z1DiYCt4PtSukv0jssEbXZbEZbSkjJwVbTCOvcJM44vN0H3NJWgBjHdY86uMEQGxJJ8V1WPU2k4d2T2lK0wiexKI5IFtNW5O45BR9JsnHLB7yj3VuHlZVOgCorwf2Xf0nBlhmV+j4MWAb9K6h5hU2GH/ky0vl64sdFETTEkvnkqobEeV+1IhOtVCXbasvLUFRJ4nygRP/xbJTIdlAipOGbwvapulIRvIDYz+r4BSyihhgsU81fEdphniKMb2tZyL+5Fik5mcKZHSE0AgwZtBoMMa04ZfnIK9EXSjR4pkuGAAT3IRkmg5KdThkDV+AgJDK0wEfeMJAvn3pWY3tUWU2jbtC1ntBi3Oppaq7I09an5MZCIxxIkGhCkBoHAbIIvB4bresJvPd1Gq1sAIVFbGGxZGDjefR9ZUnDjlWRdClObqzpJ7+7QN5Emj16nXqGhRZ3kmeKTqlU9NaP6iuO7jyTUbEgodOpu7BdSg2hfxzgSKTy13ixtdQkNoALjflAh/xYs0/iRsMQDWL5X/Eg4ofAScGe20nZPtUXFaUVPu5Gb4uRN3Ik7OHQ4IG6fLCrJtoL+BjePjyYSjpHAr+CFdOxJnjfhCQgO+UDvIpUL3wcK7xWx6TBxwqzJdeS0bn/HN6lrzugO97D6Scryz8Onq0jiN4/CIXzRCHzTr6MHn91Pd+Ez/gESLH8B&lt;/diagram&gt;&lt;/mxfile&gt;">
+    <defs/>
+    <g>
+        <rect x="0" y="375" width="140" height="100" rx="15" ry="15" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 138px; height: 1px; padding-top: 425px; margin-left: 1px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                parseOrderBooks
+                                <br/>
+                                Запуск парсинга ордербуков по ws для всех бирж и пар
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="70" y="429" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    parseOrderBooks...
+                </text>
+            </switch>
+        </g>
+        <rect x="230" y="375" width="250" height="100" rx="15" ry="15" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 248px; height: 1px; padding-top: 425px; margin-left: 231px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                parseOrderBooksOneExchange
+                                <br/>
+                                Запуск парсинга ордербуков по ws для одной биржи для всех пар, что были переданы в parseOrderBooks
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="355" y="429" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    parseOrderBooksOneExchange...
+                </text>
+            </switch>
+        </g>
+        <rect x="0" y="95" width="140" height="100" rx="15" ry="15" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 138px; height: 1px; padding-top: 145px; margin-left: 1px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                intervalFn
+                                <br/>
+                                Вызывает getMarketData и пишет эти данные в Store
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="70" y="149" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    intervalFn...
+                </text>
+            </switch>
+        </g>
+        <rect x="230" y="95" width="140" height="100" rx="15" ry="15" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 138px; height: 1px; padding-top: 145px; margin-left: 231px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                getMarketData
+                                <br/>
+                                Получает список бирж, пар, инструметов
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="300" y="149" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    getMarketData...
+                </text>
+            </switch>
+        </g>
+        <rect x="0" y="235" width="140" height="100" rx="15" ry="15" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 138px; height: 1px; padding-top: 285px; margin-left: 1px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                server.express.ts
+                                <br/>
+                                Пишем какие биржи и пары должны быть активными
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="70" y="289" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    server.express.ts...
+                </text>
+            </switch>
+        </g>
+        <rect x="0" y="515" width="140" height="100" rx="15" ry="15" fill="rgb(255, 255, 255)" stroke="rgb(0, 0, 0)" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 138px; height: 1px; padding-top: 565px; margin-left: 1px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">
+                                saveOrderBookHistory каждую секунду
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="70" y="569" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    saveOrderBookHistory каждую секунду
+                </text>
+            </switch>
+        </g>
+        <rect x="120" y="0" width="160" height="40" fill="none" stroke="none" pointer-events="all"/>
+        <g transform="translate(-0.5 -0.5)">
+            <switch>
+                <foreignObject pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility" style="overflow: visible; text-align: left;">
+                    <div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 20px; margin-left: 200px;">
+                        <div data-drawio-colors="color: rgb(0, 0, 0); " style="box-sizing: border-box; font-size: 0px; text-align: center;">
+                            <div style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: nowrap;">
+                                Intuition 7 или Antonovka
+                                <br/>
+                                v1.0.0
+                            </div>
+                        </div>
+                    </div>
+                </foreignObject>
+                <text x="200" y="24" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="12px" text-anchor="middle">
+                    Intuition 7 или Antonovka...
+                </text>
+            </switch>
+        </g>
+    </g>
+    <switch>
+        <g requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"/>
+        <a transform="translate(0,-5)" xlink:href="https://www.diagrams.net/doc/faq/svg-export-text-problems" target="_blank">
+            <text text-anchor="middle" font-size="10px" x="50%" y="100%">
+                Text is not SVG - cannot display
+            </text>
+        </a>
+    </switch>
+</svg>

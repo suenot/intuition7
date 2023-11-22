@@ -11,7 +11,7 @@ import {
   upsertInstrument as upsertInstrumentStore,
   upsertPair as upsertPairStore,
 } from "./store/store";
-import { Exchange, Asset, Instrument, Pair, OrderBook } from "./../types";
+import { Exchange, Asset, Instrument, Pair, OrderBook, Trade, Candle } from "./../types";
 import { store } from "./store/store";
 import _ from "lodash";
 import { getExchangeOrderbook } from "../getExchangeOrderbook";
@@ -87,7 +87,7 @@ export const upsertInstrument = async ({ dbs, instrument}: { dbs: String[], inst
   }
 };
 
-export const upsertOrderBoook = async (orderBook: OrderBook) => {
+export const upsertOrderBook = async (orderBook: OrderBook) => {
   try {
     const { instrumentId, exchangeId, baseId, quoteId } = orderBook;
     store.orderBooks[instrumentId] = orderBook;
@@ -139,3 +139,12 @@ export const saveOrderBookHistory = async (orderBook: OrderBook) => {
   } catch (e) { log(e) };
 };
 
+export const upsertTrades = async ({trades}: {trades: Trade[]}) => {
+  log('upsertTrades', {trades});
+  return trades;
+}
+
+export const upsertCandle = async ({candle}: {candle: Candle}) => {
+  log('upsertCandle', {candle});
+  return candle;
+}

@@ -113,6 +113,14 @@ export interface OrderBookSubscription extends OrderBook {
   symbol: string;
 }
 
+export interface TradeSubscription extends Trade {
+  symbol: string;
+}
+
+export interface OHLCVSubscription extends OHLCV {
+  symbol: string;
+}
+
 export interface Ticker {
   symbol: string;
   info: any;

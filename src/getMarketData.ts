@@ -40,13 +40,13 @@ export async function getMarketData(): Promise<{
           log({exchangesInstancesHasLoadMarkets: exchangeInstance.has.fetchMarkets});
           const markets: CcxtMarket[] = await exchangeInstance.loadMarkets(); // loadMarkets()fetchMarkets
           log({markets});
-    
+
           for (const market of Object.values(markets)) {
             const { baseId, quoteId } = market;
             const pairId = `${baseId}/${quoteId}`;
             const instrumentId = `${baseId}/${quoteId}/${exchangeId}`;
             log({instrumentId});
-      
+
             if (!assets[baseId]) {
               assets[baseId] = {
                 id: baseId,

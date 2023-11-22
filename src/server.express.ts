@@ -4,6 +4,8 @@ import { store } from "./db/store/store";
 import { intervalFn } from "./intervalFn";
 import { upsertAsset, upsertExchange, upsertInstrument, upsertPair, saveOrderBookHistoryByTimer } from "./db/db";
 import { parseOrderBooks } from "./parseOrderBooks";
+import { parseTrades } from "./parseTrades";
+import { parseCandles } from "./parseCandles";
 import debug from "debug";
 import _ from "lodash";
 const log = debug("index");
@@ -36,7 +38,9 @@ const log = debug("index");
     // const exchangePairsActive = _.filter(exchangePairs, pair => pair.active === true); // TODO: не работает, так как в store нет active
 
   // Сбор ордербуков, тиков, свечей, трейдов вебсокетами
-  parseOrderBooks({exchangeIds, pairIds}); // где-то здесь проблема
+  parseOrderBooks({exchangeIds, pairIds});
+  parseTrades({exchangeIds, pairIds});
+  parseCandles({exchangeIds, pairIds});
 
   // Раз в 1 секунду собирать исторические данные
   // saveOrderBookHistoryByTimer(1000)
@@ -116,7 +120,7 @@ const app = express()
   })
   // .post("/assets/", (req: any, res: any) => {
   //   const { id, active } = req.query;
-    
+
   // })
   .get("/instruments", (req: any, res: any) => {
     const { id, active } = req.query;
