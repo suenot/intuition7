@@ -1,7 +1,7 @@
 import { DeepClient } from "@deep-foundation/deeplinks/imports/client";
 import { TypesStore } from "./typesStore";
 import debug from "debug";
-const log = debug("unit-ui-ru");
+const log = debug("unit-ui-en");
 import * as fs from "fs";
 import * as path from 'path';
 const __dirname = path.resolve();
