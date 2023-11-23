@@ -29,7 +29,7 @@ export const parseTradesOneExchange = async ({exchangeId, pairIds}: {exchangeId:
         try {
           // const pairIds = _.filter(store.pairs, pair => (pair. === exchangeId && pair.active === true))
           const tradeCcxt: CcxtTradeSubscription[] = await exchangeInstance.watchTradesForSymbols(pairIds);
-          log({tradeCcxt});
+          console.log({tradeCcxt});
           // const trade = tradeCcxtToCore({tradeCcxt, exchangeId});
           // log({trade});
           // upsertTrades(trade);

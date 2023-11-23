@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { store } from "./db/store/store";
-import { upsertExchange, upsertInstrument, upsertAsset, upsertPair, upsertOrderBoook } from "./db/db";
+import { upsertExchange, upsertInstrument, upsertAsset, upsertPair } from "./db/db";
 import debug from "debug";
 import { getMarketData } from "./getMarketData";
 const log = debug("intervalFn");

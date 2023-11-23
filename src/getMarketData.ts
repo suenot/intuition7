@@ -42,6 +42,7 @@ export async function getMarketData(): Promise<{
           log({markets});
 
           for (const market of Object.values(markets)) {
+            if (market == undefined) continue;
             const { baseId, quoteId } = market;
             const pairId = `${baseId}/${quoteId}`;
             const instrumentId = `${baseId}/${quoteId}/${exchangeId}`;
