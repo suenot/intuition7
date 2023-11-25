@@ -33,6 +33,8 @@ import { createAvatar } from './avatar';
 import { createPaymentUi } from './payment-ui';
 import { createPaymentTests } from './payment-tests';
 import { createPaymentsSymbols } from './payments-symbols';
+import { createAvatarEditUi } from './avatar-edit-ui';
+import { createLocaleEditUi } from './locale-edit-ui';
 
 import { removePackage } from "./removePackage";
 import { createEmptyPackage } from './createEmptyPackage';

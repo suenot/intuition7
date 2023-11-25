@@ -7,7 +7,7 @@ async ({ deep, require }) => {
   var DescriptionId = await deep.id("@suenot/description", "Description");
   var TickerId = await deep.id("@suenot/ticker", "Ticker");
   var AvatarId = await deep.id("@suenot/avatar", "Avatar");
-  
+
   return ({ fillSize, style, link }) => {
 
     const data = deep.useDeepSubscription({

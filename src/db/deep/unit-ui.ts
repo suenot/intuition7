@@ -77,5 +77,109 @@ export const createUnitUi = async ({deep, Types, packageName, packageId}: {
   });
   log({handleClientId});
 
-  return {packageId, tsxId, handlerId, handleClientId};
+
+
+  // tsxId
+  const { data: [{ id: publicTsxId }] } = await deep.insert({
+    type_id: TsxId,
+    string: {
+      data: {
+        value: fs.readFileSync(path.join(__dirname, 'src', 'db', 'deep', 'unit-ui.tsx'), { encoding: 'utf-8' })
+      },
+    },
+    in: {
+      data: {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: "publicUnitTsx" } },
+      }
+    }
+  });
+  log({publicTsxId});
+
+  // handler
+  const { data: [{ id: publicHandlerId }] } = await deep.insert({
+    type_id: HandlerId,
+    in: {
+      data: {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: "publicUnitHandler" } },
+      }
+    },
+    from_id: clientSupportsJsId,
+    to_id: tsxId,
+  });
+  log({publicTsxId});
+
+  // handleClient
+  const { data: [{ id: publicHandleClientId }] } = await deep.insert({
+    type_id: HandleClientId,
+    in: {
+      data: {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: "publicUnitHandleClient" } },
+      }
+    },
+    from_id: UnitId,
+    to_id: publicHandlerId,
+  });
+  log({publicHandleClientId});
+
+
+
+
+
+
+  // tsxId
+  const { data: [{ id: editTsxId }] } = await deep.insert({
+    type_id: TsxId,
+    string: {
+      data: {
+        value: fs.readFileSync(path.join(__dirname, 'src', 'db', 'deep', 'unit-ui.tsx'), { encoding: 'utf-8' })
+      },
+    },
+    in: {
+      data: {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: "editUnitTsx" } },
+      }
+    }
+  });
+  log({editTsxId});
+
+  // handler
+  const { data: [{ id: editHandlerId }] } = await deep.insert({
+    type_id: HandlerId,
+    in: {
+      data: {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: "editUnitHandler" } },
+      }
+    },
+    from_id: clientSupportsJsId,
+    to_id: tsxId,
+  });
+  log({editTsxId});
+
+  // handleClient
+  const { data: [{ id: editHandleClientId }] } = await deep.insert({
+    type_id: HandleClientId,
+    in: {
+      data: {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: "editUnitHandleClient" } },
+      }
+    },
+    from_id: UnitId,
+    to_id: editHandlerId,
+  });
+  log({editHandleClientId});
+
+
+  return {packageId, tsxId, handlerId, handleClientId, publicTsxId, publicHandlerId, publicHandleClientId, editTsxId, editHandlerId, editHandleClientId};
 };
