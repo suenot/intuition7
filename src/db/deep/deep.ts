@@ -5,21 +5,21 @@ import { incrementPatchVersion } from './incrementPatchVersion';
 
 import { DeepClient } from "@deep-foundation/deeplinks/imports/client";
 import { generateApolloClient } from "@deep-foundation/hasura/client";
-import { createProfitmaker } from "./profitmaker";
+// import { createProfitmaker } from "./profitmaker";
 import { createUnit } from "./unit";
 import { createUnitUi }from "./unit-ui";
-import { createUnitUiEn } from './unit-ui-en';
-import { createUnitUiRu } from './unit-ui-ru';
+// import { createUnitUiEn } from './unit-ui-en';
+// import { createUnitUiRu } from './unit-ui-ru';
 import { createWallet } from "./wallet";
 import { createWalletUi } from "./wallet-ui";
 import { createPortfolio } from './portfolio';
 import { createPortfolioUi } from './portfolio-ui';
-import { createTransaction } from './transaction';
-import { createTransactionUi } from './transaction-ui';
-import { createEmission } from './emission';
-import { createEmissionUi } from './emission-ui';
-import { createTransactionTests } from './transaction-tests';
-import { createEmissionTests } from './emission-tests';
+// import { createTransaction } from './transaction';
+// import { createTransactionUi } from './transaction-ui';
+// import { createEmission } from './emission';
+// import { createEmissionUi } from './emission-ui';
+// import { createTransactionTests } from './transaction-tests';
+// import { createEmissionTests } from './emission-tests';
 import { createPortfolioTests } from './portfolio-tests';
 import { createPair } from './pair';
 import { createExchange } from './exchange';
@@ -29,6 +29,7 @@ import { createLocale } from './locale';
 import { createName } from './name';
 import { createDescription } from './description';
 import { createTicker } from './ticker';
+import { createAvatar } from './avatar';
 import { createPaymentUi } from './payment-ui';
 import { createPaymentTests } from './payment-tests';
 
@@ -79,6 +80,13 @@ const f = async () => {
       upload: true,
       createFn: createTicker,
       path: './name',
+    },
+    {
+      name: '@suenot/avatar',
+      versionUpdate: false,
+      upload: true,
+      createFn: createAvatar,
+      path: './avatar',
     },
     {
       name: '@suenot/unit',

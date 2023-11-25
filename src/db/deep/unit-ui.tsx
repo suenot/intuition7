@@ -3,10 +3,10 @@ async ({ deep, require }) => {
   const { useState, useEffect } = React;
   const { Box, Text, Avatar, Wrap, WrapItem, Editable, EditablePreview, EditableInput, EditableTextarea, Center, Flex, Divider, Button } = require('@chakra-ui/react');
   const AsyncFileId = await deep.idLocal("@deep-foundation/core", "AsyncFile");
-  var UnitNameId = await deep.id("@suenot/unit", "Name");
-  var UnitDescriptionId = await deep.id("@suenot/unit", "Description");
-  var UnitTickerId = await deep.id("@suenot/unit", "Ticker");
-  var UnitAvatarId = await deep.id("@suenot/unit", "Avatar");
+  var NameId = await deep.id("@suenot/name", "Name");
+  var DescriptionId = await deep.id("@suenot/description", "Description");
+  var TickerId = await deep.id("@suenot/ticker", "Ticker");
+  var AvatarId = await deep.id("@suenot/avatar", "Avatar");
   
   return ({ fillSize, style, link }) => {
 
@@ -14,23 +14,23 @@ async ({ deep, require }) => {
         _or: [
           {
             to_id: link.id,
-            type_id: { _id: ["@deep-foundation/core", "AsyncFile"] }
+            type_id: AsyncFileId,
           },
           {
             to_id: link.id,
-            type_id: { _id: ["@suenot/unit", "Name"] }
+            type_id: NameId,
           },
           {
             to_id: link.id,
-            type_id: { _id: ["@suenot/unit", "Description"] }
+            type_id: DescriptionId,
           },
           {
             to_id: link.id,
-            type_id: { _id: ["@suenot/unit", "Ticker"] }
+            type_id: TickerId,
           },
           {
             to_id: link.id,
-            type_id: { _id: ["@suenot/unit", "Avatar"] }
+            type_id: AvatarId,
           }
         ]
       }
@@ -41,19 +41,19 @@ async ({ deep, require }) => {
     });
     const nameData = deep.minilinks.query({
       to_id: link.id,
-      type_id: UnitNameId
+      type_id: NameId
     });
     const unitDescriptionData = deep.minilinks.query({
       to_id: link.id,
-      type_id: UnitDescriptionId
+      type_id: DescriptionId
     });
     const tickerData = deep.minilinks.query({
       to_id: link.id,
-      type_id: UnitTickerId
+      type_id: TickerId
     });
     const avatarData = deep.minilinks.query({
       to_id: link.id,
-      type_id: UnitAvatarId
+      type_id: AvatarId
     });
 
 
@@ -125,14 +125,14 @@ async ({ deep, require }) => {
           if (!unitNameId) {
             console.log("Unit doesn't exist")
             const { data: [{ id: _unitNameId }] } = await deep.insert({
-              type_id: UnitNameId,
+              type_id: NameId,
               from_id: link.id,
               to_id: link.id,
               string: { data: { value: unitName } },
             })
             unitNameId = _unitNameId;
           } else {
-            console.log("Unit exist", {unitNameId, UnitNameId, unitName})
+            console.log("Unit exist", {unitNameId, NameId, unitName})
             const { data: [{ link: _unitNameId }] } = await deep.update(
               { link_id: unitNameId },
               { value: unitName },
@@ -144,7 +144,7 @@ async ({ deep, require }) => {
           if (!unitDescriptionId) {
             console.log("Description doesn't exist")
             const { data: [{ id: _unitDescriptionId }] } = await deep.insert({
-              type_id: UnitDescriptionId,
+              type_id: DescriptionId,
               from_id: link.id,
               to_id: link.id,
               string: { data: { value: unitDescription } },
@@ -162,7 +162,7 @@ async ({ deep, require }) => {
 
           if (!unitTickerId) {
             const { data: [{ id: _unitTickerId }] } = await deep.insert({
-              type_id: UnitTickerId,
+              type_id: TickerId,
               from_id: link.id,
               to_id: link.id,
               string: { data: { value: unitTicker } },
@@ -178,7 +178,7 @@ async ({ deep, require }) => {
 
           if (!unitAvatarId) {
             const { data: [{ id: _unitAvatarId }] } = await deep.insert({
-              type_id: UnitAvatarId,
+              type_id: AvatarId,
               from_id: link.id,
               to_id: link.id,
               string: { data: { value: unitAvatar } },

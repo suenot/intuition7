@@ -13,6 +13,14 @@ export const createPaymentTests = async ({deep, Types, packageName, packageId}: 
     ContainId,
   } = Types;
 
+  const PaymentId = await deep.id('@deep-foundation/payments', 'Payment');
+  const Pay = await deep.id('@deep-foundation/payments', 'Pay');
+  const Sum = await deep.id('@deep-foundation/payments', 'Sum');
+  const Payed = await deep.id('@deep-foundation/payments', 'Payed');
+  const ObjectId = await deep.id('@deep-foundation/payments', 'Object');
+  const Storage = await deep.id('@deep-foundation/payments', 'Storage');
+  const Url = await deep.id('@deep-foundation/payments', 'Url');
+
   const UnitId = await deep.id('@suenot/unit', 'Unit');
   const NameId = await deep.id('@suenot/name', 'Name');
   const TickerId = await deep.id('@suenot/ticker', 'Ticker');
@@ -20,9 +28,8 @@ export const createPaymentTests = async ({deep, Types, packageName, packageId}: 
   const DescriptionId = await deep.id('@suenot/description', 'Description');
   const WalletId = await deep.id('@suenot/wallet', 'Wallet');
   const ContainUnitId = await deep.id('@suenot/wallet', 'ContainUnit');
-  const TransactionId = await deep.id('@suenot/transaction', 'Transaction');
 
-  console.log({packageName, packageId, UnitId, ContainId, NameId, TickerId, AvatarId, DescriptionId, WalletId, ContainUnitId, TransactionId});
+  // console.log({packageName, packageId, UnitId, ContainId, NameId, TickerId, AvatarId, DescriptionId, WalletId, ContainUnitId, PaymentId});
 
   // Создаем unit1
   const { data: [{ id: unitId1 }] } = await deep.insert({
@@ -105,7 +112,7 @@ export const createPaymentTests = async ({deep, Types, packageName, packageId}: 
       ] },
       from_id: unitId1,
       to_id: unitId1,
-      string: { data: { value: 'Dogecoin is a popular cryptocurrency that started as a playful meme in 2013. It features the Shiba Inu dog from the "Doge" internet meme as its console.logo. Despite its humorous origins, Dogecoin has gained a dedicated following and is used for tipping content creators, charitable donations, and as a digital currency for various online transactions. It distinguishes itself with a vibrant and welcoming community and relatively low transaction fees.' } },
+      string: { data: { value: 'Dogecoin is a popular cryptocurrency that started as a playful meme in 2013. It features the Shiba Inu dog from the "Doge" internet meme as its console.logo. Despite its humorous origins, Dogecoin has gained a dedicated following and is used for tipping content creators, charitable donations, and as a digital currency for various online payments. It distinguishes itself with a vibrant and welcoming community and relatively low payment fees.' } },
     });
     console.log({unit1DescriptionId});
 
@@ -198,23 +205,39 @@ export const createPaymentTests = async ({deep, Types, packageName, packageId}: 
   console.log({walletId2});
   
 
-  // Создаем transaction1
-  const { data: [{ id: transactionId1 }] } = await deep.insert({
-    type_id: TransactionId,
+  // Создаем payment1
+  const { data: [{ id: paymentId1 }] } = await deep.insert({
+    type_id: PaymentId,
     from_id: walletId1,
     to_id: walletId2,
     in: { data: [
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'transactionId1' } },
+        string: { data: { value: 'paymentId1' } },
       },
     ] },
     out: { data: [
     ] },
+    // number: { data: { value: 222.00000001 } },
+  });
+  console.log({paymentId1});
+
+  // Создаем payment1 sum
+  const { data: [{ id: payment1SumId }] } = await deep.insert({
+    type_id: Sum,
+    from_id: paymentId1,
+    to_id: paymentId1,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'payment1Sum' } },
+      },
+    ] },
     number: { data: { value: 222.00000001 } },
   });
-  console.log({transactionId1});
 
-  return {packageId, unitId1, walletId1, walletId2, transactionId1};
+
+  return {packageId, unitId1, walletId1, walletId2, paymentId1};
 };

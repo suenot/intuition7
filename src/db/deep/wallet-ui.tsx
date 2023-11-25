@@ -4,16 +4,20 @@ async ({ deep, require }) => {
   const { Box, Text, Avatar, Wrap, WrapItem, Editable, EditablePreview, EditableInput, EditableTextarea, Center, Flex, Divider, Button, Tooltip } = require('@chakra-ui/react');
   const AsyncFileId = await deep.idLocal("@deep-foundation/core", "AsyncFile");
   var UnitId = await deep.id("@suenot/unit", "Unit");
-  var UnitNameId = await deep.id("@suenot/unit", "Name");
-  var UnitDescriptionId = await deep.id("@suenot/unit", "Description");
-  var UnitTickerId = await deep.id("@suenot/unit", "Ticker");
-  var UnitAvatarId = await deep.id("@suenot/unit", "Avatar");
+  var NameId = await deep.id("@suenot/name", "Name");
+  var DescriptionId = await deep.id("@suenot/description", "Description");
+  var TickerId = await deep.id("@suenot/ticker", "Ticker");
+  var AvatarId = await deep.id("@suenot/avatar", "Avatar");
 
   const WalletId = await deep.id("@suenot/wallet", "Wallet");
   const ContainUnitId = await deep.id("@suenot/wallet", "ContainUnit");
-  const WalletAvatarId = await deep.id("@suenot/wallet", "Avatar");
-  const WalletDescriptionId = await deep.id("@suenot/wallet", "Description");
-  const WalletNameId = await deep.id("@suenot/wallet", "Name");
+  // const AvatarId = await deep.id("@suenot/wallet", "Avatar");
+  // const DescriptionId = await deep.id("@suenot/wallet", "Description");
+  // const NameId = await deep.id("@suenot/wallet", "Name");
+
+  var PaymentId = await deep.id("@deep-foundation/payments", "Payment");
+  var PaymentSumId = await deep.id("@deep-foundation/payments", "Sum");
+  var PaymentPayedId = await deep.id("@deep-foundation/payments", "Payed");
   
   return ({ fillSize, style, link }) => {
 
@@ -26,17 +30,17 @@ async ({ deep, require }) => {
         },
         // get avatar for Wallet
         {
-          type_id: WalletAvatarId,
+          type_id: AvatarId,
           to_id: link.id,
         },
         // get description for Wallet
         {
-          type_id: WalletDescriptionId,
+          type_id: DescriptionId,
           to_id: link.id,
         },
         // get name for Wallet
         {
-          type_id: WalletNameId,
+          type_id: NameId,
           to_id: link.id,
         },
         // Wallet contain units
@@ -63,7 +67,7 @@ async ({ deep, require }) => {
         },
         // get avatar for Unit
         {
-          type_id: UnitAvatarId,
+          type_id: AvatarId,
           to: {
             type_id: UnitId,
             in: {
@@ -74,7 +78,7 @@ async ({ deep, require }) => {
         },
         // get ticker for Unit
         {
-          type_id: UnitTickerId,
+          type_id: TickerId,
           to: {
             type_id: UnitId,
             in: {
@@ -85,7 +89,7 @@ async ({ deep, require }) => {
         },
         // get name for Unit
         {
-          type_id: UnitNameId,
+          type_id: NameId,
           to: {
             type_id: UnitId,
             in: {
@@ -116,7 +120,7 @@ async ({ deep, require }) => {
           from_id: link.id
         }
       },
-      type_id: UnitNameId,
+      type_id: NameId,
     });
     const unitTickerData = deep.minilinks.query({
       to: {
@@ -126,7 +130,7 @@ async ({ deep, require }) => {
           from_id: link.id
         }
       },
-      type_id: UnitTickerId,
+      type_id: TickerId,
     });
     const unitAvatarData = deep.minilinks.query({
       to: {
@@ -136,22 +140,22 @@ async ({ deep, require }) => {
           from_id: link.id
         }
       },
-      type_id: UnitAvatarId,
+      type_id: AvatarId,
     });
 
 
     const walletNameData = deep.minilinks.query({
-      type_id: WalletNameId,
+      type_id: NameId,
       to_id: link.id,
     })
 
     const walletDescriptionData = deep.minilinks.query({
-      type_id: WalletDescriptionId,
+      type_id: DescriptionId,
       to_id: link.id,
     })
 
     const walletAvatarData = deep.minilinks.query({
-      type_id: WalletAvatarId,
+      type_id: AvatarId,
       to_id: link.id,
     })
 
@@ -238,14 +242,14 @@ async ({ deep, require }) => {
           if (!walletNameId) {
             console.log("Wallet doesn't exist")
             const { data: [{ id: _walletNameId }] } = await deep.insert({
-              type_id: WalletNameId,
+              type_id: NameId,
               from_id: link.id,
               to_id: link.id,
               string: { data: { value: walletName } },
             })
             walletNameId = _walletNameId;
           } else {
-            console.log("Wallet exist", {walletNameId, WalletNameId, walletName})
+            console.log("Wallet exist", {walletNameId, NameId, walletName})
             const { data: [{ link: _walletNameId }] } = await deep.update(
               { link_id: walletNameId },
               { value: walletName },
@@ -257,7 +261,7 @@ async ({ deep, require }) => {
           if (!walletDescriptionId) {
             console.log("Description doesn't exist")
             const { data: [{ id: _walletDescriptionId }] } = await deep.insert({
-              type_id: WalletDescriptionId,
+              type_id: DescriptionId,
               from_id: link.id,
               to_id: link.id,
               string: { data: { value: walletDescription } },
@@ -275,7 +279,7 @@ async ({ deep, require }) => {
 
           if (!walletAvatarId) {
             const { data: [{ id: _walletAvatarId }] } = await deep.insert({
-              type_id: WalletAvatarId,
+              type_id: AvatarId,
               from_id: link.id,
               to_id: link.id,
               string: { data: { value: walletAvatar } },

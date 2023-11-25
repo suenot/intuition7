@@ -6,7 +6,7 @@ import * as path from 'path';
 const __dirname = path.resolve();
 const log = debug("avatar");
 
-export const createTransaction = async ({deep, Types, packageName, packageId}: {
+export const createAvatar = async ({deep, Types, packageName, packageId}: {
   deep: DeepClient,
   packageName: string,
   Types: TypesStore,
