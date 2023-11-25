@@ -20,7 +20,11 @@ export const createPortfolioTests = async ({deep, Types, packageName, packageId}
   const DescriptionId = await deep.id('@suenot/description', 'Description');
   const WalletId = await deep.id('@suenot/wallet', 'Wallet');
   const ContainUnitId = await deep.id('@suenot/wallet', 'ContainUnit');
-  // const TransactionId = await deep.id('@suenot/transaction', 'Transaction');
+
+  const UnitUiPackageId = await deep.id('@suenot/unit-ui');
+  const WalletUiPackageId = await deep.id('@suenot/wallet-ui');
+  const PaymentUiPackageId = await deep.id('@suenot/payment-ui');
+
   console.log({packageName, ContainId, UnitId, NameId, TickerId, AvatarId, DescriptionId, WalletId, ContainUnitId});
 
   // Создаем unit1
@@ -173,6 +177,50 @@ export const createPortfolioTests = async ({deep, Types, packageName, packageId}
     ] },
   });
   console.log({portfolio1Id});
+
+  // Unit ui
+  const { data: [{ id: dependenceUnitUi }] } = await deep.insert({
+    type_id: ContainId,
+    from_id: packageId,
+    to_id: UnitUiPackageId,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'dependenceUnitUi' } },
+      },
+    ] },
+  });
+
+    // Wallet ui
+    const { data: [{ id: dependenceWalletUi }] } = await deep.insert({
+      type_id: ContainId,
+      from_id: packageId,
+      to_id: WalletUiPackageId,
+      in: { data: [
+        {
+          type_id: ContainId,
+          from_id: packageId,
+          string: { data: { value: 'dependenceWalletUi' } },
+        },
+      ] },
+    });
+
+    // Payment ui
+    const { data: [{ id: dependencePaymentUi }] } = await deep.insert({
+      type_id: ContainId,
+      from_id: packageId,
+      to_id: PaymentUiPackageId,
+      in: { data: [
+        {
+          type_id: ContainId,
+          from_id: packageId,
+          string: { data: { value: 'dependencePaymentUi' } },
+        },
+      ] },
+    });
+
+
 
   return {packageId, unitId1, walletId1, walletId2, portfolio1Id};
 };

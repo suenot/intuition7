@@ -21,6 +21,8 @@ export const createPaymentTests = async ({deep, Types, packageName, packageId}: 
   const Storage = await deep.id('@deep-foundation/payments', 'Storage');
   const Url = await deep.id('@deep-foundation/payments', 'Url');
 
+  const PaymentsSymbolsPackageId = await deep.id('@suenot/payments-symbols');
+
   const UnitId = await deep.id('@suenot/unit', 'Unit');
   const NameId = await deep.id('@suenot/name', 'Name');
   const TickerId = await deep.id('@suenot/ticker', 'Ticker');
@@ -28,6 +30,11 @@ export const createPaymentTests = async ({deep, Types, packageName, packageId}: 
   const DescriptionId = await deep.id('@suenot/description', 'Description');
   const WalletId = await deep.id('@suenot/wallet', 'Wallet');
   const ContainUnitId = await deep.id('@suenot/wallet', 'ContainUnit');
+
+  const UnitUiPackageId = await deep.id('@suenot/unit-ui');
+  const WalletUiPackageId = await deep.id('@suenot/wallet-ui');
+  const PaymentUiPackageId = await deep.id('@suenot/payment-ui');
+
 
   // console.log({packageName, packageId, UnitId, ContainId, NameId, TickerId, AvatarId, DescriptionId, WalletId, ContainUnitId, PaymentId});
 
@@ -238,6 +245,61 @@ export const createPaymentTests = async ({deep, Types, packageName, packageId}: 
     number: { data: { value: 222.00000001 } },
   });
 
+  // Unit ui
+  const { data: [{ id: dependenceUnitUi }] } = await deep.insert({
+    type_id: ContainId,
+    from_id: packageId,
+    to_id: UnitUiPackageId,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'dependenceUnitUi' } },
+      },
+    ] },
+  });
 
-  return {packageId, unitId1, walletId1, walletId2, paymentId1};
+  // Wallet ui
+  const { data: [{ id: dependenceWalletUi }] } = await deep.insert({
+    type_id: ContainId,
+    from_id: packageId,
+    to_id: WalletUiPackageId,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'dependenceWalletUi' } },
+      },
+    ] },
+  });
+
+  // Payment ui
+  const { data: [{ id: dependencePaymentUi }] } = await deep.insert({
+    type_id: ContainId,
+    from_id: packageId,
+    to_id: PaymentUiPackageId,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'dependencePaymentUi' } },
+      },
+    ] },
+  });
+
+  // Payments symbols
+  const { data: [{ id: dependencePaymentsSymbols }] } = await deep.insert({
+    type_id: ContainId,
+    from_id: packageId,
+    to_id: PaymentsSymbolsPackageId,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'dependencePaymentsSymbols' } },
+      },
+    ] },
+  });
+
+  return {packageId, unitId1, walletId1, walletId2, paymentId1, payment1SumId, PaymentId, Pay, Sum, Payed, ObjectId, Storage, Url, UnitId, NameId, TickerId, AvatarId, DescriptionId, WalletId, ContainUnitId, UnitUiPackageId, WalletUiPackageId, PaymentUiPackageId, PaymentsSymbolsPackageId, dependenceUnitUi, dependenceWalletUi, dependencePaymentUi, dependencePaymentsSymbols};
 };

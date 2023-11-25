@@ -19,8 +19,11 @@ export const createPaymentUi = async ({deep, Types, packageName, packageId}: {
     TsxId,
     clientSupportsJsId
   } = Types;
-  console.log('createTransactionUi')
+  console.log('createPaymentUi')
   console.log({packageName, ContainId, HandleClientId, HandlerId, TsxId, clientSupportsJsId});
+  
+  const PaymentId = await deep.id('@suenot/payment', 'Payment');
+  console.log({PaymentId});
   
   // tsxId
   // const reservedIds = await deep.reserve(1);
@@ -29,14 +32,14 @@ export const createPaymentUi = async ({deep, Types, packageName, packageId}: {
     type_id: TsxId,
     string: {
       data: {
-        value: fs.readFileSync(path.join(__dirname, 'src', 'db', 'deep', 'transaction-ui.tsx'), { encoding: 'utf-8' })
+        value: fs.readFileSync(path.join(__dirname, 'src', 'db', 'deep', 'payment-ui.tsx'), { encoding: 'utf-8' })
       },
     },
     in: {
       data: {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: "transactionTsx" } },
+        string: { data: { value: "paymentTsx" } },
       }
     }
   });
@@ -44,8 +47,6 @@ export const createPaymentUi = async ({deep, Types, packageName, packageId}: {
   console.log({clientSupportsJsId});
   console.log({HandleClientId});
   console.log({HandlerId});
-  const TransactionId = await deep.id('@suenot/transaction', 'Transaction');
-  console.log({TransactionId});
 
   // handler
   const { data: [{ id: handlerId }] } = await deep.insert({
@@ -54,7 +55,7 @@ export const createPaymentUi = async ({deep, Types, packageName, packageId}: {
       data: {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: "transactionHandler" } },
+        string: { data: { value: "paymentHandler" } },
       }
     },
     from_id: clientSupportsJsId,
@@ -69,13 +70,13 @@ export const createPaymentUi = async ({deep, Types, packageName, packageId}: {
       data: {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: "transactionHandleClient" } },
+        string: { data: { value: "paymentHandleClient" } },
       }
     },
-    from_id: TransactionId,
+    from_id: PaymentId,
     to_id: handlerId,
   });
   log({handleClientId});
 
-  return {packageId, TransactionId, tsxId, handlerId, handleClientId};
+  return {packageId, PaymentId, tsxId, handlerId, handleClientId};
 };

@@ -32,6 +32,7 @@ import { createTicker } from './ticker';
 import { createAvatar } from './avatar';
 import { createPaymentUi } from './payment-ui';
 import { createPaymentTests } from './payment-tests';
+import { createPaymentsSymbols } from './payments-symbols';
 
 import { removePackage } from "./removePackage";
 import { createEmptyPackage } from './createEmptyPackage';
@@ -60,6 +61,13 @@ const f = async () => {
   log('end initStore');
 
   const packages: any[] = [
+    {
+      name: '@suenot/payments-symbols',
+      versionUpdate: false,
+      upload: true,
+      createFn: createPaymentsSymbols,
+      path: './payments-symbols',
+    },
     {
       name: '@suenot/name',
       versionUpdate: false,
