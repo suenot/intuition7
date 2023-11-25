@@ -55,53 +55,5 @@ export const createInstrument = async ({deep, Types, packageName, packageId}: {
   });
   console.log({symbolId});
 
-  // Ticker
-  const { data: [{ id: TickerId }] } = await deep.insert({
-    type_id: TypeId,
-    in: { data: [
-      {
-        type_id: ContainId,
-        from_id: packageId,
-        string: { data: { value: 'Ticker' } },
-      },
-    ] },
-    from_id: InstrumentId,
-    to_id: InstrumentId,
-  });
-  console.log({TickerId});
-
-  // tickerSymbol
-  const { data: [{ id: tickerSymbolId }] } = await deep.insert({
-    type_id: SymbolId,
-    string: { data: { value: '📛' } },
-    in: { data: [
-      {
-        type_id: ContainId,
-        from_id: packageId,
-        string: { data: { value: 'tickerSymbol' } },
-      },
-    ] },
-    from_id: TickerId,
-    to_id: TickerId,
-  });
-  console.log({tickerSymbolId});
-
-  // tickerValue
-  const { data: [{ id: tickerValueId }] } = await deep.insert({
-    type_id: ValueId,
-    in: { data: [
-      {
-        type_id: ContainId,
-        from_id: packageId,
-        string: { data: { value: 'tickerValue' } },
-      },
-    ] },
-    from_id: TickerId,
-    to_id: StringId,
-  });
-  console.log({tickerValueId});
-
- 
-
-  return { packageId, InstrumentId, symbolId, TickerId, tickerSymbolId, tickerValueId };
+  return { packageId, InstrumentId, symbolId };
 };

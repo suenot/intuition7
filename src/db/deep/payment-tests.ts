@@ -1,9 +1,9 @@
 import { DeepClient } from "@deep-foundation/deeplinks/imports/client";
 import { TypesStore } from "./typesStore";
 import debug from "debug";
-const log = debug("portfolio-tests");
+const log = debug("portfolio");
 
-export const createPortfolioTests = async ({deep, Types, packageName, packageId}: {
+export const createPaymentTests = async ({deep, Types, packageName, packageId}: {
   deep: DeepClient,
   packageName: string,
   Types: TypesStore,
@@ -20,8 +20,9 @@ export const createPortfolioTests = async ({deep, Types, packageName, packageId}
   const DescriptionId = await deep.id('@suenot/description', 'Description');
   const WalletId = await deep.id('@suenot/wallet', 'Wallet');
   const ContainUnitId = await deep.id('@suenot/wallet', 'ContainUnit');
-  // const TransactionId = await deep.id('@suenot/transaction', 'Transaction');
-  console.log({packageName, ContainId, UnitId, NameId, TickerId, AvatarId, DescriptionId, WalletId, ContainUnitId});
+  const TransactionId = await deep.id('@suenot/transaction', 'Transaction');
+
+  console.log({packageName, packageId, UnitId, ContainId, NameId, TickerId, AvatarId, DescriptionId, WalletId, ContainUnitId, TransactionId});
 
   // Создаем unit1
   const { data: [{ id: unitId1 }] } = await deep.insert({
@@ -30,7 +31,7 @@ export const createPortfolioTests = async ({deep, Types, packageName, packageId}
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'unitId1' } },
+        string: { data: { value: 'unit1' } },
       },
     ] },
     out: { data: [
@@ -45,7 +46,7 @@ export const createPortfolioTests = async ({deep, Types, packageName, packageId}
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'unit1NameId' } },
+        string: { data: { value: 'unit1Name' } },
       },
     ] },
     from_id: unitId1,
@@ -61,7 +62,7 @@ export const createPortfolioTests = async ({deep, Types, packageName, packageId}
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'unit1TickerId' } },
+        string: { data: { value: 'unit1Ticker' } },
       },
     ] },
     out: { data: [
@@ -79,7 +80,7 @@ export const createPortfolioTests = async ({deep, Types, packageName, packageId}
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'unit1AvatarId' } },
+        string: { data: { value: 'unit1Avatar' } },
       },
     ] },
     out: { data: [
@@ -97,7 +98,7 @@ export const createPortfolioTests = async ({deep, Types, packageName, packageId}
         {
           type_id: ContainId,
           from_id: packageId,
-          string: { data: { value: 'unit1DescriptionId' } },
+          string: { data: { value: 'unit1Description' } },
         },
       ] },
       out: { data: [
@@ -115,7 +116,7 @@ export const createPortfolioTests = async ({deep, Types, packageName, packageId}
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'walletId1' } },
+        string: { data: { value: 'wallet1' } },
       },
     ] },
     out: { data: [
@@ -127,6 +128,54 @@ export const createPortfolioTests = async ({deep, Types, packageName, packageId}
     number: { data: { value: 333 } },
   });
   console.log({walletId1});
+
+  // Создаем wallet1 name
+  const { data: [{ id: wallet1NameId }] } = await deep.insert({
+    type_id: NameId,
+    from_id: walletId1,
+    to_id: walletId1,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'wallet1Name' } },
+      },
+    ] },
+    string: { data: { value: "For cat's toys" } },
+  });
+  console.log({wallet1NameId});
+
+  // Создаем wallet1 description
+  const { data: [{ id: wallet1DescriptionId }] } = await deep.insert({
+    type_id: DescriptionId,
+    from_id: walletId1,
+    to_id: walletId1,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'wallet1Description' } },
+      },
+    ] },
+    string: { data: { value: "Buying toys for cats is essential for their physical and mental well-being, and it enhances the quality of their life while fostering a closer connection with their human companions." } },
+  });
+  console.log({wallet1DescriptionId});
+
+    // Создаем wallet1 avatar
+    const { data: [{ id: wallet1AvatarId }] } = await deep.insert({
+      type_id: AvatarId,
+      from_id: walletId1,
+      to_id: walletId1,
+      in: { data: [
+        {
+          type_id: ContainId,
+          from_id: packageId,
+          string: { data: { value: 'wallet1Avatar' } },
+        },
+      ] },
+      string: { data: { value: "https://github.com/suenot/portfolio-icons/blob/main/cat.jpeg?raw=true" } },
+    });
+    console.log({wallet1AvatarId});
 
   // Создаем wallet2
   const { data: [{ id: walletId2 }] } = await deep.insert({
@@ -147,32 +196,25 @@ export const createPortfolioTests = async ({deep, Types, packageName, packageId}
     number: { data: { value: 444 } },
   });
   console.log({walletId2});
+  
 
-  const PortfolioId = await deep.id('@suenot/portfolio', 'Portfolio');
-  const ContainWalletId = await deep.id('@suenot/portfolio', 'ContainWallet');
-
-  // Создаем portfolio1
-  const { data: [{ id: portfolio1Id }] } = await deep.insert({
-    type_id: PortfolioId,
+  // Создаем transaction1
+  const { data: [{ id: transactionId1 }] } = await deep.insert({
+    type_id: TransactionId,
+    from_id: walletId1,
+    to_id: walletId2,
     in: { data: [
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'portfolio1Id' } },
+        string: { data: { value: 'transactionId1' } },
       },
     ] },
     out: { data: [
-      {
-        type_id: ContainWalletId,
-        to_id: walletId1,
-      },
-      {
-        type_id: ContainWalletId,
-        to_id: walletId2,
-      }
     ] },
+    number: { data: { value: 222.00000001 } },
   });
-  console.log({portfolio1Id});
+  console.log({transactionId1});
 
-  return {packageId, unitId1, walletId1, walletId2, portfolio1Id};
+  return {packageId, unitId1, walletId1, walletId2, transactionId1};
 };

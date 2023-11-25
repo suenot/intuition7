@@ -26,6 +26,12 @@ import { createExchange } from './exchange';
 import { createInstrument } from './instrument';
 import { createLanguage } from './language';
 import { createLocale } from './locale';
+import { createName } from './name';
+import { createDescription } from './description';
+import { createTicker } from './ticker';
+import { createPaymentUi } from './payment-ui';
+import { createPaymentTests } from './payment-tests';
+
 import { removePackage } from "./removePackage";
 import { createEmptyPackage } from './createEmptyPackage';
 import { publishPackage } from './publishPackage';
@@ -53,32 +59,26 @@ const f = async () => {
   log('end initStore');
 
   const packages: any[] = [
-    // {
-    //   name: '@suenot/asset',
-    // },
-    // {
-    //   name: '@suenot/asset-ui',
-    // },
     {
-      name: '@suenot/profitmaker',
+      name: '@suenot/name',
       versionUpdate: false,
       upload: true,
-      createFn: createProfitmaker,
-      path: './profitmaker',
+      createFn: createName,
+      path: './name',
     },
     {
-      name: '@suenot/language',
+      name: '@suenot/description',
       versionUpdate: false,
       upload: true,
-      createFn: createLanguage,
-      path: './language',
+      createFn: createDescription,
+      path: './description',
     },
     {
-      name: '@suenot/locale',
+      name: '@suenot/ticker',
       versionUpdate: false,
       upload: true,
-      createFn: createLocale,
-      path: './locale',
+      createFn: createTicker,
+      path: './name',
     },
     {
       name: '@suenot/unit',
@@ -88,18 +88,18 @@ const f = async () => {
       path: './unit',
     },
     {
-      name: '@suenot/unit-ui',
-      versionUpdate: false,
-      upload: true,
-      createFn: createUnitUi,
-      path: './unit-ui',
-    },
-    {
       name: '@suenot/wallet',
       versionUpdate: false,
       upload: true,
       createFn: createWallet,
       path: './wallet',
+    },
+    {
+      name: '@suenot/unit-ui',
+      versionUpdate: false,
+      upload: true,
+      createFn: createUnitUi,
+      path: './unit-ui',
     },
     {
       name: '@suenot/wallet-ui',
@@ -109,89 +109,124 @@ const f = async () => {
       path: './wallet-ui',
     },
     {
-      name: '@suenot/portfolio',
+      name: '@suenot/payment-ui',
       versionUpdate: false,
       upload: true,
-      createFn: createPortfolio,
-      path: './portfolio',
+      createFn: createPaymentUi,
+      path: './payment-ui',
     },
     {
-      name: '@suenot/portfolio-ui',
+      name: '@suenot/payment-tests',
       versionUpdate: false,
       upload: true,
-      createFn: createPortfolioUi,
-      path: './portfolio-ui',
+      createFn: createPaymentTests,
+      path: './payment-tests',
     },
-    {
-      name: '@suenot/transaction',
-      versionUpdate: false,
-      upload: true,
-      createFn: createTransaction,
-      path: './transaction',
-    },
-    {
-      name: '@suenot/transaction-ui',
-      versionUpdate: false,
-      upload: true,
-      createFn: createTransactionUi,
-      path: './transaction-ui',
-    },
-    {
-      name: '@suenot/emission',
-      versionUpdate: false,
-      upload: true,
-      createFn: createEmission,
-      path: './emission',
-    },
-    {
-      name: '@suenot/emission-ui',
-      versionUpdate: false,
-      upload: true,
-      createFn: createEmissionUi,
-      path: './emission-ui',
-    },
-    {
-      name: '@suenot/transaction-tests',
-      versionUpdate: false,
-      upload: true,
-      createFn: createTransactionTests,
-      path: './transaction-tests',
-    },
-    {
-      name: '@suenot/emission-tests',
-      versionUpdate: false,
-      upload: true,
-      createFn: createEmissionTests,
-      path: './emission-tests',
-    },
-    {
-      name: '@suenot/portfolio-tests',
-      versionUpdate: false,
-      upload: true,
-      createFn: createPortfolioTests,
-      path: './portfolio-tests',
-    },
-    {
-      name: '@suenot/pair',
-      versionUpdate: false,
-      upload: true,
-      createFn: createPair,
-      path: './pair',
-    },
-    {
-      name: '@suenot/exchange',
-      versionUpdate: false,
-      upload: true,
-      createFn: createExchange,
-      path: './exchange',
-    },
-    {
-      name: '@suenot/instrument',
-      versionUpdate: false,
-      upload: true,
-      createFn: createInstrument,
-      path: './instrument',
-    },
+    // {
+    //   name: '@suenot/profitmaker',
+    //   versionUpdate: false,
+    //   upload: true,
+    //   createFn: createProfitmaker,
+    //   path: './profitmaker',
+    // },
+    // {
+    //   name: '@suenot/language',
+    //   versionUpdate: false,
+    //   upload: true,
+    //   createFn: createLanguage,
+    //   path: './language',
+    // },
+    // {
+    //   name: '@suenot/locale',
+    //   versionUpdate: false,
+    //   upload: true,
+    //   createFn: createLocale,
+    //   path: './locale',
+    // },
+    // {
+    //   name: '@suenot/portfolio',
+    //   versionUpdate: false,
+    //   upload: true,
+    //   createFn: createPortfolio,
+    //   path: './portfolio',
+    // },
+    // {
+    //   name: '@suenot/portfolio-ui',
+    //   versionUpdate: false,
+    //   upload: true,
+    //   createFn: createPortfolioUi,
+    //   path: './portfolio-ui',
+    // },
+    // {
+    //   name: '@suenot/transaction',
+    //   versionUpdate: false,
+    //   upload: true,
+    //   createFn: createTransaction,
+    //   path: './transaction',
+    // },
+    // {
+    //   name: '@suenot/transaction-ui',
+    //   versionUpdate: false,
+    //   upload: true,
+    //   createFn: createTransactionUi,
+    //   path: './transaction-ui',
+    // },
+    // {
+    //   name: '@suenot/emission',
+    //   versionUpdate: false,
+    //   upload: true,
+    //   createFn: createEmission,
+    //   path: './emission',
+    // },
+    // {
+    //   name: '@suenot/emission-ui',
+    //   versionUpdate: false,
+    //   upload: true,
+    //   createFn: createEmissionUi,
+    //   path: './emission-ui',
+    // },
+    // {
+    //   name: '@suenot/transaction-tests',
+    //   versionUpdate: false,
+    //   upload: true,
+    //   createFn: createTransactionTests,
+    //   path: './transaction-tests',
+    // },
+    // {
+    //   name: '@suenot/emission-tests',
+    //   versionUpdate: false,
+    //   upload: true,
+    //   createFn: createEmissionTests,
+    //   path: './emission-tests',
+    // },
+    // {
+    //   name: '@suenot/portfolio-tests',
+    //   versionUpdate: false,
+    //   upload: true,
+    //   createFn: createPortfolioTests,
+    //   path: './portfolio-tests',
+    // },
+    // {
+    //   name: '@suenot/pair',
+    //   versionUpdate: false,
+    //   upload: true,
+    //   createFn: createPair,
+    //   path: './pair',
+    // },
+    // {
+    //   name: '@suenot/exchange',
+    //   versionUpdate: false,
+    //   upload: true,
+    //   createFn: createExchange,
+    //   path: './exchange',
+    // },
+    // {
+    //   name: '@suenot/instrument',
+    //   versionUpdate: false,
+    //   upload: true,
+    //   createFn: createInstrument,
+    //   path: './instrument',
+    // },
     // где-то здесь ошибка (так как идет связь от пакета до synctextfile)
     // {
     //   name: '@suenot/unit-ui-ru',

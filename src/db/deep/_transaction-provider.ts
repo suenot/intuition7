@@ -4,9 +4,9 @@ import debug from "debug";
 import * as fs from "fs";
 import * as path from 'path';
 const __dirname = path.resolve();
-const log = debug("transaction");
+const log = debug("transaction-provider");
 
-export const createTransaction = async ({deep, Types, packageName, packageId}: {
+export const createTransactionProvider = async ({deep, Types, packageName, packageId}: {
   deep: DeepClient,
   packageName: string,
   Types: TypesStore,
@@ -27,6 +27,7 @@ export const createTransaction = async ({deep, Types, packageName, packageId}: {
   } = Types;
   console.log({packageName, ContainId, SymbolId, TypeId, StringId, ValueId, NumberId, SyncTextFileId, HandlerId, HandleInsertId, dockerSupportsBunJsId});
 
+  const TransactionId = await deep.id('@suenot/transaction', 'Transaction');
   const WalletId = await deep.id('@suenot/wallet', 'Wallet');
   const PaymentId = await deep.id('@deep-foundation/payments', 'Payment');
   const PayId = await deep.id('@deep-foundation/payments', 'Pay');
@@ -37,37 +38,67 @@ export const createTransaction = async ({deep, Types, packageName, packageId}: {
   const UrlId = await deep.id('@deep-foundation/payments', 'Url');
 
   // Transaction
-  const { data: [{ id: TransactionId }] } = await deep.insert({
-    type_id: PaymentId, // Наследуем от Payment
-    from_id: WalletId,
-    to_id: WalletId,
+
+  // syncTextFile
+  const { data: [{ id: syncTextFile }] } = await deep.insert({
+    type_id: SyncTextFileId,
+    string: { data: {
+      value: fs.readFileSync(path.join(__dirname, 'src', 'db', 'deep', 'transaction-insert-handler.ts'), { encoding: 'utf-8' })
+    } },
     in: { data: [
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'Transaction' } },
+        string: { data: { value: 'transactionSyncTextFile' } },
       },
     ] },
-    out: { data: [
-    ] },
   });
-  log({TransactionId});
+  log({syncTextFile});
 
-  // SymbolId (петличка от Transaction к Transaction)
-  const { data: [{ id: symbolId }] } = await deep.insert({
-    type_id: SymbolId,
-    string: { data: { value: '🐪' } },
+  // handler
+  const { data: [{ id: handlerId }] } = await deep.insert({
+    type_id: HandlerId,
     in: { data: [
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'symbol' } },
+        string: { data: { value: 'transactionHandler' } },
+      },
+    ] },
+    from_id: dockerSupportsBunJsId,
+    to_id: syncTextFile,
+  });
+  log({handlerId});
+
+  // handleInsert
+  const { data: [{ id: handleInsertId }] } = await deep.insert({
+    type_id: HandleInsertId,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'transactionHandleInsert' } },
       },
     ] },
     from_id: TransactionId,
-    to_id: TransactionId,
+    to_id: handlerId,
   });
-  log({symbolId});
+  log({handleInsertId});
+
+  // handleUpdate
+  const { data: [{ id: handleUpdateId }] } = await deep.insert({
+    type_id: HandleUpdateId,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'transactionHandleUpdate' } },
+      },
+    ] },
+    from_id: TransactionId,
+    to_id: handlerId,
+  });
+  log({handleUpdateId});
 
   return {packageId, TransactionId};
 };
