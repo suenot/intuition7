@@ -280,7 +280,7 @@ export const createPaymentTests = async ({deep, Types, packageName, packageId}: 
     type_id: ContainId,
     from_id: packageId,
     to_id: PaymentUiPackageId,
-    string: { data: { value: 'dependencePaymentsSymbols' } },
+    string: { data: { value: 'dependencePaymentUi' } },
     in: { data: [
       {
         type_id: ContainId,
