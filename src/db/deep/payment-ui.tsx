@@ -2,21 +2,18 @@ async ({ deep, require }) => {
   const React = require('react');
   const { useState, useEffect } = React;
   const AsyncFileId = await deep.idLocal("@deep-foundation/core", "AsyncFile");
-  var UnitId = await deep.id("@suenot/unit", "Unit");
-  var UnitNameId = await deep.id("@suenot/unit", "Name");
-  var UnitTickerId = await deep.id("@suenot/unit", "Ticker");
-  var UnitAvatarId = await deep.id("@suenot/unit", "Avatar");
+  var NameId = await deep.id("@suenot/name", "Name");
+  var TickerId = await deep.id("@suenot/ticker", "Ticker");
+  var AvatarId = await deep.id("@suenot/avatar", "Avatar");
 
+  var UnitId = await deep.id("@suenot/unit", "Unit");
   const WalletId = await deep.id("@suenot/wallet", "Wallet");
-  const ContainUnitId = await deep.id("@suenot/wallet", "ContainUnit");
-  const WalletAvatarId = await deep.id("@suenot/wallet", "Avatar");
-  const WalletNameId = await deep.id("@suenot/wallet", "Name");
 
   const TransactionDescriptionId = await deep.id("@suenot/transaction", "Description");
   // const TransactionStatusId = await deep.id("@suenot/transaction", "Status");
   
 
-  const { Box, Text, Avatar, Wrap, WrapItem, Editable, EditableInput, EditablePreview, Button } = require('@chakra-ui/react');
+  const { Box, Text, Avatar, Wrap, WrapItem, Editable, EditableInput, EditablePreview, Button, HStack } = require('@chakra-ui/react');
   return ({ fillSize, style, link }) => {
 
     const data = deep.useDeepSubscription({
@@ -49,7 +46,7 @@ async ({ deep, require }) => {
         },
         // get avatar for wallet from
         {
-          type_id: WalletAvatarId,
+          type_id: AvatarId,
           to: {
             type_id: WalletId,
             out: {
@@ -59,7 +56,7 @@ async ({ deep, require }) => {
         },
         // get avatar for wallet to
         {
-          type_id: WalletAvatarId,
+          type_id: AvatarId,
           to: {
             type_id: WalletId,
             in: {
@@ -95,7 +92,7 @@ async ({ deep, require }) => {
       },
     });
     const walletAvatarFromData = deep.minilinks.query({
-      type_id: WalletAvatarId,
+      type_id: AvatarId,
       to: {
         type_id: WalletId,
         out: {
@@ -104,7 +101,7 @@ async ({ deep, require }) => {
       }
     });
     const walletAvatarToData = deep.minilinks.query({
-      type_id: WalletAvatarId,
+      type_id: AvatarId,
       to: {
         type_id: WalletId,
         in: {
@@ -123,10 +120,13 @@ async ({ deep, require }) => {
         <Text textAlign="center">Transaction #{link.id}</Text>
         <Text>From: #{link?.from_id}</Text>
         <Text>To: #{link?.to_id}</Text>
-        <Editable placeholder="Amount: " value={transactionAmount} isDisabled={true}>
-          <EditablePreview w={'100%'} />
-          <EditableInput />
-        </Editable>
+        <HStack>
+          <Text>Amount: </Text>
+          <Editable placeholder="Amount: " value={transactionAmount} isDisabled={true}>
+            <EditablePreview w={'100%'} />
+            <EditableInput />
+          </Editable>
+        </HStack>
         <Text>Description: -</Text>
         <Text>Status: Empty (Await) | Empty amount | Pending | Complete | Failed</Text>
         <br />

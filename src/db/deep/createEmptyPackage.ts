@@ -19,6 +19,8 @@ export const createEmptyPackage = async ({deep, Types, packageName, packageVersi
   } = Types;
   console.log({packageName, packageVersion, PackageId, ContainId, JoinId});
 
+  const npmPackagerId = await deep.id('@deep-foundation/npm-packager');
+
   // package
   const { data: [{ id: packageId }] } = await deep.insert({
     type_id: PackageId,
@@ -27,6 +29,10 @@ export const createEmptyPackage = async ({deep, Types, packageName, packageVersi
       {
         type_id: ContainId,
         from_id: deep.linkId,
+      },
+      {
+        type_id: ContainId,
+        from_id: npmPackagerId,
       },
     ] },
     out: { data: [
