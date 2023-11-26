@@ -22,7 +22,7 @@ export const createPaymentUi = async ({deep, Types, packageName, packageId}: {
   console.log('createPaymentUi')
   console.log({packageName, ContainId, HandleClientId, HandlerId, TsxId, clientSupportsJsId});
   
-  const PaymentId = await deep.id('@suenot/payment', 'Payment');
+  const PaymentId = await deep.id('@deep-foundation/payments', 'Payment');
   console.log({PaymentId});
   
   // tsxId
