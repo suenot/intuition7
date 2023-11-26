@@ -285,11 +285,11 @@ const f = async () => {
     log('Creating package types ⭐', {packageName, packageId, packageNamespaceId})
     await deepPackage.createFn({deep, Types, packageName, packageId});
     // TODO: если успешно, то публикуй пакет
-    // log('Publishing package 🚀', {packageName, packageId});
-    // if (deepPackage.versionUpdate) {
-    //   const {publishId} = await publishPackage({deep, Types, packageName, packageId});
-    //   log({publishId});
-    // }
+    log('Publishing package 🚀', {packageName, packageId});
+    if (deepPackage.versionUpdate) {
+      const {publishId} = await publishPackage({deep, Types, packageName, packageId});
+      log({publishId});
+    }
   }
 }
 f();

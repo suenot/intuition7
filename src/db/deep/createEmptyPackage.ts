@@ -15,12 +15,14 @@ export const createEmptyPackage = async ({deep, Types, packageName, packageVersi
     PackageActiveId,
     PackageId,
     ContainId,
-    JoinId,
+    JoinId
   } = Types;
   console.log({packageName, packageVersion, PackageId, ContainId, JoinId});
 
   const npmPackagerId = await deep.id('@deep-foundation/npm-packager');
-
+  const InstalledId = await deep.id('@deep-foundation/npm-packager', 'Installed');
+  const usersPackages = await deep.id('deep', 'users', 'packages');
+  const deepAdmin = await deep.id('deep', 'admin');
   // package
   const { data: [{ id: packageId }] } = await deep.insert({
     type_id: PackageId,
@@ -34,15 +36,19 @@ export const createEmptyPackage = async ({deep, Types, packageName, packageVersi
         type_id: ContainId,
         from_id: npmPackagerId,
       },
+      // {
+      //   type_id: InstalledId,
+      //   from_id: deepAdmin,
+      // },
     ] },
     out: { data: [
       {
         type_id: JoinId,
-        to_id: await deep.id('deep', 'users', 'packages'),
+        to_id: usersPackages,
       },
       {
         type_id: JoinId,
-        to_id: await deep.id('deep', 'admin'),
+        to_id: deepAdmin
       },
     ] },
   });
@@ -56,6 +62,10 @@ export const createEmptyPackage = async ({deep, Types, packageName, packageVersi
       {
         type_id: ContainId,
         from_id: deep.linkId,
+      },
+      {
+        type_id: ContainId,
+        from_id: npmPackagerId,
       },
     ] },
     out: { data: [
