@@ -250,11 +250,12 @@ export const createPaymentTests = async ({deep, Types, packageName, packageId}: 
     type_id: ContainId,
     from_id: packageId,
     to_id: UnitUiPackageId,
+    string: { data: { value: 'dependenceUnitUi' } },
     in: { data: [
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'dependenceUnitUi' } },
+        string: { data: { value: 'containDependenceUnitUi' } },
       },
     ] },
   });
@@ -264,11 +265,12 @@ export const createPaymentTests = async ({deep, Types, packageName, packageId}: 
     type_id: ContainId,
     from_id: packageId,
     to_id: WalletUiPackageId,
+    string: { data: { value: 'dependenceWalletUi' } },
     in: { data: [
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'dependenceWalletUi' } },
+        string: { data: { value: 'containDependenceWalletUi' } },
       },
     ] },
   });
@@ -278,11 +280,12 @@ export const createPaymentTests = async ({deep, Types, packageName, packageId}: 
     type_id: ContainId,
     from_id: packageId,
     to_id: PaymentUiPackageId,
+    string: { data: { value: 'dependencePaymentsSymbols' } },
     in: { data: [
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'dependencePaymentUi' } },
+        string: { data: { value: 'containDependencePaymentUi' } },
       },
     ] },
   });
@@ -292,11 +295,12 @@ export const createPaymentTests = async ({deep, Types, packageName, packageId}: 
     type_id: ContainId,
     from_id: packageId,
     to_id: PaymentsSymbolsPackageId,
+    string: { data: { value: 'dependencePaymentsSymbols' } },
     in: { data: [
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'dependencePaymentsSymbols' } },
+        string: { data: { value: 'containDependencePaymentsSymbols' } },
       },
     ] },
   });
