@@ -35,6 +35,7 @@ import { createPaymentTests } from './payment-tests';
 import { createPaymentsSymbols } from './payments-symbols';
 import { createAvatarEditUi } from './avatar-edit-ui';
 import { createLocaleEditUi } from './locale-edit-ui';
+import { createPaymentProvider } from './payment-provider';
 
 import { removePackage } from "./removePackage";
 import { createEmptyPackage } from './createEmptyPackage';
@@ -42,6 +43,7 @@ import { publishPackage } from './publishPackage';
 import { TypesStore, createTypesStore } from "./typesStore";
 
 import debug from "debug";
+import { sleep } from '../../sleep';
 const log = debug("deep");
 
 const apolloClient = generateApolloClient({
@@ -111,136 +113,146 @@ const f = async () => {
       upload: true,
       createFn: createWallet,
       path: './wallet',
+      delay: 10000,
     },
     {
       name: '@suenot/unit-ui',
-      versionUpdate: false,
+      versionUpdate: true,
       upload: true,
       createFn: createUnitUi,
       path: './unit-ui',
     },
     {
       name: '@suenot/wallet-ui',
-      versionUpdate: false,
+      versionUpdate: true,
       upload: true,
       createFn: createWalletUi,
       path: './wallet-ui',
+      delay: 10000,
     },
     {
       name: '@suenot/payment-ui',
-      versionUpdate: false,
+      versionUpdate: true,
       upload: true,
       createFn: createPaymentUi,
       path: './payment-ui',
     },
     {
+      name: '@suenot/payment-provider',
+      versionUpdate: true,
+      upload: true,
+      createFn: createPaymentProvider,
+      path: './payment-provider',
+    },
+    {
       name: '@suenot/payment-tests',
-      versionUpdate: false,
+      versionUpdate: true,
       upload: true,
       createFn: createPaymentTests,
       path: './payment-tests',
+      delay: 10000,
     },
     // {
     //   name: '@suenot/profitmaker',
-    //   versionUpdate: false,
+    //   versionUpdate: true,
     //   upload: true,
     //   createFn: createProfitmaker,
     //   path: './profitmaker',
     // },
     // {
     //   name: '@suenot/language',
-    //   versionUpdate: false,
+    //   versionUpdate: true,
     //   upload: true,
     //   createFn: createLanguage,
     //   path: './language',
     // },
     // {
     //   name: '@suenot/locale',
-    //   versionUpdate: false,
+    //   versionUpdate: true,
     //   upload: true,
     //   createFn: createLocale,
     //   path: './locale',
     // },
     // {
     //   name: '@suenot/portfolio',
-    //   versionUpdate: false,
+    //   versionUpdate: true,
     //   upload: true,
     //   createFn: createPortfolio,
     //   path: './portfolio',
     // },
     // {
     //   name: '@suenot/portfolio-ui',
-    //   versionUpdate: false,
+    //   versionUpdate: true,
     //   upload: true,
     //   createFn: createPortfolioUi,
     //   path: './portfolio-ui',
     // },
     // {
     //   name: '@suenot/transaction',
-    //   versionUpdate: false,
+    //   versionUpdate: true,
     //   upload: true,
     //   createFn: createTransaction,
     //   path: './transaction',
     // },
     // {
     //   name: '@suenot/transaction-ui',
-    //   versionUpdate: false,
+    //   versionUpdate: true,
     //   upload: true,
     //   createFn: createTransactionUi,
     //   path: './transaction-ui',
     // },
     // {
     //   name: '@suenot/emission',
-    //   versionUpdate: false,
+    //   versionUpdate: true,
     //   upload: true,
     //   createFn: createEmission,
     //   path: './emission',
     // },
     // {
     //   name: '@suenot/emission-ui',
-    //   versionUpdate: false,
+    //   versionUpdate: true,
     //   upload: true,
     //   createFn: createEmissionUi,
     //   path: './emission-ui',
     // },
     // {
     //   name: '@suenot/transaction-tests',
-    //   versionUpdate: false,
+    //   versionUpdate: true,
     //   upload: true,
     //   createFn: createTransactionTests,
     //   path: './transaction-tests',
     // },
     // {
     //   name: '@suenot/emission-tests',
-    //   versionUpdate: false,
+    //   versionUpdate: true,
     //   upload: true,
     //   createFn: createEmissionTests,
     //   path: './emission-tests',
     // },
     // {
     //   name: '@suenot/portfolio-tests',
-    //   versionUpdate: false,
+    //   versionUpdate: true,
     //   upload: true,
     //   createFn: createPortfolioTests,
     //   path: './portfolio-tests',
     // },
     // {
     //   name: '@suenot/pair',
-    //   versionUpdate: false,
+    //   versionUpdate: true,
     //   upload: true,
     //   createFn: createPair,
     //   path: './pair',
     // },
     // {
     //   name: '@suenot/exchange',
-    //   versionUpdate: false,
+    //   versionUpdate: true,
     //   upload: true,
     //   createFn: createExchange,
     //   path: './exchange',
     // },
     // {
     //   name: '@suenot/instrument',
-    //   versionUpdate: false,
+    //   versionUpdate: true,
     //   upload: true,
     //   createFn: createInstrument,
     //   path: './instrument',
@@ -248,14 +260,14 @@ const f = async () => {
     // где-то здесь ошибка (так как идет связь от пакета до synctextfile)
     // {
     //   name: '@suenot/unit-ui-ru',
-    //   versionUpdate: false,
+    //   versionUpdate: true,
     //   upload: true,
     //   createFn: createUnitUiRu,
     //   path: './unit-ui-ru',
     // },
     // {
     //   name: '@suenot/unit-ui-en',
-    //   versionUpdate: false,
+    //   versionUpdate: true,
     //   upload: true,
     //   createFn: createUnitUiEn,
     //   path: './unit-ui-en',
@@ -269,6 +281,9 @@ const f = async () => {
   }
 
   for (const deepPackage of packages) {
+    if (deepPackage.delay) {
+      await sleep(deepPackage.delay);
+    }
     // // insert new package
     const packageName = deepPackage.name;
     var lastPackageVersion = '0.0.1';

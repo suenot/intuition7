@@ -4,9 +4,9 @@ import debug from "debug";
 import * as fs from "fs";
 import * as path from 'path';
 const __dirname = path.resolve();
-const log = debug("transaction-provider");
+const log = debug("payment-provider");
 
-export const createTransactionProvider = async ({deep, Types, packageName, packageId}: {
+export const createPaymentProvider = async ({deep, Types, packageName, packageId}: {
   deep: DeepClient,
   packageName: string,
   Types: TypesStore,
@@ -27,15 +27,14 @@ export const createTransactionProvider = async ({deep, Types, packageName, packa
   } = Types;
   console.log({packageName, ContainId, SymbolId, TypeId, StringId, ValueId, NumberId, SyncTextFileId, HandlerId, HandleInsertId, dockerSupportsBunJsId});
 
-  const TransactionId = await deep.id('@suenot/transaction', 'Transaction');
-  const WalletId = await deep.id('@suenot/wallet', 'Wallet');
-  const PaymentId = await deep.id('@deep-foundation/payments', 'Payment');
+  // const WalletId = await deep.id('@suenot/wallet', 'Wallet');
+  // const PaymentId = await deep.id('@deep-foundation/payments', 'Payment');
   const PayId = await deep.id('@deep-foundation/payments', 'Pay');
-  const SumId = await deep.id('@deep-foundation/payments', 'Sum');
-  const PayedId = await deep.id('@deep-foundation/payments', 'Payed');
-  const ObjectId = await deep.id('@deep-foundation/payments', 'Object');
-  const StorageId = await deep.id('@deep-foundation/payments', 'Storage');
-  const UrlId = await deep.id('@deep-foundation/payments', 'Url');
+  // const SumId = await deep.id('@deep-foundation/payments', 'Sum');
+  // const PayedId = await deep.id('@deep-foundation/payments', 'Payed');
+  // const ObjectId = await deep.id('@deep-foundation/payments', 'Object');
+  // const StorageId = await deep.id('@deep-foundation/payments', 'Storage');
+  // const UrlId = await deep.id('@deep-foundation/payments', 'Url');
 
   // Transaction
 
@@ -43,13 +42,13 @@ export const createTransactionProvider = async ({deep, Types, packageName, packa
   const { data: [{ id: syncTextFile }] } = await deep.insert({
     type_id: SyncTextFileId,
     string: { data: {
-      value: fs.readFileSync(path.join(__dirname, 'src', 'db', 'deep', 'transaction-insert-handler.ts'), { encoding: 'utf-8' })
+      value: fs.readFileSync(path.join(__dirname, 'src', 'db', 'deep', 'payment-insert-handler.ts'), { encoding: 'utf-8' })
     } },
     in: { data: [
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'transactionSyncTextFile' } },
+        string: { data: { value: 'paymentSyncTextFile' } },
       },
     ] },
   });
@@ -62,7 +61,7 @@ export const createTransactionProvider = async ({deep, Types, packageName, packa
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'transactionHandler' } },
+        string: { data: { value: 'paymentHandler' } },
       },
     ] },
     from_id: dockerSupportsBunJsId,
@@ -77,10 +76,10 @@ export const createTransactionProvider = async ({deep, Types, packageName, packa
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'transactionHandleInsert' } },
+        string: { data: { value: 'paymentHandleInsert' } },
       },
     ] },
-    from_id: TransactionId,
+    from_id: PayId,
     to_id: handlerId,
   });
   log({handleInsertId});
@@ -92,14 +91,14 @@ export const createTransactionProvider = async ({deep, Types, packageName, packa
       {
         type_id: ContainId,
         from_id: packageId,
-        string: { data: { value: 'transactionHandleUpdate' } },
+        string: { data: { value: 'paymentHandleUpdate' } },
       },
     ] },
-    from_id: TransactionId,
+    from_id: PayId,
     to_id: handlerId,
   });
   log({handleUpdateId});
 
-  return {packageId, TransactionId};
+  return {packageId, syncTextFile, handlerId};
 };
 
