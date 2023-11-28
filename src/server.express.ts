@@ -39,8 +39,8 @@ const log = debug("index");
 
   // Сбор ордербуков, тиков, свечей, трейдов вебсокетами
   parseOrderBooks({exchangeIds, pairIds});
-  parseTrades({exchangeIds, pairIds});
-  parseCandles({exchangeIds, pairIds});
+  // parseTrades({exchangeIds, pairIds});
+  // parseCandles({exchangeIds, pairIds});
 
   // Раз в 1 секунду собирать исторические данные
   // saveOrderBookHistoryByTimer(1000)

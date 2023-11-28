@@ -1,5 +1,6 @@
 import _ from "lodash";
 import ccxt from "ccxt";
+// import { pro as ccxt } from "ccxt"
 import { orderBookCcxtToCore } from "./orderBookCcxtToCore/orderBookCcxtToCore";
 import { OrderBook as CcxtOrderBook, OrderBookSubscription as CcxtOrderBookSubscription } from "./ccxtTypes";
 import { upsertOrderBook } from "./db/db";
@@ -16,6 +17,7 @@ export const parseOrderBooks = async ({exchangeIds, pairIds}: {exchangeIds: stri
   for (const exchangeId of exchangeIds) {
     log({exchangeId});
     parseOrderBooksOneExchange({exchangeId, pairIds});
+    // sleep(5000);
   }
 }
 
@@ -23,8 +25,8 @@ export const parseOrderBooksOneExchange = async ({exchangeId, pairIds}: {exchang
   log('parseOrderBooksOneExchange', {exchangeId, pairIds});
   const pairIdsEmpty = _.isEmpty(pairIds);
   log({pairIdsEmpty});
-  const exchangeInstance = new (ccxt.pro as any)[exchangeId]({});
-  if (exchangeId in ccxt.pro) {
+  const exchangeInstance = new (ccxt as any)[exchangeId]({});
+  if (exchangeId in ccxt) {
     while (true) {
       if (pairIdsEmpty) {
         console.log('sleep 5s');

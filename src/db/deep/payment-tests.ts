@@ -21,6 +21,8 @@ export const createPaymentTests = async ({deep, Types, packageName, packageId}: 
   const Storage = await deep.id('@deep-foundation/payments', 'Storage');
   const Url = await deep.id('@deep-foundation/payments', 'Url');
 
+  const TaskId = await deep.id('@suenot/task', 'Task');
+
   const PaymentsSymbolsPackageId = await deep.id('@suenot/payments-symbols');
 
   const UnitId = await deep.id('@suenot/unit', 'Unit');
@@ -34,6 +36,9 @@ export const createPaymentTests = async ({deep, Types, packageName, packageId}: 
   const UnitUiPackageId = await deep.id('@suenot/unit-ui');
   const WalletUiPackageId = await deep.id('@suenot/wallet-ui');
   const PaymentUiPackageId = await deep.id('@suenot/payment-ui');
+
+  const PortfolioId = await deep.id('@suenot/portfolio', 'Portfolio');
+  const ContainWalletId = await deep.id('@suenot/portfolio', 'ContainWallet');
 
 
   // console.log({packageName, packageId, UnitId, ContainId, NameId, TickerId, AvatarId, DescriptionId, WalletId, ContainUnitId, PaymentId});
@@ -210,7 +215,61 @@ export const createPaymentTests = async ({deep, Types, packageName, packageId}: 
     number: { data: { value: 444 } },
   });
   console.log({walletId2});
-  
+
+  // Создаем wallet3
+  const { data: [{ id: walletId3 }] } = await deep.insert({
+    type_id: WalletId,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'Кошелек Кадетского фонда' } },
+      },
+    ] },
+    out: { data: [
+      {
+        type_id: ContainUnitId,
+        to_id: unitId1,
+      }
+    ] },
+    number: { data: { value: 0 } },
+  });
+  console.log({walletId3});
+
+  // Создаем wallet3
+  const { data: [{ id: walletId4 }] } = await deep.insert({
+    type_id: WalletId,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'Кошелек Группы Охвата' } },
+      },
+    ] },
+    out: { data: [
+      {
+        type_id: ContainUnitId,
+        to_id: unitId1,
+      }
+    ] },
+    number: { data: { value: 0 } },
+  });
+  console.log({walletId4});
+
+  // Создаем task1
+  const { data: [{ id: task1Id }] } = await deep.insert({
+    type_id: TaskId,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'Создание MVP deep.memo' } },
+      },
+    ] },
+    out: { data: [
+    ] },
+  });
+  console.log({task1Id});
 
   // Создаем payment1
   const { data: [{ id: paymentId1 }] } = await deep.insert({
@@ -225,6 +284,10 @@ export const createPaymentTests = async ({deep, Types, packageName, packageId}: 
       },
     ] },
     out: { data: [
+      {
+        type_id: ObjectId,
+        to_id: task1Id,
+      }
     ] },
     // number: { data: { value: 222.00000001 } },
   });
@@ -304,6 +367,60 @@ export const createPaymentTests = async ({deep, Types, packageName, packageId}: 
       },
     ] },
   });
+
+    // Создаем portfolio1
+    const { data: [{ id: portfolio1Id }] } = await deep.insert({
+      type_id: PortfolioId,
+      in: { data: [
+        {
+          type_id: ContainId,
+          from_id: packageId,
+          string: { data: { value: 'portfolio1Id' } },
+        },
+      ] },
+      out: { data: [
+        {
+          type_id: ContainWalletId,
+          to_id: walletId1,
+        },
+        {
+          type_id: ContainWalletId,
+          to_id: walletId2,
+        }
+      ] },
+    });
+    console.log({portfolio1Id});
+
+      // Создаем emission1
+  const { data: [{ id: emissionId1 }] } = await deep.insert({
+    type_id: PaymentId,
+    from_id: unitId1,
+    to_id: walletId1,
+    in: { data: [
+      {
+        type_id: ContainId,
+        from_id: packageId,
+        string: { data: { value: 'emissionId1' } },
+      },
+    ] },
+    number: { data: { value: 999.99 } },
+  });
+  console.log({emissionId1});
+
+    // Создаем emission1 sum
+    const { data: [{ id: emission1SumId }] } = await deep.insert({
+      type_id: Sum,
+      from_id: emissionId1,
+      to_id: emissionId1,
+      in: { data: [
+        {
+          type_id: ContainId,
+          from_id: packageId,
+          string: { data: { value: 'emission1Sum' } },
+        },
+      ] },
+      number: { data: { value: 999.99 } },
+    });
 
   return {packageId, unitId1, walletId1, walletId2, paymentId1, payment1SumId, PaymentId, Pay, Sum, Payed, ObjectId, Storage, Url, UnitId, NameId, TickerId, AvatarId, DescriptionId, WalletId, ContainUnitId, UnitUiPackageId, WalletUiPackageId, PaymentUiPackageId, PaymentsSymbolsPackageId, dependenceUnitUi, dependenceWalletUi, dependencePaymentUi, dependencePaymentsSymbols};
 };

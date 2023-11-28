@@ -26,6 +26,7 @@ import { createExchange } from './exchange';
 import { createInstrument } from './instrument';
 import { createLanguage } from './language';
 import { createLocale } from './locale';
+import { createTask } from './task';
 import { createName } from './name';
 import { createDescription } from './description';
 import { createTicker } from './ticker';
@@ -65,6 +66,13 @@ const f = async () => {
   log('end initStore');
 
   const packages: any[] = [
+    {
+      name: '@suenot/task',
+      versionUpdate: false,
+      upload: true,
+      createFn: createTask,
+      path: './task',
+    },
     {
       name: '@suenot/payments-symbols',
       versionUpdate: false,
