@@ -1,7 +1,7 @@
 async ({ deep, require }) => {
   const React = require('react');
   const { useState, useEffect } = React;
-  const { Box, Text, Avatar, Wrap, WrapItem, Editable, EditablePreview, EditableInput, EditableTextarea, Center, Flex, Divider, Button, Tooltip } = require('@chakra-ui/react');
+  const { useColorModeValue, Box, Text, Avatar, Wrap, WrapItem, Editable, EditablePreview, EditableInput, EditableTextarea, Center, Flex, Divider, Button, Tooltip } = require('@chakra-ui/react');
   const AsyncFileId = await deep.idLocal("@deep-foundation/core", "AsyncFile");
   var UnitId = await deep.id("@suenot/unit", "Unit");
   var NameId = await deep.id("@suenot/name", "Name");
@@ -19,6 +19,8 @@ async ({ deep, require }) => {
   var PaymentSumId = await deep.id("@deep-foundation/payments", "Sum");
   var PaymentPayedId = await deep.id("@deep-foundation/payments", "Payed");
   
+  const bg = useColorModeValue("#fff", "#18202b");
+
   return ({ fillSize, style, link }) => {
 
     const data = deep.useDeepSubscription({
@@ -201,7 +203,7 @@ async ({ deep, require }) => {
     const amountFixed = typeof(amount) === 'number' ? amount.toFixed(8) : "";
 
     return <div>
-      <Box maxW='sm' minW='sm' w='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' p='4' backgroundColor='white'>
+      <Box maxW='sm' minW='sm' w='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' p='4' bg={bg}>
         <div>
           <Flex
             align="center"

@@ -9,18 +9,23 @@ async ({ deep, require }) => {
   var UnitId = await deep.id("@suenot/unit", "Unit");
   const WalletId = await deep.id("@suenot/wallet", "Wallet");
 
-  const TransactionDescriptionId = await deep.id("@suenot/transaction", "Description");
+  const DescriptionId = await deep.id("@suenot/description", "Description");
+  const PayId = await deep.id("@deep-foundation/payments", "Pay");
   // const TransactionStatusId = await deep.id("@suenot/transaction", "Status");
-  
 
-  const { Box, Text, Avatar, Wrap, WrapItem, Editable, EditableInput, EditablePreview, Button, HStack } = require('@chakra-ui/react');
+  const { useColorModeValue, Box, Text, Avatar, Wrap, WrapItem, Editable, EditableInput, EditablePreview, Button, HStack } = require('@chakra-ui/react');
   return ({ fillSize, style, link }) => {
 
     const data = deep.useDeepSubscription({
       _or: [
+        {
+          type_id: PayId,
+          to_id: link.id,
+        },
+
         // get description for transaction
         {
-          type_id: TransactionDescriptionId,
+          type_id: DescriptionId,
           to_id: link.id,
         },
 
@@ -67,8 +72,14 @@ async ({ deep, require }) => {
       ]
     });
 
+    const transactionPayData = deep.minilinks.query({
+      type_id: PayId,
+      to_id: link.id,
+    });
+    console.log({transactionPayData})
+
     const transactionDescriptionData = deep.minilinks.query({
-      type_id: TransactionDescriptionId,
+      type_id: DescriptionId,
       to_id: link.id,
     });
 
@@ -114,9 +125,11 @@ async ({ deep, require }) => {
     const amount = link?.value?.value || 0;
     const amountFixed = typeof(amount) === 'number' ? amount.toFixed(8) : "";
 
+    const bg = useColorModeValue("#fff", "#18202b");
+
     const [transactionAmount, setTransactionAmount] = useState(amountFixed);
     return <div>
-      <Box maxW='sm' minW='sm' w='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' p='4' backgroundColor='white'>
+      <Box maxW='sm' minW='sm' w='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' p='4' bg={bg}>
         <Text textAlign="center">Transaction #{link.id}</Text>
         <Text>From: #{link?.from_id}</Text>
         <Text>To: #{link?.to_id}</Text>
@@ -128,9 +141,14 @@ async ({ deep, require }) => {
           </Editable>
         </HStack>
         <Text>Description: -</Text>
-        <Text>Status: Empty (Await) | Empty amount | Pending | Complete | Failed</Text>
         <br />
-        <Button colorScheme='teal' size='md' variant='outline' onClick={async () => {}}>
+        <Button colorScheme='teal' size='md' variant='outline' onClick={async () => {
+          const { data: [{ id: payId }] } = await deep.insert({
+            type_id: PayId,
+            from_id: link.id,
+            to_id: link.id,
+          })
+        }}>
           Send
         </Button>
       </Box>

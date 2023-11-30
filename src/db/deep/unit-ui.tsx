@@ -1,12 +1,14 @@
 async ({ deep, require }) => {
   const React = require('react');
   const { useState, useEffect } = React;
-  const { Box, Text, Avatar, Wrap, WrapItem, Editable, EditablePreview, EditableInput, EditableTextarea, Center, Flex, Divider, Button } = require('@chakra-ui/react');
+  const { useColorModeValue, Box, Text, Avatar, Wrap, WrapItem, Editable, EditablePreview, EditableInput, EditableTextarea, Center, Flex, Divider, Button } = require('@chakra-ui/react');
   const AsyncFileId = await deep.idLocal("@deep-foundation/core", "AsyncFile");
   var NameId = await deep.id("@suenot/name", "Name");
   var DescriptionId = await deep.id("@suenot/description", "Description");
   var TickerId = await deep.id("@suenot/ticker", "Ticker");
   var AvatarId = await deep.id("@suenot/avatar", "Avatar");
+
+  const bg = useColorModeValue("#fff", "#18202b");
 
   return ({ fillSize, style, link }) => {
 
@@ -80,7 +82,7 @@ async ({ deep, require }) => {
     const [unitSrc, setUnitSrc] = useState(unitSrcValue);
 
     return <div>
-      <Box maxW='sm' minW='sm' w='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' p='4' backgroundColor='white'>
+      <Box maxW='sm' minW='sm' w='sm' borderWidth='1px' borderRadius='lg' overflow='hidden' p='4' bg={bg}>
         <div>
           <Flex
             align="center"
