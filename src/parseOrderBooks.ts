@@ -1,5 +1,6 @@
 import _ from "lodash";
 import ccxt from "ccxt";
+// import { pro } from "ccxt";
 // import { pro as ccxt } from "ccxt"
 import { orderBookCcxtToCore } from "./orderBookCcxtToCore/orderBookCcxtToCore";
 import { OrderBook as CcxtOrderBook, OrderBookSubscription as CcxtOrderBookSubscription } from "./ccxtTypes";
@@ -8,6 +9,9 @@ import { sleep } from "./sleep";
 import debug from "debug";
 import { store } from "./db/store/store";
 const log = debug("parseOrderBooks");
+
+// class ExtendedProCEX extends pro.binance {}
+// class ExtendedProCEX extends pro.kucoin {}
 
 
 
@@ -25,8 +29,8 @@ export const parseOrderBooksOneExchange = async ({exchangeId, pairIds}: {exchang
   log('parseOrderBooksOneExchange', {exchangeId, pairIds});
   const pairIdsEmpty = _.isEmpty(pairIds);
   log({pairIdsEmpty});
-  const exchangeInstance = new (ccxt as any)[exchangeId]({});
-  if (exchangeId in ccxt) {
+  const exchangeInstance = new (ccxt.pro as any)[exchangeId]({});
+  if (exchangeId in ccxt.pro) {
     while (true) {
       if (pairIdsEmpty) {
         console.log('sleep 5s');

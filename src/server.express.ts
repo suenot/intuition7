@@ -15,7 +15,7 @@ const log = debug("index");
   await intervalFn();
 
   // Сделать активными часть бирж и пар
-  const exchangeIds = ['binance', 'okex', 'kucoin'];
+  const exchangeIds = ['binance', 'okx', 'kucoin'];
   const pairIds = ['ETH/BTC', 'LTC/BTC', 'BTC/USDT', 'ETH/USDT', 'DOGE/USDT'];
   for (const exchangeId of exchangeIds) {
     await upsertExchange({ dbs: ['store'], exchange: {...store.exchanges[exchangeId], active: true}});

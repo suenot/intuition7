@@ -17,7 +17,7 @@
     "@deep-foundation/hasura": "^0.0.60",
     "@elysiajs/cors": "^0.7.0",
     "@elysiajs/graphql-yoga": "^0.6.3",
-    "ccxt": "4.1.66",
+    "ccxt": "4.1.76",
     "cors": "^2.8.5",
     "debug": "^4.3.4",
     "dotenv": "^16.3.1",
