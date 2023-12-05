@@ -1,5 +1,7 @@
 # Intuition 7
 
+В этом бойлерплейте застрял с тестами и бросил это дело. Не могу запустить jest/chai.
+
 ## Development
 To start the development server run:
 ```bash

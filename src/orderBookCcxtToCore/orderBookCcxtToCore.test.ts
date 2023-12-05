@@ -1,10 +1,10 @@
 import { orderBookCcxtToCore } from './orderBookCcxtToCore';
-import { expect, test, describe } from "bun:test";
-import { OrderBook as CcxtOrderBook } from '../ccxtTypes';
+import { expect } from 'chai';
+import { OrderBook as CcxtOrderBook, OrderBookSubscription as CcxtOrderBookSubscription } from '../ccxtTypes';
 import { OrderBook } from '../types';
 
 // Sample CCXT Orderbook data
-const sampleCcxtOrderbook: CcxtOrderBook = {
+const sampleCcxtOrderbook: CcxtOrderBookSubscription = {
   asks: [
     [0.06008, 28.8976],
     [0.06009, 30.6959],
@@ -16,6 +16,7 @@ const sampleCcxtOrderbook: CcxtOrderBook = {
   timestamp: 123456789,
   datetime: '2020-01-01T00:00:00.000Z',
   nonce: 123,
+  symbol: 'ETH/BTC',
 };
 
 // Expected Orderbook data
@@ -27,11 +28,16 @@ const expectedOrderbook: OrderBook = {
     { price: 0.06008, amount: 28.8976, type: 'ask', total: 1.73616781 },
     { price: 0.06009, amount: 30.6959, type: 'ask', total: 1.84451663 },
   ],
+  exchangeId: '',
+  pairId: '',
+  instrumentId: '',
+  baseId: '',
+  quoteId: '',
 };
 
 describe('orderBookCcxtToCore', () => {
-  test('should convert CCXT order book data to custom format', () => {
-    const result = orderBookCcxtToCore(sampleCcxtOrderbook);
-    expect(result).toEqual(expectedOrderbook);
+  it('should convert CCXT order book data to custom format', () => {
+    const result = orderBookCcxtToCore({orderBookCcxt: sampleCcxtOrderbook, exchangeId: 'binance'});
+    expect(result).to.deep.equal(expectedOrderbook);
   });
 });

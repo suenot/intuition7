@@ -69,9 +69,10 @@ export interface Trade {
   type?: string;                   // order type, 'market', 'limit', ... or undefined/None/null
   side: 'buy' | 'sell' | string;            // direction of the trade, 'buy' or 'sell'
   symbol: string;                  // symbol in CCXT format
-  takerOrMaker: 'taker' | 'maker' | string; // string, 'taker' or 'maker'
+  takerOrMaker?: 'taker' | 'maker' | string; // string, 'taker' or 'maker'
   cost: number;                    // total cost (including fees), `price * amount`
-  fee: Fee;
+  fee?: Fee;
+  fees?: Fee[];
 }
 
 export interface Order {
