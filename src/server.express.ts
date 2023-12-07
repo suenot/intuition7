@@ -38,8 +38,9 @@ const log = debug("index");
     // const exchangePairsActive = _.filter(exchangePairs, pair => pair.active === true); // TODO: не работает, так как в store нет active
 
   // Сбор ордербуков, тиков, свечей, трейдов вебсокетами
-  // parseOrderBooks({exchangeIds, pairIds});
   parseTrades({exchangeIds, pairIds});
+
+  parseOrderBooks({exchangeIds, pairIds});
   // parseCandles({exchangeIds, pairIds});
 
   // Раз в 1 секунду собирать исторические данные
