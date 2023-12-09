@@ -60,8 +60,11 @@ export interface Order {
   amount: number,
   type: string,
   total: number,
-  timestampFounded?: number,
-  userId?: string,
+  sum: number,
+  percent?: number, // процент "стенки" от общей стороны сткана
+  percentSum?: number, // процент для отрисовки так называемого "крокодила" (объема по нарастанию, где последний элемент имеет 100%)
+  users?: User[], // мы в стакане видем склееные ордера многих пользователей, поэтому массив
+  timestampFounded?: number, // время нахождения стенки в стакане
   strategyId?: string,
 }
 
@@ -73,8 +76,16 @@ export interface OrderBook {
   pairId: string,
   baseId: string,
   quoteId: string,
-  data: Order[],
+  bids: Order[],
+  asks: Order[],
   trades?: any[],
+  spread: number,
+  spreadPercent: number,
+  sum: number,
+  bidsSum: number,
+  asksSum: number,
+  bestBidPrice: number,
+  bestAskPrice: number,
 }
 
 export interface StoreOrderBooksBase {
@@ -108,6 +119,7 @@ export interface Trade { // TODO: объединить с Order или нет?
 export interface User {
   id: string,
   name: string,
+  avatar: string,
 }
 
 export interface Strategy {

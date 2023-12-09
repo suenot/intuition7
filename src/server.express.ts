@@ -8,6 +8,8 @@ import { parseTrades } from "./parseTrades";
 import { parseCandles } from "./parseCandles";
 import debug from "debug";
 import _ from "lodash";
+import { OrderBook } from './types';
+
 const log = debug("index");
 
 (async () => {
@@ -54,6 +56,11 @@ const log = debug("index");
 
 })();
 
+const reverseAsks = (orderBook: OrderBook) => {
+  orderBook.asks = orderBook.asks.reverse();
+  return orderBook;
+}
+
 const app = express()
   .use(cors())
   .get("/ping", (req: any, res: any) => {
@@ -79,8 +86,11 @@ const app = express()
     const { exchange, base, quote } = req.query;
     log("orderbook", exchange, base, quote);
     if (exchange && base && quote) {
-      res.json(store.orderBooksByBase?.[base]?.[quote]?.[exchange] || []);
+      var orderBook = store.orderBooksByBase?.[base]?.[quote]?.[exchange] || {};
+      orderBook = reverseAsks(orderBook);
+      res.json(orderBook);
     } else if (base && quote) {
+      // TODO: пока без reverseAsks, так как тут словари в словаре
       res.json(store.orderBooksByBase?.[base]?.[quote] || {});
     } else if (base) {
       res.json(store.orderBooksByBase?.[base] || {});
