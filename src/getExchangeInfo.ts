@@ -12,6 +12,8 @@ export async function getExchangeInfo(exchangeId: string): Promise<Exchange | nu
       id: exchange.id,
       name: exchange.name,
       url: exchange.urls.www,
+      avatar: exchange?.urls?.logo,
+      urls: exchange.urls,
       version: exchange.version,
       active: false,
       pairs: {},

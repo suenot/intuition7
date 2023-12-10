@@ -2,6 +2,8 @@ import ccxt from "ccxt";
 import _ from "lodash";
 import debug from "debug";
 import { Trade as CcxtTrade, TradeSubscription as CcxtTradeSubscription } from "./ccxtTypes";
+import { Trade } from "./types";
+import { tradeCcxtToCore } from "./tradesCcxtToCore/tradesCcxtToCore";
 import { upsertTrades } from "./db/db";
 import { sleep } from "./sleep";
 const log = debug("parseTrades");
@@ -28,11 +30,15 @@ export const parseTradesOneExchange = async ({exchangeId, pairIds}: {exchangeId:
       } else {
         try {
           // const pairIds = _.filter(store.pairs, pair => (pair. === exchangeId && pair.active === true))
-          const tradeCcxt: CcxtTradeSubscription[] = await exchangeInstance.watchTradesForSymbols(pairIds);
-          log({tradeCcxt});
-          // const trade = tradeCcxtToCore({tradeCcxt, exchangeId});
-          // log({trade});
-          // upsertTrades(trade);
+          const tradesCcxt: CcxtTradeSubscription[] = await exchangeInstance.watchTradesForSymbols(pairIds);
+          log({tradesCcxt});
+          const trades: Trade[] = [];
+          for (const tradeCcxt of tradesCcxt) {
+            const trade = tradeCcxtToCore({tradeCcxt, exchangeId});
+            log({trade});
+            trades.push(trade);
+          }
+          upsertTrades({trades});
         } catch (e) { log(e) };
       }
     }

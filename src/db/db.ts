@@ -141,6 +141,10 @@ export const saveOrderBookHistory = async (orderBook: OrderBook) => {
 
 export const upsertTrades = async ({trades}: {trades: Trade[]}) => {
   log('upsertTrades', {trades});
+  for (const trade of trades) {
+    if (!store.trades[trade.instrumentId]) store.trades[trade.instrumentId] = [];
+    store.trades[trade.instrumentId].push(trade);
+  }
   return trades;
 }
 

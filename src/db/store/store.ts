@@ -20,8 +20,8 @@ export const store: Store = {
   orderBooksByBase: {},
   orderBooksHistory: {},
   orderBooksHistoryByBase: {},
-  trades: [],
-  candles: [],
+  trades: {},
+  candles: {},
   exchangesInstances: {},
 }
 

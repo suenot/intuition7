@@ -41,7 +41,6 @@ const log = debug("index");
 
   // Сбор ордербуков, тиков, свечей, трейдов вебсокетами
   parseTrades({exchangeIds, pairIds});
-
   parseOrderBooks({exchangeIds, pairIds});
   // parseCandles({exchangeIds, pairIds});
 
@@ -167,7 +166,11 @@ const app = express()
       upsertPair({ dbs: ['store'], pair: {...store.pairs[id], active: JSON.parse(active)}});
     }
   })
-  .get("/trades", () => store.trades)
+  .get("/trades", (req: any, res: any) => {
+    // TODO: выдавать ошибку, если пары не существует
+    const { exchange, base, quote } = req.query;
+    res.json( store.trades[`${base}/${quote}/${exchange}`] );
+  })
   .get("/candles", () => store.candles)
   .get("/users", () => store.users)
   .get("/users/:id", (req: any, res: any) => {

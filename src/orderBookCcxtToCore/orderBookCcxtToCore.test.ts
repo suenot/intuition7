@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import { OrderBook as CcxtOrderBook, OrderBookSubscription as CcxtOrderBookSubscription } from '../ccxtTypes';
 import { OrderBook } from '../types';
 
+// TODO: тест устарел, нужно обновить
 // Sample CCXT Orderbook data
 const sampleCcxtOrderbook: CcxtOrderBookSubscription = {
   asks: [
