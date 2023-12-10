@@ -259,6 +259,22 @@ export interface Transaction {
   fee: Fee;
 }
 
+interface ClusterPoint {
+  price: number;
+  volume: number;
+  percent: number;
+  timestampFounded?: number; // время нахождения интересного события
+  // TODO: может еще стоит записать время жизни стенки? я так для сигналов раньше делал
+  labelsId?: string[]; // чтобы отмечать стенки и интересные позиции
+}
+
+interface Cluster extends Candle {
+  bestAsk?: number; // Нужно для синхронизации со стаканом
+  bestBid?: number;
+  spreadPrice?: number;
+  clusterPoints?: ClusterPoint[];
+}
+
 export interface Store {
   modules: Dictionary<Module>,
   exchanges: Dictionary<Exchange>,
@@ -274,6 +290,6 @@ export interface Store {
   signals: Dictionary<Signal>,
   bots: Dictionary<Bot>,
   trades: Dictionary<Trade[]>,
-  candles: Dictionary<Candle>,
+  candles: Dictionary<Candle[]>,
   exchangesInstances: Dictionary<any>,
 }
