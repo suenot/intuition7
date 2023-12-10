@@ -133,15 +133,16 @@ const app = express()
 
   // })
   .get("/instruments", (req: any, res: any) => {
-    const { id, active } = req.query;
-    if (id && (active === 'true' || active === 'false')) {
-      upsertInstrument({ dbs: ['store'], instrument: {...store.instruments[id], active: JSON.parse(active)}});
+    const { instrumentId, exchangeId, active } = req.query;
+    if (instrumentId && (active === 'true' || active === 'false')) {
+      upsertInstrument({ dbs: ['store'], instrument: {...store.instruments[instrumentId], active: JSON.parse(active)}});
+    } else if (instrumentId) {
+      res.json(store.instruments[instrumentId])
+    } else if (exchangeId) {
+      // TODO: возвращать инструменты по одной бирже
     } else {
-      if (id) {
-        return store.instruments[id];
-      }
+      res.json(store.instruments)
     }
-    return store.instruments;
   })
   // .get("/pairs", (context) => store.pairs)
   .get("/pairs", (req: any, res: any) => {
