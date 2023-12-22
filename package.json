@@ -3,7 +3,7 @@
   "version": "1.0.50",
   "type": "module",
   "scripts": {
-    "test": "jest",
+    "test": "jest --silent=false",
     "dev:bun:elysia": "DEBUG=* bun run --watch src/server.elysia.ts",
     "prod:bun:elysia": "DEBUG=* bun run src/server.elysia.ts",
     "dev:node:fastify": "DEBUG=* nodemon --experimental-specifier-resolution=node ./src/server.fastify.ts",

@@ -4,6 +4,7 @@ const config: Config.InitialOptions = {
   preset: "ts-jest",
   testEnvironment: "node",
   verbose: true,
-  automock: true,
+  silent: false,
+  automock: false, // jest.unmock('./path_to_module_to_be_unmocked');
 }
 export default config
