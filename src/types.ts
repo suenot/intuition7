@@ -210,6 +210,23 @@ export interface Trade {
   fees?: Fee[];
 }
 
+// чем tick отличается от candle?
+// тик — это любое единичное изменение или движение котировки в ту или другую сторону. Может меняться на один пункт и более.
+// но по мне это просто свечка с очень маленьким таймфреймом (0.2-1 секунда, может даже 5 секунд, но если сдвига цены не было, то не сохраняем данные)
+// export interface Tick {
+//   timestampStart: number,
+//   timestampEnd: number,
+//   high: number,
+//   low: number,
+//   volume: number,
+//   count: number,
+//   // buyVolume: number,
+//   // buyCount: number,
+//   // sellVolume: number,
+//   // sellCount: number,
+//   // TODO: meta tick: объемые по биржам, отображать на какой бирже произошло больше всего сделок
+// }
+
 export interface User {
   id: string,
   name: string,
@@ -235,13 +252,62 @@ export interface Bot {
   name: string,
 }
 
+// Timeframes names
+// '0.2s' - fast ticks
+// '1s' - ticks
+// '1m'
+// '3m'
+// '5m'
+// '15m',
+// '30m',
+// '1h'
+// '2h'
+// '4h'
+// '6h'
+// '8h'
+// '12h',
+// '1d'
+// '3d'
+// '1w'
+// '1M'
+export interface Timeframe {
+  id: string,
+  name: string,
+  milliseconds: number,
+}
+
 export interface Candle {
-  timestamp: number,
+  timestamp?: number,
+  timestampStart: number,
+  timestampEnd: number,
+  timeframe: number, // number is universal
+  timeframeId?: string,
+  timeframeName?: string,
+  status?: 'open' | 'closed' | string,
   open: number,
   high: number,
   low: number,
   close: number,
   volume: number,
+  // Heikin-Ashi
+  xClose?: number, // (Open+High+Low+Close)/4 - The average price of the current bar.
+  xOpen?: number, // [xOpen(Previous Bar) + xClose(Previous Bar)]/2 -Midpoint of the previous bar.
+  xHigh?: number, // Max(High, xOpen, xClose) - Highest value in the set.
+  xLow?: number, // Min(Low, xOpen, xClose) - Lowest value in the set.
+  // counts
+  count?: number,
+  buyCount?: number,
+  sellCount?: number,
+  // volumes
+  buyVolume?: number,
+  sellVolume?: number,
+  // TODO: meta exchange (единая)
+  // cluster
+  // Нужно для синхронизации со стаканом
+  bestAsk?: number;
+  bestBid?: number;
+  spreadPrice?: number;
+  clusterPoints?: ClusterPoint[];
 }
 
 export interface Transaction {
@@ -259,21 +325,29 @@ export interface Transaction {
   fee: Fee;
 }
 
+interface Message {
+  id: string;
+  text: string;
+  type: 'info' | 'warning' | 'error' | string;
+  timestamp: number;
+}
+
 interface ClusterPoint {
   price: number;
   volume: number;
   percent: number;
   timestampFounded?: number; // время нахождения интересного события
-  // TODO: может еще стоит записать время жизни стенки? я так для сигналов раньше делал
+  timestampLifeTime?: number;
   labelsId?: string[]; // чтобы отмечать стенки и интересные позиции
+  messagesId?: string[]; // чтобы отмечать стенки и интересные позиции
 }
 
-interface Cluster extends Candle {
-  bestAsk?: number; // Нужно для синхронизации со стаканом
-  bestBid?: number;
-  spreadPrice?: number;
-  clusterPoints?: ClusterPoint[];
-}
+// interface Cluster extends Candle {
+//   bestAsk?: number; // Нужно для синхронизации со стаканом
+//   bestBid?: number;
+//   spreadPrice?: number;
+//   clusterPoints?: ClusterPoint[];
+// }
 
 export interface Store {
   modules: Dictionary<Module>,
