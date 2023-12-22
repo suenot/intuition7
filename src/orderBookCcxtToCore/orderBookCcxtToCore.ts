@@ -68,7 +68,7 @@ export const orderBookCcxtToCore = ({orderBookCcxt, exchangeId}: {orderBookCcxt:
       percent: 0, // replace with actual logic
       percentSum: 0, // replace with actual logic
       users: [], // replace with actual logic
-      timestampFounded: +new Date(), // replace with actual logic
+      timestampFounded: undefined, // replace with actual logic
       strategyId: undefined, // replace with actual logic
     };
   });
