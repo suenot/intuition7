@@ -1,4 +1,4 @@
-import { Trade, Candle } from '../types';
+import { Trade, Candle, Dictionary } from '../types';
 import { store } from "../db/store/store";
 
 // export interface Trade {
@@ -111,6 +111,6 @@ const getTimeframeMilliseconds = (timeframe: string): number => {
 
 // Сама задача:
 // Нужно написать функцию или набор функций на typescript, которая постоянно принимает trade и формирует свечки на их основе (словарь со свечками под каждую торговую пару лежит в глобальной переменной)
-const tradesToCandles = (trades: Trade[]): void => {
+export const tradesToCandles = (trades: Trade[]): void => {
  // Здесь
 }
