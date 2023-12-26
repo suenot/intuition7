@@ -6,18 +6,20 @@ import _ from 'lodash';
 
 // split by 10 items or less from demoTrades with lodash
 const demoTicks: Trade[][] = _.chunk(demoTrades, 10);
+console.log({demoTicks});
 
 describe('tradesToCandles', () => {
-  it.only('should update or create a new 1-minute candle', async () => {
+  it('should update or create a new 1-minute candle', async () => {
     for (const demoTick of demoTicks) {
       const tick: Trade[] = demoTick;
-      const result = tradesToCandle(tick, 'tick');
-      console.log(result);
+      const candle = tradesToCandle(tick, 'tick');
+      console.log({candle});
       await sleep(1000);
     }
     expect(true).toBe(true);
   }, 60000);
-  it('ticks candles to 1m candle', async () => {
-    expect(true).toBe(true);
-  });
+
+  // it('ticks candles to 1m candle', async () => {
+  //   expect(true).toBe(true);
+  // });
 });

@@ -310,6 +310,14 @@ export const candlesToCandle = (candles: Candle[], timeframeNameFrom: string, ti
 // Сама задача:
 // Нужно написать функцию или набор функций на typescript, которая постоянно принимает trade и формирует свечки на их основе (словарь со свечками под каждую торговую пару лежит в глобальной переменной)
 export const tradesToCandle = (tick: Trade[], timeframeName: string): Candle => {
+  const firstTrade = tick[0];
+  const lastTrade = tick[tick.length - 1];
+  const instrumentTimeframeId = `${firstTrade.pairId}/${firstTrade.exchangeId}/${timeframeName}`;
+  const id = instrumentTimeframeId;
+  
+  if (!store.candles) store.candles = {};
+  if (!store.candles[id]) store.candles[id] = [];
+
   // const timeframe = getTimeframeMilliseconds('tick');
   // const timeframeId = 'tick';
   // const timeframeName = 'tick';
@@ -317,10 +325,7 @@ export const tradesToCandle = (tick: Trade[], timeframeName: string): Candle => 
   const timeframeId = timeframeName;
   const status = 'closed'; // if tick then closed, if minute then look for timestampEnd
 
-  const firstTrade = tick[0];
-  const lastTrade = tick[tick.length - 1];
-  const instrumentTimeframeId = `${firstTrade.pairId}/${firstTrade.exchangeId}/${timeframeName}`;
-  const id = instrumentTimeframeId;
+
   const exchangeId = firstTrade.exchangeId;
   const instrumentId = firstTrade.instrumentId;
   const pairId = firstTrade.pairId;
