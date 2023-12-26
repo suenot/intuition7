@@ -141,16 +141,17 @@ export const getNextTimeframe = (timeframe: string): string => {
   return timeframes[timeframe] || '';
 }
 
-// TODO: нужно обновлять свечку, либо создавать новую (а не просто добавлять в список)
 export const upsertCandle = (candle: Candle): void => {
   if (!store.candles) store.candles = {};
   if (!store.candles[candle.id]) store.candles[candle.id] = [];
-  store.candles[candle.id].push(candle);
+  if (candle.status === 'closed') {
+    store.candles[candle.id].push(candle);
+  } else if (candle.status === 'open') {
+    store.candles[candle.id][store.candles[candle.id].length - 1] = candle;
+  }
 }
 
-
-// TODO: fn: Generate candle from candles for next timeframe
-
+// TODO: нужно понять какой брать диапазон свечек timeframeNameFrom необходимый для timeframeNameTo
 export const candlesToCandle = (candles: Candle[], timeframeNameFrom: string, timeFrameNameTo: string): Candle => {
   const timeframeFrom = getTimeframeMilliseconds(timeframeNameFrom);
   const timeframeTo = getTimeframeMilliseconds(timeFrameNameTo);
@@ -314,7 +315,7 @@ export const tradesToCandle = (tick: Trade[], timeframeName: string): Candle => 
   const lastTrade = tick[tick.length - 1];
   const instrumentTimeframeId = `${firstTrade.pairId}/${firstTrade.exchangeId}/${timeframeName}`;
   const id = instrumentTimeframeId;
-  
+
   if (!store.candles) store.candles = {};
   if (!store.candles[id]) store.candles[id] = [];
 

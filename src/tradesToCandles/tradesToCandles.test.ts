@@ -1,4 +1,4 @@
-import { tradesToCandle, candlesToCandle } from './tradesToCandles';
+import { tradesToCandle, candlesToCandle, upsertCandle } from './tradesToCandles';
 import { Trade } from '../types';
 import { demoTrades } from './data';
 import { sleep } from '../sleep';
@@ -13,6 +13,7 @@ describe('tradesToCandles', () => {
     for (const demoTick of demoTicks) {
       const tick: Trade[] = demoTick;
       const candle = tradesToCandle(tick, 'tick');
+      upsertCandle(candle);
       console.log({candle});
       await sleep(1000);
     }
