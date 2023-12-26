@@ -119,9 +119,9 @@ const getTimeframeMilliseconds = (timeframe: string): number => {
 
 export const getNextTimeframe = (timeframe: string): string => {
   const timeframes: Dictionary<string> = {
+    'tick': '1m',
     // 'tick': '0.2s',
     // '0.2s': '1s',
-    'tick': '1m',
     // '1s': '1m',
     // '1m': '3m',
     // '3m': '5m',
@@ -141,10 +141,175 @@ export const getNextTimeframe = (timeframe: string): string => {
   return timeframes[timeframe] || '';
 }
 
+// TODO: нужно обновлять свечку, либо создавать новую (а не просто добавлять в список)
+export const upsertCandle = (candle: Candle): void => {
+  if (!store.candles) store.candles = {};
+  if (!store.candles[candle.id]) store.candles[candle.id] = [];
+  store.candles[candle.id].push(candle);
+}
+
+
+// TODO: fn: Generate candle from candles for next timeframe
+
+export const candlesToCandle = (candles: Candle[], timeframeNameFrom: string, timeFrameNameTo: string): Candle => {
+  const timeframeFrom = getTimeframeMilliseconds(timeframeNameFrom);
+  const timeframeTo = getTimeframeMilliseconds(timeFrameNameTo);
+  const timeframeId = timeFrameNameTo;
+  const timeframeName = timeFrameNameTo;
+  // 
+  const status = 'closed'; // if tick then closed, if minute then look for timestampEnd
+
+  const firstCandle = candles[0];
+  const lastCandle = candles[candles.length - 1];
+  const instrumentTimeframeId = `${firstCandle.pairId}/${firstCandle.exchangeId}/${timeframeName}`;
+  const id = instrumentTimeframeId;
+  const exchangeId = firstCandle.exchangeId;
+  const instrumentId = firstCandle.instrumentId;
+  const pairId = firstCandle.pairId;
+  const baseId = firstCandle.baseId;
+  const quoteId = firstCandle.quoteId;
+  const timestamp = firstCandle.timestamp;
+  const timestampStart = firstCandle.timestamp;
+  const timestampEnd = lastCandle.timestamp;
+
+  const open = candles[0].open;
+  const high = candles.reduce((acc, candle) => Math.max(acc, candle.high), 0);
+  const low = candles.reduce((acc, candle) => Math.min(acc, candle.low), Infinity);
+  const close = candles[candles.length - 1].close;
+
+  const count = candles.reduce((acc, candle) => acc + candle.count, 0);
+  const buyCount = candles.reduce((acc, candle) => acc + candle.buyCount, 0);
+  const sellCount = candles.reduce((acc, candle) => acc + candle.sellCount, 0);
+  const buyVolume = candles.reduce((acc, candle) => acc + candle.buyVolume, 0);
+  const sellVolume = candles.reduce((acc, candle) => acc + candle.sellVolume, 0);
+  const volume = candles.reduce((acc, candle) => acc + candle.volume, 0);
+
+  const bestAsk = candles.reduce((acc, candle) => Math.min(acc, candle.bestAsk), Infinity);
+  const bestBid = candles.reduce((acc, candle) => Math.max(acc, candle.bestBid), 0);
+  const spreadPrice = bestBid - bestAsk;
+  // cluster points это массив цен от низкой к высокой, где просуммирован весь объем свечки по каждой кон
+  const clusterPoints = candles.reduce((acc: any, candle: any) => {
+    if (!acc[candle.price]) acc[candle.price] = 0;
+    acc[candle.price] += candle.amount;
+    return acc;
+  }, {});
+  const change = close - open;
+  const changePercent = (close - open) / open * 100;
+  const changePercentAbs = Math.abs(changePercent);
+
+  const countDisbalance = buyCount - sellCount;
+  const countDisbalancePercent = (buyCount - sellCount) / count * 100;
+  const countDisbalancePercentAbs = Math.abs(countDisbalancePercent);
+
+  const volumeDisbalance = buyVolume - sellVolume;
+  const volumeDisbalancePercent = (buyVolume - sellVolume) / volume * 100;
+  const volumeDisbalancePercentAbs = Math.abs(volumeDisbalancePercent);
+
+  // Средневзвешенная цена покупки — это средняя цена покупки, весом которых является объем соответствующих сделок на покупку
+  const weightedAverageBuyPrice = buyVolume / buyCount;
+  // Средневзвешенная цена продажи — это средняя цена продажи, весом которых является объем соответствующих сделок на продажу
+  const weightedAverageSellPrice = sellVolume / sellCount;
+  // Средневзвешенная цена — это средняя цена сделок, весом которых является объем сделок
+  const weightedAveragePrice = volume / count;
+
+  // Медианная цена покупки от
+  const medianBuyPrice = candles[Math.floor(buyCount / 2)]?.medianBuyPrice;
+  // Медианная цена продажи
+  const medianSellPrice = candles[Math.floor(sellCount / 2)]?.medianSellPrice;
+  // Медианная цена
+  const medianPrice = candles[Math.floor(count / 2)]?.medianPrice;
+
+  // Стандартное отклонение от медианных цен
+  const priceStandardDeviation = Math.sqrt(candles.reduce((acc, candle) => acc + Math.pow(candle.medianPrice - medianPrice, 2), 0) / count);
+
+    // calculate Heikin-Ashi
+  var xClose;
+  var xOpen;
+  var xHigh;
+  var xLow;
+  if (store.candles[id].length > 1) {
+    // first previous candle with status Closed
+    const previousCandle: Candle = store.candles[id].filter(candle => candle.status === 'closed')[store.candles[id].length - 1];
+    if (previousCandle.xClose === undefined || previousCandle.xOpen === undefined) {
+      previousCandle.xClose = previousCandle.close;
+      previousCandle.xOpen = previousCandle.open;
+    }
+    xClose = (open + high + low + close) / 4;
+    xOpen = (previousCandle?.xOpen + previousCandle?.xClose) / 2;
+    xHigh = Math.max(high, xOpen, xClose);
+    xLow = Math.min(low, xOpen, xClose);
+  }
+
+
+  var candle: Candle = {
+    id,
+    exchangeId,
+    instrumentId,
+    pairId,
+    baseId,
+    quoteId,
+    //
+    timestamp,
+    timestampStart,
+    timestampEnd,
+    timeframe: timeframeTo,
+    timeframeId,
+    timeframeName,
+    status,
+    open,
+    high,
+    low,
+    close,
+    // Heikin-Ashi
+    xClose,
+    xOpen,
+    xHigh,
+    xLow,
+
+    // counts
+    count,
+    buyCount,
+    sellCount,
+    // volumes
+    buyVolume,
+    sellVolume,
+    volume,
+    // cluster
+    // Нужно для синхронизации со стаканом
+    bestAsk,
+    bestBid,
+    spreadPrice,
+    clusterPoints,
+    // orders,
+
+    // new fields
+    change,
+    changePercent,
+    changePercentAbs,
+    countDisbalance,
+    countDisbalancePercent,
+    countDisbalancePercentAbs,
+    volumeDisbalance,
+    volumeDisbalancePercent,
+    volumeDisbalancePercentAbs,
+    weightedAverageBuyPrice,
+    weightedAverageSellPrice,
+    weightedAveragePrice,
+    medianBuyPrice,
+    medianSellPrice,
+    medianPrice,
+    priceStandardDeviation,
+  };
+
+  return candle;
+
+}
+
+
 
 // Сама задача:
 // Нужно написать функцию или набор функций на typescript, которая постоянно принимает trade и формирует свечки на их основе (словарь со свечками под каждую торговую пару лежит в глобальной переменной)
-export const tradesToCandles = (tick: Trade[], timeframeName: string): void => {
+export const tradesToCandle = (tick: Trade[], timeframeName: string): Candle => {
   // const timeframe = getTimeframeMilliseconds('tick');
   // const timeframeId = 'tick';
   // const timeframeName = 'tick';
@@ -299,9 +464,11 @@ export const tradesToCandles = (tick: Trade[], timeframeName: string): void => {
     priceStandardDeviation,
   };
 
-  if (!store.candles) store.candles = {};
-  if (!store.candles[id]) store.candles[id] = [];
-  store.candles[id].push(candle);
+  return candle;
+  // TODO: запись вынести в отдельную функцию
+  // if (!store.candles) store.candles = {};
+  // if (!store.candles[id]) store.candles[id] = [];
+  // store.candles[id].push(candle);
 
   // run next tick if exist based on candles
   // const nextTimeframeName = getNextTimeframe(timeframeName);

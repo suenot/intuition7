@@ -287,13 +287,13 @@ export interface Candle {
   baseId: string,
   quoteId: string,
   //
-  timestamp?: number,
+  timestamp: number,
   timestampStart: number,
   timestampEnd: number,
   timeframe: number, // number is universal
-  timeframeId?: string,
-  timeframeName?: string,
-  status?: 'open' | 'closed' | string,
+  timeframeId: string,
+  timeframeName: string,
+  status: 'open' | 'closed' | string,
   open: number,
   high: number,
   low: number,
@@ -305,18 +305,18 @@ export interface Candle {
   xHigh?: number, // Max(High, xOpen, xClose) - Highest value in the set.
   xLow?: number, // Min(Low, xOpen, xClose) - Lowest value in the set.
   // counts
-  count?: number,
-  buyCount?: number,
-  sellCount?: number,
+  count: number,
+  buyCount: number,
+  sellCount: number,
   // volumes
-  buyVolume?: number,
-  sellVolume?: number,
+  buyVolume: number,
+  sellVolume: number,
   // TODO: meta exchange (единая)
   // cluster
   // Нужно для синхронизации со стаканом
-  bestAsk?: number;
-  bestBid?: number;
-  spreadPrice?: number;
+  bestAsk: number;
+  bestBid: number;
+  spreadPrice: number;
   clusterPoints?: ClusterPoint[];
   orders?: Order[];
 
