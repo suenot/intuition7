@@ -1,7 +1,6 @@
 {
   "name": "app",
   "version": "1.0.50",
-  "type": "module",
   "scripts": {
     "test": "jest --silent=false",
     "dev:bun:elysia": "DEBUG=* bun run --watch src/server.elysia.ts",
