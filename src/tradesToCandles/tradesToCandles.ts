@@ -1,5 +1,6 @@
 import { Trade, Candle, Dictionary } from '../types';
 import { store } from "../db/store/store";
+import _ from 'lodash';
 
 // export interface Trade {
 //   id: string,
@@ -359,11 +360,34 @@ export const tradesToCandle = (tick: Trade[], timeframeName: string): Candle => 
   const bestBid = tick.reduce((acc, trade) => Math.max(acc, trade.price), 0);
   const spreadPrice = (bestBid + bestAsk) / 2;
   // cluster points это массив цен от низкой к высокой, где просуммирован весь объем свечки по каждой конкретной цене
-  const clusterPoints = tick.reduce((acc: any, trade: any) => {
+  const clusterPointsObject = tick.reduce((acc: any, trade: any) => {
     if (!acc[trade.price]) acc[trade.price] = 0;
     acc[trade.price] += trade.amount;
     return acc;
   }, {});
+  //
+  // interface ClusterPoint {
+  //   price: number;
+  //   volume: number;
+  //   percent: number;
+  //   timestampFounded?: number; // время нахождения интересного события
+  //   timestampLifeTime?: number;
+  //   labelsId?: string[]; // чтобы отмечать стенки и интересные позиции
+  //   messagesId?: string[]; // чтобы отмечать стенки и интересные позиции
+  // }
+  
+  // clusterPoints to interface ClusterPoint с помощьд библиотеки lodash
+  // object to array + add  fields from ClusterPoint
+  const clusterPointsUnsorted = _.map(clusterPointsObject, (volume, price) => {
+    const percent = volume / tick.reduce((acc, trade) => acc + trade.amount, 0) * 100;
+    return {
+      price: +price,
+      volume,
+      percent,
+    };
+  });
+  // sort by price from low to high
+  const clusterPoints = _.sortBy(clusterPointsUnsorted, 'price');
 
   // calculate Heikin-Ashi
   var xClose;
