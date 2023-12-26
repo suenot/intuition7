@@ -193,19 +193,22 @@ export interface StoreOrderBooksHistoryExchange {
 
 export interface Trade {
   id: string,
+  instrumentId: string;
+  exchangeId: string;
+  pairId: string;
+  baseId: string;
+  quoteId: string;
+  //
   price: number,
   amount: number,
   type?: string, // 'market', 'limit', ... or undefined/None/null
   total: number,
   timestamp: number,
-  info: any; // the original decoded JSON as is
+  info?: any; // the original decoded JSON as is
   order?: string; // string order id or undefined/None/null
   side: 'buy' | 'sell' | string;            // direction of the trade, 'buy' or 'sell'
   takerOrMaker?: 'taker' | 'maker' | string; // string, 'taker' or 'maker'
   cost: number; // total cost (including fees), `price * amount`
-  pairId: string; // symbol in CCXT format
-  instrumentId: string;
-  exchangeId: string;
   fee?: Fee;
   fees?: Fee[];
 }
@@ -277,6 +280,13 @@ export interface Timeframe {
 }
 
 export interface Candle {
+  id: string, // "BTC/USDT/binance/1m"
+  exchangeId: string,
+  instrumentId: string,
+  pairId: string,
+  baseId: string,
+  quoteId: string,
+  //
   timestamp?: number,
   timestampStart: number,
   timestampEnd: number,
