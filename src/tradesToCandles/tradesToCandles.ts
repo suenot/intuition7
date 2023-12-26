@@ -206,6 +206,9 @@ export const tradesToCandles = (tick: Trade[]): void => {
   // Стандартное отклонение цены в долях — это мера волатильности, показывающая, насколько сильно цена акции изменяется за период в процентах
   const priceStandardDeviation = Math.sqrt(tick.reduce((acc, trade) => acc + Math.pow(trade.price - weightedAveragePrice, 2), 0) / count);
 
+  // Получить ордербук на эту пару ???
+  // const orders = 
+
 
   var candle: Candle = {
     id,
@@ -246,6 +249,7 @@ export const tradesToCandles = (tick: Trade[]): void => {
     bestBid,
     spreadPrice,
     clusterPoints,
+    // orders,
 
     // new fields
     change,
