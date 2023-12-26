@@ -151,7 +151,7 @@ export const tradesToCandles = (tick: Trade[]): void => {
     acc[trade.price] += trade.amount;
     return acc;
   }, {});
-  const candle = {
+  var candle: Candle = {
     id: candleId,
     exchangeId: firstTrade.exchangeId,
     instrumentId: firstTrade.instrumentId,
@@ -173,10 +173,10 @@ export const tradesToCandles = (tick: Trade[]): void => {
 
     // Heikin-Ashi
     // Heikin-Ashi is a candlestick pattern that uses price data from the current open-high-low-close, as well as the current and prior Heikin-Ashi candles, to create a composite candlestick. The resulting candlestick filters out some noise in an effort to better capture the trend.
-    xClose: undefined , // (Open+High+Low+Close)/4 - The average price of the current bar.
-    xOpen: undefined, // [xOpen(Previous Bar) + xClose(Previous Bar)]/2 -Midpoint of the previous bar.
-    xHigh?: undefined, // Max(High, xOpen, xClose) - Highest value in the set.
-    xLow?: undefined, // Min(Low, xOpen, xClose) - Lowest value in the set.
+    // xClose: -1 , // (Open+High+Low+Close)/4 - The average price of the current bar.
+    // xOpen: -1, // [xOpen(Previous Bar) + xClose(Previous Bar)]/2 -Midpoint of the previous bar.
+    // xHigh: -1, // Max(High, xOpen, xClose) - Highest value in the set.
+    // xLow: -1, // Min(Low, xOpen, xClose) - Lowest value in the set.
     // counts
     count,
     buyCount,
@@ -193,5 +193,20 @@ export const tradesToCandles = (tick: Trade[]): void => {
     spreadPrice,
     clusterPoints,
   };
+
+  // calculate Heikin-Ashi
+  // TODO: перенести наверх
+  if (store.candles[candleId].length > 1) {
+    const previousCandle: Candle = store.candles[candleId][store.candles[candleId].length - 1];
+    if (previousCandle.xClose === undefined || previousCandle.xOpen === undefined) {
+      previousCandle.xClose = previousCandle.close;
+      previousCandle.xOpen = previousCandle.open;
+    }
+    candle.xClose = (candle.open + candle.high + candle.low + candle.close) / 4;
+    candle.xOpen = (previousCandle?.xOpen + previousCandle?.xClose) / 2;
+    candle.xHigh = Math.max(candle.high, candle.xOpen, candle.xClose);
+    candle.xLow = Math.min(candle.low, candle.xOpen, candle.xClose);
+  }
+
   store.candles[candleId].push(candle);
 }
