@@ -123,6 +123,7 @@ export const tradesToCandles = (tick: Trade[]): void => {
   const timeframe = getTimeframeMilliseconds('tick');
   const timeframeId = 'tick';
   const timeframeName = 'tick';
+  const status = 'closed'; // if tick then closed, if minute then look for timestampEnd
 
   const firstTrade = tick[0];
   const lastTrade = tick[tick.length - 1];
@@ -165,7 +166,8 @@ export const tradesToCandles = (tick: Trade[]): void => {
   var xHigh;
   var xLow;
   if (store.candles[id].length > 1) {
-    const previousCandle: Candle = store.candles[id][store.candles[id].length - 1];
+    // first previous candle with status closed
+    const previousCandle: Candle = store.candles[id].filter(candle => candle.status === 'closed')[store.candles[id].length - 1];
     if (previousCandle.xClose === undefined || previousCandle.xOpen === undefined) {
       previousCandle.xClose = previousCandle.close;
       previousCandle.xOpen = previousCandle.open;
@@ -224,7 +226,7 @@ export const tradesToCandles = (tick: Trade[]): void => {
     timeframe,
     timeframeId,
     timeframeName,
-    // status?: 'open' | 'closed' | string,
+    status,
     open,
     high,
     low,
