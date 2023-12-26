@@ -152,12 +152,19 @@ export const upsertCandle = (candle: Candle): void => {
 }
 
 // TODO: нужно понять какой брать диапазон свечек timeframeNameFrom необходимый для timeframeNameTo
+// TODO: нужно определить статус свечки
+// TODO: а может быть, что тик попадает в две свечки? Нужно определиться с этим
 export const candlesToCandle = (candles: Candle[], timeframeNameFrom: string, timeFrameNameTo: string): Candle => {
+
+  const timestampCurrent = +Date.now();
+  // Разница между текущим временем и временем последней свечки
+  const diff = timestampCurrent - candles[candles.length - 1].timestampEnd;
+
   const timeframeFrom = getTimeframeMilliseconds(timeframeNameFrom);
   const timeframeTo = getTimeframeMilliseconds(timeFrameNameTo);
   const timeframeId = timeFrameNameTo;
   const timeframeName = timeFrameNameTo;
-  // 
+
   const status = 'closed'; // if tick then closed, if minute then look for timestampEnd
 
   const firstCandle = candles[0];
@@ -187,7 +194,7 @@ export const candlesToCandle = (candles: Candle[], timeframeNameFrom: string, ti
 
   const bestAsk = candles.reduce((acc, candle) => Math.min(acc, candle.bestAsk), Infinity);
   const bestBid = candles.reduce((acc, candle) => Math.max(acc, candle.bestBid), 0);
-  const spreadPrice = bestBid - bestAsk;
+  const spreadPrice = (bestBid + bestAsk) / 2;
   // cluster points это массив цен от низкой к высокой, где просуммирован весь объем свечки по каждой кон
   const clusterPoints = candles.reduce((acc: any, candle: any) => {
     if (!acc[candle.price]) acc[candle.price] = 0;
@@ -350,7 +357,7 @@ export const tradesToCandle = (tick: Trade[], timeframeName: string): Candle => 
 
   const bestAsk = tick.reduce((acc, trade) => Math.min(acc, trade.price), Infinity);
   const bestBid = tick.reduce((acc, trade) => Math.max(acc, trade.price), 0);
-  const spreadPrice = bestBid - bestAsk;
+  const spreadPrice = (bestBid + bestAsk) / 2;
   // cluster points это массив цен от низкой к высокой, где просуммирован весь объем свечки по каждой конкретной цене
   const clusterPoints = tick.reduce((acc: any, trade: any) => {
     if (!acc[trade.price]) acc[trade.price] = 0;
