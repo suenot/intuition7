@@ -45,6 +45,13 @@ import { store } from "../db/store/store";
 // }
 
 // export interface Candle {
+//   id: string, // "BTC/USDT/binance/1m"
+//   exchangeId: string,
+//   instrumentId: string,
+//   pairId: string,
+//   baseId: string,
+//   quoteId: string,
+//   //
 //   timestamp?: number,
 //   timestampStart: number,
 //   timestampEnd: number,
@@ -88,6 +95,7 @@ import { store } from "../db/store/store";
 
 const getTimeframeMilliseconds = (timeframe: string): number => {
   const timeframes: Dictionary<number> = {
+    'tick': 0,
     '0.2s': 200,
     '1s': 1000,
     '1m': 60000,
@@ -109,8 +117,81 @@ const getTimeframeMilliseconds = (timeframe: string): number => {
   return timeframes[timeframe] || 0;
 };
 
+
 // Сама задача:
 // Нужно написать функцию или набор функций на typescript, которая постоянно принимает trade и формирует свечки на их основе (словарь со свечками под каждую торговую пару лежит в глобальной переменной)
-export const tradesToCandles = (trades: Trade[]): void => {
- // Здесь
+export const tradesToCandles = (tick: Trade[]): void => {
+  if (!store.candles) store.candles = {};
+  const open = tick[0].price;
+  const high = tick.reduce((acc, trade) => Math.max(acc, trade.price), 0);
+  const low = tick.reduce((acc, trade) => Math.min(acc, trade.price), Infinity);
+  const close = tick[tick.length - 1].price;
+
+  const count = tick.length;
+  const buyCount = tick.filter(trade => trade.side === 'buy').length;
+  const sellCount = tick.filter(trade => trade.side === 'sell').length;
+  const buyVolume = tick.filter(trade => trade.side === 'buy').reduce((acc, trade) => acc + trade.amount, 0);
+  const sellVolume = tick.filter(trade => trade.side === 'sell').reduce((acc, trade) => acc + trade.amount, 0);
+  const volume = tick.reduce((acc, trade) => acc + trade.amount, 0);
+  const firstTrade = tick[0];
+  const lastTrade = tick[tick.length - 1];
+  const timeframe = 'tick';
+  const instrumentTimeframeId = `${firstTrade.pairId}/${firstTrade.exchangeId}/${timeframe}`;
+  const candleId = `${instrumentTimeframeId}/${firstTrade.timestamp}`;
+  // const candelTimeframe = getTimeframeMilliseconds('tick');
+
+  if (!store.candles[candleId]) store.candles[candleId] = [];
+
+  const bestAsk = tick.reduce((acc, trade) => Math.min(acc, trade.price), Infinity);
+  const bestBid = tick.reduce((acc, trade) => Math.max(acc, trade.price), 0);
+  const spreadPrice = bestBid - bestAsk;
+  // cluster points это массив цен от низкой к высокой, где просуммирован весь объем свечки по каждой конкретной цене
+  const clusterPoints = tick.reduce((acc: any, trade: any) => {
+    if (!acc[trade.price]) acc[trade.price] = 0;
+    acc[trade.price] += trade.amount;
+    return acc;
+  }, {});
+  const candle = {
+    id: candleId,
+    exchangeId: firstTrade.exchangeId,
+    instrumentId: firstTrade.instrumentId,
+    pairId: firstTrade.pairId,
+    baseId: firstTrade.baseId,
+    quoteId: firstTrade.quoteId,
+    //
+    timestamp: firstTrade.timestamp,
+    timestampStart: firstTrade.timestamp,
+    timestampEnd: lastTrade.timestamp,
+    timeframe: 0,
+    timeframeId: 'tick',
+    timeframeName: 'tick',
+    // status?: 'open' | 'closed' | string,
+    open,
+    high,
+    low,
+    close,
+
+    // Heikin-Ashi
+    // Heikin-Ashi is a candlestick pattern that uses price data from the current open-high-low-close, as well as the current and prior Heikin-Ashi candles, to create a composite candlestick. The resulting candlestick filters out some noise in an effort to better capture the trend.
+    xClose: undefined , // (Open+High+Low+Close)/4 - The average price of the current bar.
+    xOpen: undefined, // [xOpen(Previous Bar) + xClose(Previous Bar)]/2 -Midpoint of the previous bar.
+    xHigh?: undefined, // Max(High, xOpen, xClose) - Highest value in the set.
+    xLow?: undefined, // Min(Low, xOpen, xClose) - Lowest value in the set.
+    // counts
+    count,
+    buyCount,
+    sellCount,
+    // volumes
+    buyVolume,
+    sellVolume,
+    volume,
+    // TODO: meta exchange (единая)
+    // cluster
+    // Нужно для синхронизации со стаканом
+    bestAsk,
+    bestBid,
+    spreadPrice,
+    clusterPoints,
+  };
+  store.candles[candleId].push(candle);
 }
