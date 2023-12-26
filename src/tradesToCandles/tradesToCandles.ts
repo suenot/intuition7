@@ -117,12 +117,39 @@ const getTimeframeMilliseconds = (timeframe: string): number => {
   return timeframes[timeframe] || 0;
 };
 
+export const getNextTimeframe = (timeframe: string): string => {
+  const timeframes: Dictionary<string> = {
+    // 'tick': '0.2s',
+    // '0.2s': '1s',
+    'tick': '1m',
+    // '1s': '1m',
+    // '1m': '3m',
+    // '3m': '5m',
+    // '5m': '15m',
+    // '15m': '30m',
+    // '30m': '1h',
+    // '1h': '2h',
+    // '2h': '4h',
+    // '4h': '6h',
+    // '6h': '8h',
+    // '8h': '12h',
+    // '12h': '1d',
+    // '1d': '3d',
+    // '3d': '1w',
+    // '1w': '1M',
+  };
+  return timeframes[timeframe] || '';
+}
+
+
 // Сама задача:
 // Нужно написать функцию или набор функций на typescript, которая постоянно принимает trade и формирует свечки на их основе (словарь со свечками под каждую торговую пару лежит в глобальной переменной)
-export const tradesToCandles = (tick: Trade[]): void => {
-  const timeframe = getTimeframeMilliseconds('tick');
-  const timeframeId = 'tick';
-  const timeframeName = 'tick';
+export const tradesToCandles = (tick: Trade[], timeframeName: string): void => {
+  // const timeframe = getTimeframeMilliseconds('tick');
+  // const timeframeId = 'tick';
+  // const timeframeName = 'tick';
+  const timeframe = getTimeframeMilliseconds(timeframeName);
+  const timeframeId = timeframeName;
   const status = 'closed'; // if tick then closed, if minute then look for timestampEnd
 
   const firstTrade = tick[0];
@@ -166,7 +193,7 @@ export const tradesToCandles = (tick: Trade[]): void => {
   var xHigh;
   var xLow;
   if (store.candles[id].length > 1) {
-    // first previous candle with status closed
+    // first previous candle with status Closed
     const previousCandle: Candle = store.candles[id].filter(candle => candle.status === 'closed')[store.candles[id].length - 1];
     if (previousCandle.xClose === undefined || previousCandle.xOpen === undefined) {
       previousCandle.xClose = previousCandle.close;
@@ -275,4 +302,9 @@ export const tradesToCandles = (tick: Trade[]): void => {
   if (!store.candles) store.candles = {};
   if (!store.candles[id]) store.candles[id] = [];
   store.candles[id].push(candle);
+
+  // run next tick if exist based on candles
+  // const nextTimeframeName = getNextTimeframe(timeframeName);
+  // nextTimeframeName && tradesToCandles(nextTimeframeName);
+
 }
