@@ -176,6 +176,36 @@ export const tradesToCandles = (tick: Trade[]): void => {
     xLow = Math.min(low, xOpen, xClose);
   }
 
+  // new fields
+  const change = close - open;
+  const changePercent = (close - open) / open * 100;
+  const changePercentAbs = Math.abs(changePercent);
+
+  const countDisbalance = buyCount - sellCount;
+  const countDisbalancePercent = (buyCount - sellCount) / count * 100;
+  const countDisbalancePercentAbs = Math.abs(countDisbalancePercent);
+
+  const volumeDisbalance = buyVolume - sellVolume;
+  const volumeDisbalancePercent = (buyVolume - sellVolume) / volume * 100;
+  const volumeDisbalancePercentAbs = Math.abs(volumeDisbalancePercent);
+
+  // Средневзвешенная цена покупки — это средняя цена покупки, весом которых является объем соответствующих сделок на покупку
+  const weightedAverageBuyPrice = buyVolume / buyCount;
+  // Средневзвешенная цена продажи — это средняя цена продажи, весом которых является объем соответствующих сделок на продажу
+  const weightedAverageSellPrice = sellVolume / sellCount;
+  // Средневзвешенная цена — это средняя цена сделок, весом которых является объем сделок
+  const weightedAveragePrice = volume / count;
+
+  // Медианная цена покупки
+  const medianBuyPrice = tick.filter(trade => trade.side === 'buy').sort((a, b) => a.price - b.price)[Math.floor(buyCount / 2)]?.price;
+  // Медианная цена продажи
+  const medianSellPrice = tick.filter(trade => trade.side === 'sell').sort((a, b) => a.price - b.price)[Math.floor(sellCount / 2)]?.price;
+  // Медианная цена
+  const medianPrice = tick.sort((a, b) => a.price - b.price)[Math.floor(count / 2)]?.price;
+
+  // Стандартное отклонение цены в долях — это мера волатильности, показывающая, насколько сильно цена акции изменяется за период в процентах
+  const priceStandardDeviation = Math.sqrt(tick.reduce((acc, trade) => acc + Math.pow(trade.price - weightedAveragePrice, 2), 0) / count);
+
 
   var candle: Candle = {
     id,
@@ -216,6 +246,24 @@ export const tradesToCandles = (tick: Trade[]): void => {
     bestBid,
     spreadPrice,
     clusterPoints,
+
+    // new fields
+    change,
+    changePercent,
+    changePercentAbs,
+    countDisbalance,
+    countDisbalancePercent,
+    countDisbalancePercentAbs,
+    volumeDisbalance,
+    volumeDisbalancePercent,
+    volumeDisbalancePercentAbs,
+    weightedAverageBuyPrice,
+    weightedAverageSellPrice,
+    weightedAveragePrice,
+    medianBuyPrice,
+    medianSellPrice,
+    medianPrice,
+    priceStandardDeviation,
   };
 
   if (!store.candles) store.candles = {};

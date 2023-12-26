@@ -318,6 +318,24 @@ export interface Candle {
   bestBid?: number;
   spreadPrice?: number;
   clusterPoints?: ClusterPoint[];
+
+  // new fields
+  change: number,
+  changePercent: number,
+  changePercentAbs: number,
+  countDisbalance: number,
+  countDisbalancePercent: number,
+  countDisbalancePercentAbs: number,
+  volumeDisbalance: number,
+  volumeDisbalancePercent: number,
+  volumeDisbalancePercentAbs: number,
+  weightedAverageBuyPrice: number,
+  weightedAverageSellPrice: number,
+  weightedAveragePrice: number,
+  medianBuyPrice: number,
+  medianSellPrice: number,
+  medianPrice: number,
+  priceStandardDeviation: number,
 }
 
 export interface Transaction {
