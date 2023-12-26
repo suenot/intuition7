@@ -120,11 +120,14 @@ const getTimeframeMilliseconds = (timeframe: string): number => {
 // Сама задача:
 // Нужно написать функцию или набор функций на typescript, которая постоянно принимает trade и формирует свечки на их основе (словарь со свечками под каждую торговую пару лежит в глобальной переменной)
 export const tradesToCandles = (tick: Trade[]): void => {
-  if (!store.candles) store.candles = {};
+  const timeframe = getTimeframeMilliseconds('tick');
+  const timeframeId = 'tick';
+  const timeframeName = 'tick';
+
   const firstTrade = tick[0];
   const lastTrade = tick[tick.length - 1];
-  const instrumentTimeframeId = `${firstTrade.pairId}/${firstTrade.exchangeId}/${timeframe}`;
-  const id = `${instrumentTimeframeId}/${firstTrade.timestamp}`;
+  const instrumentTimeframeId = `${firstTrade.pairId}/${firstTrade.exchangeId}/${timeframeName}`;
+  const id = instrumentTimeframeId;
   const exchangeId = firstTrade.exchangeId;
   const instrumentId = firstTrade.instrumentId;
   const pairId = firstTrade.pairId;
@@ -133,9 +136,6 @@ export const tradesToCandles = (tick: Trade[]): void => {
   const timestamp = firstTrade.timestamp;
   const timestampStart = firstTrade.timestamp;
   const timestampEnd = lastTrade.timestamp;
-  const timeframe = getTimeframeMilliseconds('tick');
-  const timeframeId = 'tick';
-  const timeframeName = 'tick';
 
   const open = tick[0].price;
   const high = tick.reduce((acc, trade) => Math.max(acc, trade.price), 0);
@@ -158,6 +158,25 @@ export const tradesToCandles = (tick: Trade[]): void => {
     acc[trade.price] += trade.amount;
     return acc;
   }, {});
+
+  // calculate Heikin-Ashi
+  var xClose;
+  var xOpen;
+  var xHigh;
+  var xLow;
+  if (store.candles[id].length > 1) {
+    const previousCandle: Candle = store.candles[id][store.candles[id].length - 1];
+    if (previousCandle.xClose === undefined || previousCandle.xOpen === undefined) {
+      previousCandle.xClose = previousCandle.close;
+      previousCandle.xOpen = previousCandle.open;
+    }
+    xClose = (open + high + low + close) / 4;
+    xOpen = (previousCandle?.xOpen + previousCandle?.xClose) / 2;
+    xHigh = Math.max(high, xOpen, xClose);
+    xLow = Math.min(low, xOpen, xClose);
+  }
+
+
   var candle: Candle = {
     id,
     exchangeId,
@@ -178,6 +197,10 @@ export const tradesToCandles = (tick: Trade[]): void => {
     low,
     close,
     // Heikin-Ashi
+    xClose,
+    xOpen,
+    xHigh,
+    xLow,
 
     // counts
     count,
@@ -195,20 +218,7 @@ export const tradesToCandles = (tick: Trade[]): void => {
     clusterPoints,
   };
 
-  // calculate Heikin-Ashi
-  // TODO: перенести наверх
-  if (store.candles[id].length > 1) {
-    const previousCandle: Candle = store.candles[id][store.candles[id].length - 1];
-    if (previousCandle.xClose === undefined || previousCandle.xOpen === undefined) {
-      previousCandle.xClose = previousCandle.close;
-      previousCandle.xOpen = previousCandle.open;
-    }
-    candle.xClose = (candle.open + candle.high + candle.low + candle.close) / 4;
-    candle.xOpen = (previousCandle?.xOpen + previousCandle?.xClose) / 2;
-    candle.xHigh = Math.max(candle.high, candle.xOpen, candle.xClose);
-    candle.xLow = Math.min(candle.low, candle.xOpen, candle.xClose);
-  }
-
+  if (!store.candles) store.candles = {};
   if (!store.candles[id]) store.candles[id] = [];
   store.candles[id].push(candle);
 }
