@@ -1,7 +1,11 @@
 import { tradesToCandles } from './tradesToCandles';
 import { Trade } from '../types';
-import { demoTicks } from './data';
+import { demoTrades } from './data';
 import { sleep } from '../sleep';
+import _ from 'lodash';
+
+// split by 10 items or less from demoTrades with lodash
+const demoTicks: Trade[][] = _.chunk(demoTrades, 10);
 
 describe('tradesToCandles', () => {
   it.only('should update or create a new 1-minute candle', async () => {
