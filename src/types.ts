@@ -318,6 +318,7 @@ export interface Candle {
   bestBid?: number;
   spreadPrice?: number;
   clusterPoints?: ClusterPoint[];
+  orders?: Order[];
 
   // new fields
   change: number,

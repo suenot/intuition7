@@ -58,6 +58,8 @@ export const tradeCcxtToCore = ({tradeCcxt, exchangeId}: {tradeCcxt: CcxtTrade, 
     pairId,
     instrumentId,
     exchangeId,
+    baseId,
+    quoteId,
     fee: tradeCcxt.fee,
     fees: tradeCcxt.fees,
   };
