@@ -28,6 +28,8 @@ describe('tradeCcxtToCore', () => {
       side: 'buy',
       pairId: 'BTC/USD',
       instrumentId: 'BTC/USD/binance',
+      baseId: 'BTC',
+      quoteId: 'USD',
       exchangeId: 'binance',
       cost: 200,
     };
