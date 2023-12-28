@@ -1,4 +1,7 @@
-import { tradesToCandle, candlesToCandle, upsertCandle } from './tradesToCandles';
+import { tradesToCandle } from './tradesToCandle';
+// import { candlesToCandle } from './candlesToCandle';
+import { upsertCandle } from './upsertCandle';
+
 import { Trade } from '../types';
 import { demoTrades } from './data';
 import { sleep } from '../sleep';
