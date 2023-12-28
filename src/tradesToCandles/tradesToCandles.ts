@@ -1,4 +1,4 @@
-import { Trade, Candle, Dictionary } from '../types';
+import { Trade, Candle, Dictionary, ClusterPoint } from '../types';
 import { store } from "../db/store/store";
 import _ from 'lodash';
 
@@ -154,7 +154,7 @@ export const upsertCandle = (candle: Candle): void => {
 
 // TODO: нужно понять какой брать диапазон свечек timeframeNameFrom необходимый для timeframeNameTo
 // TODO: нужно определить статус свечки
-// TODO: а может быть, что тик попадает в две свечки? Нужно определиться с этим
+// TODO: а может быть, что тик попадает в две свечки? Нужно определиться с этим. tickToTicks() или divideTicksByMinutes()
 export const candlesToCandle = (candles: Candle[], timeframeNameFrom: string, timeFrameNameTo: string): Candle => {
 
   const timestampCurrent = +Date.now();
@@ -196,12 +196,19 @@ export const candlesToCandle = (candles: Candle[], timeframeNameFrom: string, ti
   const bestAsk = candles.reduce((acc, candle) => Math.min(acc, candle.bestAsk), Infinity);
   const bestBid = candles.reduce((acc, candle) => Math.max(acc, candle.bestBid), 0);
   const spreadPrice = (bestBid + bestAsk) / 2;
-  // cluster points это массив цен от низкой к высокой, где просуммирован весь объем свечки по каждой кон
-  const clusterPoints = candles.reduce((acc: any, candle: any) => {
-    if (!acc[candle.price]) acc[candle.price] = 0;
-    acc[candle.price] += candle.amount;
+
+  // TODO: нужно убидить, чтобы собираются правильно
+  const clusterPointsUnsorted = candles.reduce((acc: any, candle: any) => {
+    candle.clusterPoints.forEach((clusterPoint: any) => {
+      if (!acc[clusterPoint.price]) acc[clusterPoint.price] = 0;
+      acc[clusterPoint.price] += clusterPoint.volume;
+    });
     return acc;
   }, {});
+
+  const clusterPoints = _.sortBy(clusterPointsUnsorted, 'price', 'desc');
+
+
   const change = close - open;
   const changePercent = (close - open) / open * 100;
   const changePercentAbs = Math.abs(changePercent);
@@ -386,8 +393,8 @@ export const tradesToCandle = (tick: Trade[], timeframeName: string): Candle => 
       percent,
     };
   });
-  // sort by price from low to high
-  const clusterPoints = _.sortBy(clusterPointsUnsorted, 'price');
+  // sort by price from high to low
+  const clusterPoints = _.sortBy(clusterPointsUnsorted, 'price', 'desc');
 
   // calculate Heikin-Ashi
   var xClose;

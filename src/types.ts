@@ -365,6 +365,7 @@ interface ClusterPoint {
   price: number;
   volume: number;
   percent: number;
+  empty?: boolean;
   timestampFounded?: number; // время нахождения интересного события
   timestampLifeTime?: number;
   labelsId?: string[]; // чтобы отмечать стенки и интересные позиции
