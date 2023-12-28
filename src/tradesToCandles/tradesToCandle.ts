@@ -72,7 +72,7 @@ export const tradesToCandle = (tick: Trade[], timeframeName: string): Candle => 
     };
   });
   // sort by price from high to low
-  const clusterPoints = _.sortBy(clusterPointsUnsorted, 'price', 'desc');
+  const clusterPoints = _.orderBy(clusterPointsUnsorted, ['price'], ['desc']);
 
   // calculate Heikin-Ashi
   var xClose;

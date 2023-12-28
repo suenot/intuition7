@@ -1,3 +1,5 @@
+import { Dictionary } from '../types';
+
 export const getTimeframeMilliseconds = (timeframe: string): number => {
   const timeframes: Dictionary<number> = {
     'tick': 0,

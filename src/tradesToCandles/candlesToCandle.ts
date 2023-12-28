@@ -1,7 +1,7 @@
-import { Trade, Candle, Dictionary, ClusterPoint } from '../types';
+import { Trade, Candle, Dictionary } from '../types';
 import { store } from "../db/store/store";
 import _ from 'lodash';
-import { getTimeframeMilliseconds } from '../getTimeframeMilliseconds';
+import { getTimeframeMilliseconds } from './getTimeframeMilliseconds';
 
 // TODO: нужно понять какой брать диапазон свечек timeframeNameFrom необходимый для timeframeNameTo
 // TODO: нужно определить статус свечки
