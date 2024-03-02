@@ -20,9 +20,16 @@ const typeDefs = `
     title: String
     author: String
   }
+  type Pair {
+    id: String
+    baseId: String
+    quoteId: String
+    active: Boolean
+  }
 
   type Query {
     books: [Book]
+    pairs: [Pair]
   }
 `;
 
@@ -33,6 +40,9 @@ const resolvers = {
       { title: 'Book 1', author: 'Author 1' },
       { title: 'Book 2', author: 'Author 2' },
     ],
+    pairs: () => {
+      return Object.values(store.pairs);
+    }
   },
 };
 
