@@ -9,8 +9,32 @@ import { parseCandles } from "./parseCandles";
 import debug from "debug";
 import _ from "lodash";
 import { OrderBook } from './types';
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware } from '@apollo/server/express4';
 
 const log = debug("index");
+
+// Определение схемы
+const typeDefs = `
+  type Book {
+    title: String
+    author: String
+  }
+
+  type Query {
+    books: [Book]
+  }
+`;
+
+// Резолверы (функции для обработки запросов)
+const resolvers = {
+  Query: {
+    books: () => [
+      { title: 'Book 1', author: 'Author 1' },
+      { title: 'Book 2', author: 'Author 2' },
+    ],
+  },
+};
 
 (async () => {
   // Сбор ассетов, пар, инструментов, бирж
@@ -194,5 +218,21 @@ const app = express()
     res.json( store.bots[id] );
   })
 
+const main = async () => {
+  // Create an Apollo Server
+  const server = new ApolloServer({ typeDefs, resolvers });
 
-app.listen(7771, () => console.log('Server running on port 7771'));
+  // Note you must call `start()` on the `ApolloServer`
+  // instance before passing the instance to `expressMiddleware`
+  await server.start();
+
+  // Specify the path where we'd like to mount our server
+  app.use('/graphql', cors<cors.CorsRequest>(), express.json(), expressMiddleware(server));
+
+  // Start the server
+  const PORT = process.env.PORT || 4000;
+  app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}/graphql`);
+  });
+}
+main();

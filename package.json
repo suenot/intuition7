@@ -9,9 +9,11 @@
     "prod:node:fastify": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm ./src/server.fastify.ts",
     "dev:node:express": "DEBUG=* nodemon --experimental-specifier-resolution=node ./src/server.express.ts",
     "prod:node:express": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm ./src/server.express.ts",
-    "deep:profitmaker": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm  ./src/db/deep/deep.ts"
+    "deep:profitmaker": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm  ./src/db/deep/deep.ts",
+    "apollo:demo": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm  ./src/express-apollo-demo.ts"
   },
   "dependencies": {
+    "@apollo/server": "^4.10.0",
     "@deep-foundation/deeplinks": "^0.0.322",
     "@deep-foundation/hasura": "^0.0.60",
     "@elysiajs/cors": "^0.7.0",
@@ -23,6 +25,7 @@
     "elysia": "latest",
     "express": "^4.18.2",
     "fastify": "^4.23.2",
+    "graphql": "^16.8.1",
     "latest-version": "^7.0.0",
     "lodash": "^4.17.21",
     "mongodb": "^6.1.0",
