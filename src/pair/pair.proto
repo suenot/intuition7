@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+message Pair {
+  string id = 1;
+  string baseId = 2;
+  string quoteId = 3;
+  bool active = 4;
+}
