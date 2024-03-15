@@ -48,7 +48,7 @@ export const candlesToCandle = (candles: Candle[], timeframeNameFrom: string, ti
   const bestBid = candles.reduce((acc, candle) => Math.max(acc, candle.bestBid), 0);
   const spreadPrice = (bestBid + bestAsk) / 2;
 
-  // TODO: нужно убидить, чтобы собираются правильно
+  // TODO: нужно убедиться, чтобы собираются правильно
   const clusterPointsUnsorted = candles.reduce((acc: any, candle: any) => {
     candle.clusterPoints.forEach((clusterPoint: any) => {
       if (!acc[clusterPoint.price]) acc[clusterPoint.price] = 0;
