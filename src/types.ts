@@ -1,3 +1,5 @@
+import { Exchange as ExchangeCCXT } from 'ccxt';
+
 export interface Dictionary<T> {
   [key: string]: T;
 }
@@ -48,7 +50,7 @@ export interface Instrument {
   exchangeId: string;
   timestampFounded?: number;
   timestampUpdated?: number;
-  exchangeInstance?: any;
+  exchangeInstance?: ExchangeCCXT | undefined;
   active?: boolean;
   activeOnExchange?: boolean | undefined;
   type?: string;
@@ -82,7 +84,7 @@ export interface Instrument {
     leverage?: MinMax,
     price?: MinMax,
   };
-  info?: any;
+  info?: object | undefined;
 }
 
 // Торговая пара это просто набор двух ассетов, который может встречать на разных биржах
@@ -148,7 +150,7 @@ export interface UserOrder {
   cost: number;
   trades: Trade[];
   fee: Fee;
-  info: any;
+  info: object | undefined;
 }
 
 export interface OrderBook {
@@ -161,7 +163,7 @@ export interface OrderBook {
   quoteId: string,
   bids: Order[],
   asks: Order[],
-  trades?: any[],
+  trades?: Trade[],
   spread: number,
   spreadPercent: number,
   sum: number,
@@ -204,7 +206,7 @@ export interface Trade {
   type?: string, // 'market', 'limit', ... or undefined/None/null
   total: number,
   timestamp: number,
-  info?: any; // the original decoded JSON as is
+  info?: object | undefined; // the original decoded JSON as is
   order?: string; // string order id or undefined/None/null
   side: 'buy' | 'sell' | string;            // direction of the trade, 'buy' or 'sell'
   takerOrMaker?: 'taker' | 'maker' | string; // string, 'taker' or 'maker'
@@ -340,7 +342,7 @@ export interface Candle {
 }
 
 export interface Transaction {
-  info: any;
+  info: object | undefined;
   id: string;
   txid?: string;
   timestamp: number;
@@ -395,5 +397,5 @@ export interface Store {
   bots: Dictionary<Bot>,
   trades: Dictionary<Trade[]>,
   candles: Dictionary<Candle[]>,
-  exchangesInstances: Dictionary<any>,
+  exchangesInstances: Dictionary<ExchangeCCXT>,
 }
