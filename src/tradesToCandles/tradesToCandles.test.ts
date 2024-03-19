@@ -38,10 +38,10 @@ describe('tradesToCandles', () => {
     // expect(true).toBe(true);
 
 
-    // expect(candles).toBe(dataCandlesResult); // TODO: проблема сравнения объектов, поэтому пока проверяю на длину массива
+    expect(JSON.parse(JSON.stringify(candles))).toStrictEqual(dataCandlesResult);
 
     // test that canles are not empty
-    expect(candles.length).toBeGreaterThan(0);
+    // expect(candles.length).toBeGreaterThan(0);
   }, 60000);
 
 
