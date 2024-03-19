@@ -282,25 +282,25 @@ export interface Timeframe {
 }
 
 export interface Candle {
-  id: string, // "BTC/USDT/binance/1m"
-  exchangeId: string,
-  instrumentId: string,
-  pairId: string,
-  baseId: string,
-  quoteId: string,
+  id?: string, // "BTC/USDT/binance/1m"
+  exchangeId?: string,
+  instrumentId?: string,
+  pairId?: string,
+  baseId?: string,
+  quoteId?: string,
   //
-  timestamp: number,
-  timestampStart: number,
-  timestampEnd: number,
-  timeframe: number, // number is universal
-  timeframeId: string,
-  timeframeName: string,
-  status: 'open' | 'closed' | string,
-  open: number,
-  high: number,
-  low: number,
-  close: number,
-  volume: number,
+  timestamp?: number,
+  timestampStart?: number,
+  timestampEnd?: number,
+  timeframe?: number, // number is universal
+  timeframeId?: string,
+  timeframeName?: string,
+  status?: 'open' | 'closed' | string,
+  open?: number,
+  high?: number,
+  low?: number,
+  close?: number,
+  volume?: number,
   // Heikin-Ashi
   xClose?: number, // (Open+High+Low+Close)/4 - The average price of the current bar.
   xOpen?: number, // [xOpen(Previous Bar) + xClose(Previous Bar)]/2 -Midpoint of the previous bar.
