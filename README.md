@@ -1,4 +1,5 @@
-# Intuition 7
+# Intuition
+![Version](https://img.shields.io/badge/version-7.0.0-blue.svg)
 
 В этом бойлерплейте застрял с тестами и бросил это дело. Не могу запустить jest/chai.
 
