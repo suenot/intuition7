@@ -1,6 +1,6 @@
 import { Trade, Candle, Dictionary } from '../types'; // TODO: использовать ClusterPoint вместо any
 import { store } from "../db/store/store";
-import { getTimeframeMilliseconds } from './getTimeframeMilliseconds';
+import { getTimeframeMilliseconds } from '../getTimeframeMilliseconds/getTimeframeMilliseconds';
 import _ from 'lodash';
 
 export const tradesToCandle = (tick: Trade[], timeframeName: string): Candle => {

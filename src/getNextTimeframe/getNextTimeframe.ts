@@ -1,4 +1,4 @@
-import { timeframes } from './timeframes';
+import { timeframes } from '../timeframes/timeframes';
 
 // find the next timeframe with active = true, else return the current timeframe
 export const getNextTimeframe = (timeframe: string): string => {
