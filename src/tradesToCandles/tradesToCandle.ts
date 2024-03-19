@@ -106,16 +106,28 @@ export const tradesToCandle = (tick: Trade[], timeframeName: string): Candle => 
   const volumeDisbalancePercentAbs = Math.abs(volumeDisbalancePercent);
 
   // Средневзвешенная цена покупки — это средняя цена покупки, весом которых является объем соответствующих сделок на покупку
-  const weightedAverageBuyPrice = buyVolume / buyCount;
+  let weightedAverageBuyPrice = undefined;
+  if (buyCount !== 0 && buyVolume !== undefined && buyCount !== undefined) {
+    weightedAverageBuyPrice = buyVolume / buyCount;
+  }
   // Средневзвешенная цена продажи — это средняя цена продажи, весом которых является объем соответствующих сделок на продажу
-  const weightedAverageSellPrice = sellVolume / sellCount;
+  let weightedAverageSellPrice = undefined;
+  if (sellCount !== 0 && sellVolume !== undefined && sellCount !== undefined) {
+    weightedAverageSellPrice = sellVolume / sellCount;
+  }
   // Средневзвешенная цена — это средняя цена сделок, весом которых является объем сделок
   const weightedAveragePrice = volume / count;
 
   // Медианная цена покупки
-  const medianBuyPrice = tick.filter(trade => trade.side === 'buy').sort((a, b) => a.price - b.price)[Math.floor(buyCount / 2)]?.price;
+  let medianBuyPrice = undefined;
+  if (buyCount !== 0) {
+    medianBuyPrice = tick.filter(trade => trade.side === 'buy').sort((a, b) => a.price - b.price)[Math.floor(buyCount / 2)]?.price;
+  }
   // Медианная цена продажи
-  const medianSellPrice = tick.filter(trade => trade.side === 'sell').sort((a, b) => a.price - b.price)[Math.floor(sellCount / 2)]?.price;
+  let medianSellPrice = undefined;
+  if (sellCount !== 0) {
+    medianSellPrice = tick.filter(trade => trade.side === 'sell').sort((a, b) => a.price - b.price)[Math.floor(sellCount / 2)]?.price;
+  }
   // Медианная цена
   const medianPrice = tick.sort((a, b) => a.price - b.price)[Math.floor(count / 2)]?.price;
 

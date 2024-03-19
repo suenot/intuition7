@@ -30,7 +30,7 @@ jobs:
 
       - name: Install packages
         run: |
-          npm i
+          npm i --force
 
       - name: Run tests
         run: |

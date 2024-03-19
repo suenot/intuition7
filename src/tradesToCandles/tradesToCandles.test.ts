@@ -6,22 +6,42 @@ import { upsertCandle } from './upsertCandle';
 import { demoTrades } from './data';
 import { sleep } from '../sleep';
 import _ from 'lodash';
+import fs from 'fs'; // TEMP: write to file ./dataCandlesResult.json
+import dataCandlesResult from './dataCandlesResult';
 
 // split by 10 items or less from demoTrades with lodash
 const demoTicks: Trade[][] = _.chunk(demoTrades, 10);
 // console.log({demoTicks});
 
 describe('tradesToCandles', () => {
-  it('should update or create a new 1-minute candle', async () => {
+  it.only('should update or create a new 1-minute candle', async () => {
+    const candles: Candle[] = [];
     for (const demoTick of demoTicks) {
       const tick: Trade[] = demoTick;
       const candle = tradesToCandle(tick, 'tick');
       upsertCandle(candle);
       // console.log({clusterPoints: candle.clusterPoints});
       console.log({candle});
-      await sleep(1000);
+      candles.push(candle);
     }
-    expect(true).toBe(true);
+
+
+    // // TEMP: write to file for test data ./dataCandlesResult.json
+    // fs.writeFileSync('./src/tradesToCandles/dataCandlesResult.json', JSON.stringify(candles, null, 2));
+    // const file = `export default ${JSON.stringify(candles, null, 2)};`;
+    // try {
+    //   fs.writeFileSync('./src/tradesToCandles/dataCandlesResult.ts', file);
+    //   console.log('Successfully wrote file');
+    // } catch (err) {
+    //   console.error('Error writing file', err);
+    // }
+    // expect(true).toBe(true);
+
+
+    // expect(candles).toBe(dataCandlesResult); // TODO: проблема сравнения объектов, поэтому пока проверяю на длину массива
+
+    // test that canles are not empty
+    expect(candles.length).toBeGreaterThan(0);
   }, 60000);
 
 

@@ -307,38 +307,38 @@ export interface Candle {
   xHigh?: number, // Max(High, xOpen, xClose) - Highest value in the set.
   xLow?: number, // Min(Low, xOpen, xClose) - Lowest value in the set.
   // counts
-  count: number,
-  buyCount: number,
-  sellCount: number,
+  count?: number,
+  buyCount?: number,
+  sellCount?: number,
   // volumes
-  buyVolume: number,
-  sellVolume: number,
+  buyVolume?: number,
+  sellVolume?: number,
   // TODO: meta exchange (единая)
   // cluster
   // Нужно для синхронизации со стаканом
-  bestAsk: number;
-  bestBid: number;
-  spreadPrice: number;
+  bestAsk?: number;
+  bestBid?: number;
+  spreadPrice?: number;
   clusterPoints?: ClusterPoint[];
   orders?: Order[];
 
   // new fields
-  change: number,
-  changePercent: number,
-  changePercentAbs: number,
-  countDisbalance: number,
-  countDisbalancePercent: number,
-  countDisbalancePercentAbs: number,
-  volumeDisbalance: number,
-  volumeDisbalancePercent: number,
-  volumeDisbalancePercentAbs: number,
-  weightedAverageBuyPrice: number,
-  weightedAverageSellPrice: number,
-  weightedAveragePrice: number,
-  medianBuyPrice: number,
-  medianSellPrice: number,
-  medianPrice: number,
-  priceStandardDeviation: number,
+  change?: number,
+  changePercent?: number,
+  changePercentAbs?: number,
+  countDisbalance?: number,
+  countDisbalancePercent?: number,
+  countDisbalancePercentAbs?: number,
+  volumeDisbalance?: number,
+  volumeDisbalancePercent?: number,
+  volumeDisbalancePercentAbs?: number,
+  weightedAverageBuyPrice?: number,
+  weightedAverageSellPrice?: number,
+  weightedAveragePrice?: number,
+  medianBuyPrice?: number,
+  medianSellPrice?: number,
+  medianPrice?: number,
+  priceStandardDeviation?: number,
 }
 
 export interface Transaction {

@@ -6,7 +6,8 @@
 ## Development
 To start the development server run:
 ```bash
-bun dev:bun:debug
+npm run i --force
+npm run dev:node:express
 ```
 
 Open http://localhost:8080/ with your browser to see the result.
