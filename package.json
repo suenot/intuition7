@@ -3,6 +3,8 @@
   "version": "1.0.50",
   "scripts": {
     "test": "jest --silent=false",
+    "test:tradesToCandles": "npm run test ./src/tradesToCandles/tradesToCandles.test.ts",
+    "test:candlesToCandle": "npm run test ./src/candlesToCandle/candlesToCandle.test.ts",
     "dev:bun:elysia": "DEBUG=* bun run --watch src/server.elysia.ts",
     "prod:bun:elysia": "DEBUG=* bun run src/server.elysia.ts",
     "dev:node:fastify": "DEBUG=* nodemon --experimental-specifier-resolution=node ./src/server.fastify.ts",

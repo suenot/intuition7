@@ -37,15 +37,15 @@ export const candlesToCandle = (candles: Candle[], timeframeNameFrom: string, ti
   const low = candles.reduce((acc, candle) => Math.min(acc, candle.low), Infinity);
   const close = candles[candles.length - 1].close;
 
-  const count = candles.reduce((acc, candle) => acc + candle.count, 0);
-  const buyCount = candles.reduce((acc, candle) => acc + candle.buyCount, 0);
-  const sellCount = candles.reduce((acc, candle) => acc + candle.sellCount, 0);
-  const buyVolume = candles.reduce((acc, candle) => acc + candle.buyVolume, 0);
-  const sellVolume = candles.reduce((acc, candle) => acc + candle.sellVolume, 0);
+  const count = candles.reduce((acc, candle) => acc + (candle?.count || 1), 0);
+  const buyCount = candles.reduce((acc, candle) => acc + (candle?.buyCount || 1), 0);
+  const sellCount = candles.reduce((acc, candle) => acc + (candle?.sellCount || 1), 0);
+  const buyVolume = candles.reduce((acc, candle) => acc + (candle?.buyVolume || 0), 0);
+  const sellVolume = candles.reduce((acc, candle) => acc + (candle?.sellVolume || 0), 0);
   const volume = candles.reduce((acc, candle) => acc + candle.volume, 0);
 
-  const bestAsk = candles.reduce((acc, candle) => Math.min(acc, candle.bestAsk), Infinity);
-  const bestBid = candles.reduce((acc, candle) => Math.max(acc, candle.bestBid), 0);
+  const bestAsk = candles.reduce((acc, candle) => Math.min(acc, (candle.bestAsk || Infinity)), Infinity);
+  const bestBid = candles.reduce((acc, candle) => Math.max(acc, (candle.bestBid || -Infinity)), 0);
   const spreadPrice = (bestBid + bestAsk) / 2;
 
   // TODO: нужно убедиться, чтобы собираются правильно
@@ -84,10 +84,15 @@ export const candlesToCandle = (candles: Candle[], timeframeNameFrom: string, ti
   // Медианная цена продажи
   const medianSellPrice = candles[Math.floor(sellCount / 2)]?.medianSellPrice;
   // Медианная цена
-  const medianPrice = candles[Math.floor(count / 2)]?.medianPrice;
+  let medianPrice: number | undefined = undefined;
+  if (count && count % 2 === 0) {
+    medianPrice = candles[Math.floor(count / 2)]?.medianPrice;
+  }
 
-  // Стандартное отклонение от медианных цен
-  const priceStandardDeviation = Math.sqrt(candles.reduce((acc, candle) => acc + Math.pow(candle.medianPrice - medianPrice, 2), 0) / count);
+  // // Стандартное отклонение от медианных цен TODO
+  // if (medianPrice && candle?.medianPrice && typeof candle.medianPrice === 'number') {
+  //   const priceStandardDeviation = Math.sqrt(candles.reduce((acc, candle) => acc + Math.pow(candle.medianPrice - medianPrice, 2), 0) / count);
+  // }
 
     // calculate Heikin-Ashi
   var xClose;
@@ -165,7 +170,7 @@ export const candlesToCandle = (candles: Candle[], timeframeNameFrom: string, ti
     medianBuyPrice,
     medianSellPrice,
     medianPrice,
-    priceStandardDeviation,
+    // priceStandardDeviation,
   };
 
   return candle;
