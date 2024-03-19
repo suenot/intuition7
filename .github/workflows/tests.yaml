@@ -1,0 +1,37 @@
+name: Server build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Update dependencies
+        run: |
+          sudo apt-get update && sudo apt-get upgrade
+
+      - name: Install dependencies
+        run: |
+          sudo apt install -y git curl
+
+      - name: Install Node Version Manager (NVM)
+        run: |
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+          export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          nvm install 18 && nvm use 18 && nvm alias default 18
+          npm i -g npm@latest
+
+      - name: Install packages
+        run: |
+          npm i
+
+      - name: Run tests
+        run: |
+          npm run test
