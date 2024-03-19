@@ -5,7 +5,7 @@ import { Trade as CcxtTrade, TradeSubscription as CcxtTradeSubscription } from "
 import { Trade } from "./types";
 import { tradeCcxtToCore } from "./tradesCcxtToCore/tradesCcxtToCore";
 import { upsertTrades } from "./db/db";
-import { sleep } from "./sleep";
+import { sleep } from "./index";
 const log = debug("parseTrades");
 
 export const parseTrades = async ({exchangeIds, pairIds}: {exchangeIds: string[], pairIds: string[]}) => {

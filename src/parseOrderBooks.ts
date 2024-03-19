@@ -5,7 +5,7 @@ import ccxt from "ccxt";
 import { orderBookCcxtToCore } from "./orderBookCcxtToCore/orderBookCcxtToCore";
 import { OrderBook as CcxtOrderBook, OrderBookSubscription as CcxtOrderBookSubscription } from "./ccxtTypes";
 import { upsertOrderBook } from "./db/db";
-import { sleep } from "./sleep";
+import { sleep } from "./index";
 import debug from "debug";
 import { store } from "./db/store/store";
 const log = debug("parseOrderBooks");

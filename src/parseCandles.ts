@@ -3,7 +3,7 @@ import debug from "debug";
 import _ from "lodash";
 import { OHLCV as CcxtCandle, OHLCVSubscription as CcxtCandleSubscription } from "./ccxtTypes";
 import { upsertCandle } from "./db/db";
-import { sleep } from "./sleep";
+import { sleep } from "./index";
 const log = debug("parseCandles");
 
 export const parseCandles = async ({exchangeIds, pairIds}: {exchangeIds: string[], pairIds: string[]}) => {

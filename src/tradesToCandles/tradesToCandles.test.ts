@@ -4,7 +4,7 @@ import { Trade, Candle, Dictionary } from '../types';
 import { upsertCandle } from './upsertCandle';
 
 import { demoTrades } from './data';
-import { sleep } from '../sleep';
+import { sleep } from '../index';
 import _ from 'lodash';
 import fs from 'fs'; // TEMP: write to file ./dataCandlesResult.json
 import dataCandlesResult from './dataCandlesResult';

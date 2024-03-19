@@ -44,7 +44,7 @@ import { publishPackage } from './publishPackage';
 import { TypesStore, createTypesStore } from "./typesStore";
 
 import debug from "debug";
-import { sleep } from '../../sleep';
+import { sleep } from '../../index';
 const log = debug("deep");
 
 const apolloClient = generateApolloClient({
