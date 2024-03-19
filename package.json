@@ -5,14 +5,9 @@
     "test": "jest --silent=false",
     "test:tradesToCandles": "npm run test ./src/tradesToCandles/tradesToCandles.test.ts",
     "test:candlesToCandle": "npm run test ./src/candlesToCandle/candlesToCandle.test.ts",
-    "dev:bun:elysia": "DEBUG=* bun run --watch src/server.elysia.ts",
-    "prod:bun:elysia": "DEBUG=* bun run src/server.elysia.ts",
-    "dev:node:fastify": "DEBUG=* nodemon --experimental-specifier-resolution=node ./src/server.fastify.ts",
-    "prod:node:fastify": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm ./src/server.fastify.ts",
-    "dev:node:express": "DEBUG=* nodemon --experimental-specifier-resolution=node ./src/server.express.ts",
-    "prod:node:express": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm ./src/server.express.ts",
-    "deep:profitmaker": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm  ./src/db/deep/deep.ts",
-    "apollo:demo": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm  ./src/express-apollo-demo.ts"
+    "dev:node:express": "DEBUG=* nodemon --experimental-specifier-resolution=node ./src/main.ts",
+    "prod:node:express": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm ./src/main.ts",
+    "deep:profitmaker": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm  ./src/db/deep/deep.ts"
   },
   "dependencies": {
     "@apollo/server": "^4.10.0",
