@@ -16,15 +16,6 @@ export const instrumentTimeframeIdFn = ({candle}: {candle: Candle}): string | un
   return `${firstTrade?.pairId}/${firstTrade?.exchangeId}/${timeframeName}`
 };
 
-// Грязная функция, которая создает заготовку для свечи в хранилище
-export const createInstrumentTimeframeId = ({candle}: {candle: Candle}) => {
-  const {id} = candle;
-  if (id) {
-    if (!store.candles) store.candles = {};
-    if (!store.candles[id]) store.candles[id] = [];
-  }
-}
-
 export const pairIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.pairId : undefined };
 
 export const baseIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.baseId : undefined };

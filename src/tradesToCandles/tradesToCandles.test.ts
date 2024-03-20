@@ -9,6 +9,7 @@ import _ from 'lodash';
 import fs from 'fs'; // TEMP: write to file ./dataCandlesResult.json
 import dataCandlesResult from './dataCandlesResult';
 import { demoCandleIndicators } from './demoCandleIndicators';
+import { createStoreCandlesId } from '../createStoreCandlesId/createStoreCandlesId';
 
 // split by 10 items or less from demoTrades with lodash
 const demoTicks: Trade[][] = _.chunk(demoTrades, 10);

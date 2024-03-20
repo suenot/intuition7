@@ -1,234 +1,281 @@
-import { CandleIndicator } from '../types'
+import { CandleIndicator } from '../types';
+import { createStoreCandlesId } from '../createStoreCandlesId/createStoreCandlesId';
 
 export const demoCandleIndicators: CandleIndicator[] = [
   {
     "value": "id",
-    "fn": "id",
-    "params": []
+    "fn": "instrumentTimeframeIdFn",
+    "params": [],
+    callback: (id: any) => {createStoreCandlesId(id)},
   },
   {
     "value": "exchangeId",
     "fn": "exchangeId",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "instrumentId",
     "fn": "instrumentId",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "pairId",
     "fn": "pairId",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "baseId",
     "fn": "baseId",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "quoteId",
     "fn": "quoteId",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "timestamp",
     "fn": "timestamp",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "timestampStart",
     "fn": "timestampStart",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "timestampEnd",
     "fn": "timestampEnd",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "timeframeMs",
     "fn": "timeframeMs",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "timeframeName",
     "fn": "timeframeName",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "status",
     "fn": "status",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "open",
     "fn": "open",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "high",
     "fn": "high",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "low",
     "fn": "low",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "close",
     "fn": "close",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "xClose",
     "fn": "xClose",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "xOpen",
     "fn": "xOpen",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "xHigh",
     "fn": "xHigh",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "xLow",
     "fn": "xLow",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "count",
     "fn": "count",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "buyCount",
     "fn": "buyCount",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "sellCount",
     "fn": "sellCount",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "buyVolume",
     "fn": "buyVolume",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "sellVolume",
     "fn": "sellVolume",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "volume",
     "fn": "volume",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "bestAsk",
     "fn": "bestAsk",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "bestBid",
     "fn": "bestBid",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "spreadPrice",
     "fn": "spreadPrice",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "clusterPoints",
     "fn": "clusterPoints",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "change",
     "fn": "change",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "changePercent",
     "fn": "changePercent",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "changePercentAbs",
     "fn": "changePercentAbs",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "countDisbalance",
     "fn": "countDisbalance",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "countDisbalancePercent",
     "fn": "countDisbalancePercent",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "countDisbalancePercentAbs",
     "fn": "countDisbalancePercentAbs",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "volumeDisbalance",
     "fn": "volumeDisbalance",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "volumeDisbalancePercent",
     "fn": "volumeDisbalancePercent",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "volumeDisbalancePercentAbs",
     "fn": "volumeDisbalancePercentAbs",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "weightedAverageBuyPrice",
     "fn": "weightedAverageBuyPrice",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "weightedAverageSellPrice",
     "fn": "weightedAverageSellPrice",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "weightedAveragePrice",
     "fn": "weightedAveragePrice",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "medianBuyPrice",
     "fn": "medianBuyPrice",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "medianSellPrice",
     "fn": "medianSellPrice",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "medianPrice",
     "fn": "medianPrice",
-    "params": []
+    "params": [],
+    callback: undefined,
   },
   {
     "value": "priceStandardDeviation",
     "fn": "priceStandardDeviation",
-    "params": []
+    "params": [],
+    callback: undefined,
   }
 ]

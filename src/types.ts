@@ -390,10 +390,12 @@ interface ClusterPoint {
 //   clusterPoints?: ClusterPoint[];
 // }
 
+
 export type CandleIndicator = {
   value: keyof Candle,
-  fn: keyof typeof tradesToCandlesFunctions,
-  params: any[]
+  fn: any, // или нужно перечислить все названия функций
+  params: any[],
+  callback?: Function
 }
 
 export interface Store {
