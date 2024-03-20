@@ -302,7 +302,7 @@ export const tradesToCandle = (tick: Trade[], timeframeName: string, indicators:
     if (typeof indicator === 'object' && indicator !== null && 'value' in indicator && 'fn' in indicator && 'params' in indicator) {
       // Ensure that indicator.params is an object with properties `tick` and `candle`
       if (typeof indicator.params === 'object' && 'tick' in indicator.params && 'candle' in indicator.params) {
-        candle[indicator.value] = tradesToCandlesFunctions[indicator.fn](indicator.params);
+        candle[indicator.value] = tradesToCandlesFunctions[indicator.fn](indicator.params as any);
       }
     }
   }
