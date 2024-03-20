@@ -4,36 +4,37 @@ import { getTimeframeMilliseconds } from '../getTimeframeMilliseconds/getTimefra
 import _ from 'lodash';
 // import { demoCandleIndicators } from './demoCandleIndicators';
 
-export const firstTradeFn = ({tick}: {tick: Trade[]}) => tick[0];
+export const firstTradeFn = ({tick}: {tick: Trade[]}) => tick?.[0];
 
-export const lastTradeFn = ({tick}: {tick: Trade[]}) => tick[tick.length - 1];
+export const lastTradeFn = ({tick}: {tick: Trade[]}) => tick?.[tick.length - 1];
 
 export const instrumentTimeframeIdFn = ({candle}: {candle: Candle}): string | undefined => {
   const {firstTrade, timeframeName} = candle;
+  console.log({firstTrade, timeframeName});
   if (!firstTrade || !firstTrade.pairId || !firstTrade.exchangeId || !timeframeName) {
     return undefined;
   }
   return `${firstTrade?.pairId}/${firstTrade?.exchangeId}/${timeframeName}`
 };
 
-export const pairIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.pairId : undefined };
+export const pairIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle?.firstTrade ? candle?.firstTrade.pairId : undefined };
 
-export const baseIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.baseId : undefined };
+export const baseIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle?.firstTrade ? candle?.firstTrade.baseId : undefined };
 
-export const quoteIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.quoteId : undefined };
+export const quoteIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle?.firstTrade ? candle?.firstTrade.quoteId : undefined };
 
-export const timestampFn = ({candle}: {candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.timestamp : undefined };
+export const timestampFn = ({candle}: {candle: Partial<Candle>}) => { return candle?.firstTrade ? candle?.firstTrade.timestamp : undefined };
 
-export const timestampStartFn = ({candle}: {candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.timestamp : undefined };
+export const timestampStartFn = ({candle}: {candle: Partial<Candle>}) => { return candle?.firstTrade ? candle?.firstTrade.timestamp : undefined };
 
-export const timestampEndFn = ({candle}: {candle: Partial<Candle>}) => { return candle.lastTrade ? candle.lastTrade.timestamp : undefined };
+export const timestampEndFn = ({candle}: {candle: Partial<Candle>}) => { return candle?.lastTrade ? candle?.lastTrade?.timestamp : undefined };
 
-const exchangeIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.exchangeId : undefined };
-const instrumentIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.instrumentId : undefined };
+const exchangeIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle?.firstTrade ? candle?.firstTrade?.exchangeId : undefined };
+const instrumentIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle?.firstTrade ? candle?.firstTrade.instrumentId : undefined };
 
 const timeframeMsFn = ({candle}: {candle: Partial<Candle>}) => { return getTimeframeMilliseconds(candle?.timeframeName || "") };
 
-const timeframeNameFn = ({candle}: {candle: Partial<Candle>}) => { return candle.timeframeName  || undefined};
+const timeframeNameFn = ({candle}: {candle: Partial<Candle>}) => { return candle?.timeframeName  || undefined};
 
 const statusFn = ({candle}: {candle: Partial<Candle>}) => {
   const {timeframeMs, timestampStart, timestampEnd} = candle;
@@ -292,10 +293,11 @@ export const tradesToCandle = (tick: Trade[], timeframeName: string, indicators:
     // Check if indicator is an object and has the necessary properties
     if (typeof indicator === 'object' && indicator !== null && 'value' in indicator && 'fn' in indicator && 'params' in indicator) {
       // Ensure that indicator.params is an object with properties `tick` and `candle`
-      if (typeof indicator.params === 'object' && 'tick' in indicator.params && 'candle' in indicator.params) {
+      // if (typeof indicator.params === 'object' && 'tick' in indicator.params && 'candle' in indicator.params) {
         candle[indicator.value] = tradesToCandlesFunctions[indicator.fn](indicator.params as any);
-      }
+      // }
     }
   }
+  // console.log({candle});
   return candle as Candle;
 };

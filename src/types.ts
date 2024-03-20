@@ -1,5 +1,5 @@
 import { Exchange as ExchangeCCXT } from 'ccxt';
-import { tradesToCandlesFunctions } from './tradesToCandles/tradesToCandle';
+import { tradesToCandlesFunctions } from './tradesToCandle/tradesToCandle';
 
 export interface Dictionary<T> {
   [key: string]: T;
@@ -293,7 +293,7 @@ export interface Candle {
   timestamp?: number,
   timestampStart?: number,
   timestampEnd?: number,
-  
+
   // timeframe?: number, // number is universal
   // timeframeId?: string,
   timeframeMs?: number,
@@ -391,12 +391,21 @@ interface ClusterPoint {
 // }
 
 
+type FunctionName = keyof typeof tradesToCandlesFunctions;
+
 export type CandleIndicator = {
   value: keyof Candle,
-  fn: any, // или нужно перечислить все названия функций
+  fn: FunctionName, // fn is now a key of tradesToCandlesFunctions
   params: any[],
   callback?: Function
 }
+
+// export type CandleIndicator = {
+//   value: keyof Candle,
+//   fn: any, // или нужно перечислить все названия функций // keyof typeof tradesToCandlesFunctions
+//   params: any[],
+//   callback?: Function
+// }
 
 export interface Store {
   modules: Dictionary<Module>,

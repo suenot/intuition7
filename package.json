@@ -3,7 +3,7 @@
   "version": "1.0.50",
   "scripts": {
     "test": "jest --silent=false",
-    "test:tradesToCandles": "npm run test ./src/tradesToCandles/tradesToCandles.test.ts",
+    "test:tradesToCandle": "npm run test ./src/tradesToCandle/tradesToCandle.test.ts",
     "test:candlesToCandle": "npm run test ./src/candlesToCandle/candlesToCandle.test.ts",
     "dev:node:express": "DEBUG=* nodemon --experimental-specifier-resolution=node ./src/main.ts",
     "prod:node:express": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm ./src/main.ts",

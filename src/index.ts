@@ -16,7 +16,7 @@ import { tradeCcxtToCore } from "./tradesCcxtToCore/tradesCcxtToCore";
 import { orderBookCcxtToCore } from "./orderBookCcxtToCore/orderBookCcxtToCore";
 
 // Generating candles in core format
-import { tradesToCandle } from "./tradesToCandles/tradesToCandle";
+import { tradesToCandle } from "./tradesToCandle/tradesToCandle";
 import { candlesToCandle } from "./candlesToCandle/candlesToCandle";
 
 // Insert/Update/Upsert data to db
