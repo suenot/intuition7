@@ -4,7 +4,11 @@ import { getTimeframeMilliseconds } from '../getTimeframeMilliseconds/getTimefra
 import _ from 'lodash';
 // import { demoCandleIndicators } from './demoCandleIndicators';
 
-export const firstTradeFn = ({tick}: {tick: Trade[]}) => tick?.[0];
+export const firstTradeFn = ({tick}: {tick: Trade[]}) => {
+  console.log('firstTradeFn');
+  console.log({tick})
+  return tick?.[0];
+}
 
 export const lastTradeFn = ({tick}: {tick: Trade[]}) => tick?.[tick.length - 1];
 
