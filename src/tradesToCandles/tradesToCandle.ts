@@ -1,8 +1,9 @@
-import { Trade, Candle, Dictionary } from '../types'; // TODO: использовать ClusterPoint вместо any
+import { Trade, Candle, Dictionary, CandleIndicator } from '../types'; // TODO: использовать ClusterPoint вместо any
 import { store } from "../db/store/store";
 import { getTimeframeMilliseconds } from '../getTimeframeMilliseconds/getTimeframeMilliseconds';
 import _ from 'lodash';
 import { listen } from 'bun';
+import { demoCandleIndicators } from './demoCandleIndicators';
 
 export const firstTradeFn = (tick: Trade[]) => tick[0];
 
@@ -16,121 +17,74 @@ export const createInstrumentTimeframeId = (instrumentTimeframeId: string) => {
 }
 
 export const tradesToCandlesFunctions = {
-  id: () => { return "BTC/USDT/binance/1m" },
-  exchangeId: () => { return "exchangeId" },
-  instrumentId: () => { return "instrumentId" },
-  pairId: () => { return "pairId" },
-  baseId: () => { return "baseId" },
-  quoteId: () => { return "quoteId" },
-  timestamp: () => { return Date.now() },
-  timestampStart: () => { return Date.now() },
-  timestampEnd: () => { return Date.now() },
-  timeframe: () => { return 60000 },
-  timeframeId: () => { return "1m" },
-  timeframeName: () => { return "1 minute" },
-  status: () => { return "closed" },
-  open: () => { return 50000 },
-  high: () => { return 51000 },
-  low: () => { return 49000 },
-  close: () => { return 50000 },
-  xClose: () => { return 50000 },
-  xOpen: () => { return 50000 },
-  xHigh: () => { return 51000 },
-  xLow: () => { return 49000 },
-  count: () => { return 100 },
-  buyCount: () => { return 60 },
-  sellCount: () => { return 40 },
-  buyVolume: () => { return 6000 },
-  sellVolume: () => { return 4000 },
-  volume: () => { return 10000 },
-  bestAsk: () => { return 50000 },
-  bestBid: () => { return 49000 },
-  spreadPrice: () => { return 1000 },
-  clusterPoints: () => { return [] },
-  change: () => { return 100 },
-  changePercent: () => { return 2 },
-  changePercentAbs: () => { return 2 },
-  countDisbalance: () => { return 20 },
-  countDisbalancePercent: () => { return 20 },
-  countDisbalancePercentAbs: () => { return 20 },
-  volumeDisbalance: () => { return 2000 },
-  volumeDisbalancePercent: () => { return 20 },
-  volumeDisbalancePercentAbs: () => { return 20 },
-  weightedAverageBuyPrice: () => { return 50000 },
-  weightedAverageSellPrice: () => { return 49000 },
-  weightedAveragePrice: () => { return 49500 },
-  medianBuyPrice: () => { return 50000 },
-  medianSellPrice: () => { return 49000 },
-  medianPrice: () => { return 49500 },
-  priceStandardDeviation: () => { return 500 },
-  orders: () => { return [] },
+  id: (params: object) => { return "BTC/USDT/binance/1m" },
+  exchangeId: (params: object) => { return "exchangeId" },
+  instrumentId: (params: object) => { return "instrumentId" },
+  pairId: (params: object) => { return "pairId" },
+  baseId: (params: object) => { return "baseId" },
+  quoteId: (params: object) => { return "quoteId" },
+  timestamp: (params: object) => { return Date.now() },
+  timestampStart: (params: object) => { return Date.now() },
+  timestampEnd: (params: object) => { return Date.now() },
+  timeframe: (params: object) => { return 60000 },
+  timeframeId: (params: object) => { return "1m" },
+  timeframeName: (params: object) => { return "1 minute" },
+  status: (params: object) => { return "closed" },
+  open: (params: object) => { return 50000 },
+  high: (params: object) => { return 51000 },
+  low: (params: object) => { return 49000 },
+  close: (params: object) => { return 50000 },
+  xClose: (params: object) => { return 50000 },
+  xOpen: (params: object) => { return 50000 },
+  xHigh: (params: object) => { return 51000 },
+  xLow: (params: object) => { return 49000 },
+  count: (params: object) => { return 100 },
+  buyCount: (params: object) => { return 60 },
+  sellCount: (params: object) => { return 40 },
+  buyVolume: (params: object) => { return 6000 },
+  sellVolume: (params: object) => { return 4000 },
+  volume: (params: object) => { return 10000 },
+  bestAsk: (params: object) => { return 50000 },
+  bestBid: (params: object) => { return 49000 },
+  spreadPrice: (params: object) => { return 1000 },
+  clusterPoints: (params: object) => { return [] },
+  change: (params: object) => { return 100 },
+  changePercent: (params: object) => { return 2 },
+  changePercentAbs: (params: object) => { return 2 },
+  countDisbalance: (params: object) => { return 20 },
+  countDisbalancePercent: (params: object) => { return 20 },
+  countDisbalancePercentAbs: (params: object) => { return 20 },
+  volumeDisbalance: (params: object) => { return 2000 },
+  volumeDisbalancePercent: (params: object) => { return 20 },
+  volumeDisbalancePercentAbs: (params: object) => { return 20 },
+  weightedAverageBuyPrice: (params: object) => { return 50000 },
+  weightedAverageSellPrice: (params: object) => { return 49000 },
+  weightedAveragePrice: (params: object) => { return 49500 },
+  medianBuyPrice: (params: object) => { return 50000 },
+  medianSellPrice: (params: object) => { return 49000 },
+  medianPrice: (params: object) => { return 49500 },
+  priceStandardDeviation: (params: object) => { return 500 },
+  orders: (params: object) => { return [] },
 }
 
-// export const demoParams = [
-//   "id",
-//   "exchangeId",
-//   "instrumentId",
-//   "pairId",
-//   "baseId",
-//   "quoteId",
-//   "timestamp",
-//   "timestampStart",
-//   "timestampEnd",
-//   "timeframe",
-//   "timeframeId",
-//   "timeframeName",
-//   "status",
-//   "open",
-//   "high",
-//   "low",
-//   "close",
-//   "xClose",
-//   "xOpen",
-//   "xHigh",
-//   "xLow",
-//   "count",
-//   "buyCount",
-//   "sellCount",
-//   "buyVolume",
-//   "sellVolume",
-//   "volume",
-//   "bestAsk",
-//   "bestBid",
-//   "spreadPrice",
-//   "clusterPoints",
-//   "change",
-//   "changePercent",
-//   "changePercentAbs",
-//   "countDisbalance",
-//   "countDisbalancePercent",
-//   "countDisbalancePercentAbs",
-//   "volumeDisbalance",
-//   "volumeDisbalancePercent",
-//   "volumeDisbalancePercentAbs",
-//   "weightedAverageBuyPrice",
-//   "weightedAverageSellPrice",
-//   "weightedAveragePrice",
-//   "medianBuyPrice",
-//   "medianSellPrice",
-//   "medianPrice",
-//   "priceStandardDeviation"
-// ]
-
-export const tradesToCandle = (tick: Trade[], timeframeName: string, params: (keyof Candle)[]): Candle => {
-  let candle: any = {}; // в идеале, чтобы заработал Partial<Candle>
-  if (params.length === 0) {
+// Then in your function where you use it:
+export const tradesToCandle = (tick: Trade[], timeframeName: string, indicators: CandleIndicator[]): Candle => {
+  let candle: any = {}; // Ideally, this should be Partial<Candle>
+  if (indicators.length === 0) {
     return candle as Candle;
   }
-  for (const param of params) {
-    // run function that named as param
-    if (typeof param === 'function') {
-      candle[param as keyof Candle] = tradesToCandlesFunctions[param as keyof Candle]();
+  for (const indicator of indicators) {
+    // Check if indicator is an object and has the necessary properties
+    if (typeof indicator === 'object' && indicator !== null && 'value' in indicator && 'fn' in indicator && 'params' in indicator) {
+      candle[indicator.value] = tradesToCandlesFunctions[indicator.fn](indicator.params);
     }
   }
   return candle as Candle;
 };
 
 export const _tradesToCandle = (tick: Trade[], timeframeName: string): Candle => {
+  // let candle: any = {};
+
   const firstTrade = firstTradeFn(tick);
   const lastTrade = lastTradeFn(tick);
   const id = instrumentTimeframeIdFn(firstTrade, timeframeName);

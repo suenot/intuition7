@@ -1,4 +1,5 @@
 import { Exchange as ExchangeCCXT } from 'ccxt';
+import { tradesToCandlesFunctions } from './tradesToCandles/tradesToCandle';
 
 export interface Dictionary<T> {
   [key: string]: T;
@@ -380,6 +381,12 @@ interface ClusterPoint {
 //   spreadPrice?: number;
 //   clusterPoints?: ClusterPoint[];
 // }
+
+export type CandleIndicator = {
+  value: keyof Candle,
+  fn: keyof typeof tradesToCandlesFunctions,
+  params: any[]
+}
 
 export interface Store {
   modules: Dictionary<Module>,
