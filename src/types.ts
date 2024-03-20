@@ -293,8 +293,10 @@ export interface Candle {
   timestamp?: number,
   timestampStart?: number,
   timestampEnd?: number,
-  timeframe?: number, // number is universal
-  timeframeId?: string,
+  
+  // timeframe?: number, // number is universal
+  // timeframeId?: string,
+  timeframeMs?: number,
   timeframeName?: string,
   status?: 'open' | 'closed' | string,
   open?: number,
@@ -340,6 +342,12 @@ export interface Candle {
   medianSellPrice?: number,
   medianPrice?: number,
   priceStandardDeviation?: number,
+  
+  previousCandle?: Candle,
+
+  //
+  firstTrade?: Trade,
+  lastTrade?: Trade,
 }
 
 export interface Transaction {
