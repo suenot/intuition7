@@ -25,26 +25,26 @@ export const createInstrumentTimeframeId = ({candle}: {candle: Candle}) => {
   }
 }
 
-export const pairIdFn = ({tick, candle}: {tick: Trade[], candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.pairId : undefined };
+export const pairIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.pairId : undefined };
 
-export const baseIdFn = ({tick, candle}: {tick: Trade[], candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.baseId : undefined };
+export const baseIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.baseId : undefined };
 
-export const quoteIdFn = ({tick, candle}: {tick: Trade[], candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.quoteId : undefined };
+export const quoteIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.quoteId : undefined };
 
-export const timestampFn = ({tick, candle}: {tick: Trade[], candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.timestamp : undefined };
+export const timestampFn = ({candle}: {candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.timestamp : undefined };
 
-export const timestampStartFn = ({tick, candle}: {tick: Trade[], candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.timestamp : undefined };
+export const timestampStartFn = ({candle}: {candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.timestamp : undefined };
 
-export const timestampEndFn = ({tick, candle}: {tick: Trade[], candle: Partial<Candle>}) => { return candle.lastTrade ? candle.lastTrade.timestamp : undefined };
+export const timestampEndFn = ({candle}: {candle: Partial<Candle>}) => { return candle.lastTrade ? candle.lastTrade.timestamp : undefined };
 
-const exchangeIdFn = ({tick, candle}: {tick: Trade[], candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.exchangeId : undefined };
-const instrumentIdFn = ({tick, candle}: {tick: Trade[], candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.instrumentId : undefined };
+const exchangeIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.exchangeId : undefined };
+const instrumentIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle.firstTrade ? candle.firstTrade.instrumentId : undefined };
 
-const timeframeMsFn = ({tick, candle}: {tick: Trade[], candle: Partial<Candle>}) => { return getTimeframeMilliseconds(candle?.timeframeName || "") };
+const timeframeMsFn = ({candle}: {candle: Partial<Candle>}) => { return getTimeframeMilliseconds(candle?.timeframeName || "") };
 
-const timeframeNameFn = ({tick, candle}: {tick: Trade[], candle: Partial<Candle>}) => { return candle.timeframeName  || undefined};
+const timeframeNameFn = ({candle}: {candle: Partial<Candle>}) => { return candle.timeframeName  || undefined};
 
-const statusFn = ({tick, candle}: {tick: Trade[], candle: Partial<Candle>}) => {
+const statusFn = ({candle}: {candle: Partial<Candle>}) => {
   const {timeframeMs, timestampStart, timestampEnd} = candle;
   if (!timeframeMs || !timestampStart || !timestampEnd) {
     return undefined;
@@ -67,7 +67,7 @@ const volumeFn = ({tick}: {tick: Trade[]}) => tick.reduce((acc, trade) => acc + 
 
 const bestAskFn = ({tick}: {tick: Trade[]}) => tick.reduce((acc, trade) => Math.min(acc, trade.price), Infinity);
 const bestBidFn = ({tick}: {tick: Trade[]}) => tick.reduce((acc, trade) => Math.max(acc, trade.price), 0);
-const spreadPriceFn = ({tick, candle}: {tick: Trade[], candle: Candle}) => {
+const spreadPriceFn = ({candle}: {candle: Candle}) => {
   const { bestBid, bestAsk } = candle;
   if (!bestBid || !bestAsk) {
     return undefined;
@@ -213,25 +213,25 @@ const previousCandleFn = ({candle}: {candle: Candle}) => {
 }
 
 // Heikin-Ashi
-const xCloseFn = ({tick, candle}: {tick: Trade[], candle: Candle}) => {
+const xCloseFn = ({candle}: {candle: Candle}) => {
   const { open, high, low, close } = candle;
   if (!open || !high || !low || !close) return undefined;
   return (open + high + low + close) / 4;
 }
 
-const xOpenFn = ({tick, candle}: {tick: Trade[], candle: Candle}) => {
+const xOpenFn = ({candle}: {candle: Candle}) => {
   const { previousCandle } = candle;
   if (!previousCandle || !previousCandle?.xOpen || !previousCandle?.xClose) return undefined;
   return (previousCandle?.xOpen + previousCandle?.xClose) / 2;
 }
 
-const xHighFn = ({tick, candle}: {tick: Trade[], candle: Candle}) => {
+const xHighFn = ({candle}: {candle: Candle}) => {
   const { high, xOpen, xClose } = candle;
   if (!high || !xOpen || !xClose) return undefined;
   return Math.max(high, xOpen, xClose);
 }
 
-const xLowFn = ({tick, candle}: {tick: Trade[], candle: Candle}) => {
+const xLowFn = ({candle}: {candle: Candle}) => {
   const { low, xOpen, xClose } = candle;
   if (!low || !xOpen || !xClose) return undefined;
   return Math.min(low, xOpen, xClose);
