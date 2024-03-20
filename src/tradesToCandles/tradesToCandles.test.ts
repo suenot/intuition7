@@ -8,6 +8,7 @@ import { sleep } from '../index';
 import _ from 'lodash';
 import fs from 'fs'; // TEMP: write to file ./dataCandlesResult.json
 import dataCandlesResult from './dataCandlesResult';
+import { demoCandleIndicators } from './demoCandleIndicators';
 
 // split by 10 items or less from demoTrades with lodash
 const demoTicks: Trade[][] = _.chunk(demoTrades, 10);
@@ -18,7 +19,7 @@ describe('tradesToCandles', () => {
     const candles: Candle[] = [];
     for (const demoTick of demoTicks) {
       const tick: Trade[] = demoTick;
-      const candle = tradesToCandle(tick, 'tick');
+      const candle = tradesToCandle(tick, 'tick', demoCandleIndicators);
       upsertCandle(candle);
       // console.log({clusterPoints: candle.clusterPoints});
       console.log({candle});
