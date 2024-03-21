@@ -20,8 +20,8 @@ describe('tradesToCandles', () => {
     const candles: Candle[] = [];
     for (const demoTick of demoTicks) {
       const tick: Trade[] = demoTick;
-      const candle = tradesToCandle(tick, '0.5s', demoCandleIndicators);
-      // upsertCandle(candle); // TODO: временно закоментировал
+      const candle = tradesToCandle(tick, 'tick', demoCandleIndicators);
+      upsertCandle(candle); // TODO: временно закоментировал
       // console.log({clusterPoints: candle.clusterPoints});
       // console.log({candle}); // TODO: временно закоментировал
       candles.push(candle);
