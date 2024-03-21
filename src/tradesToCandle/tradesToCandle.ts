@@ -38,7 +38,7 @@ export const instrumentIdFn = ({candle}: {candle: Partial<Candle>}) => { return 
 
 export const timeframeMsFn = ({candle}: {candle: Partial<Candle>}) => { return getTimeframeMilliseconds(candle?.timeframeName || "") };
 
-export const timeframeNameFn = ({candle}: {candle: Partial<Candle>}) => { return candle?.timeframeName  || undefined};
+export const timeframeNameFn = ({timeframeName}: {timeframeName: string}) => { return timeframeName  || undefined};
 
 export const statusFn = ({candle}: {candle: Partial<Candle>}) => {
   const {timeframeMs, timestampStart, timestampEnd} = candle;
@@ -297,7 +297,7 @@ export const tradesToCandle = (tick: Trade[], timeframeName: string, indicators:
   for (const indicator of indicators) {
     // Check if indicator is an object and has the necessary properties
     if (typeof indicator === 'object' && indicator !== null && 'value' in indicator && 'fn' in indicator && 'params' in indicator) {
-      candle[indicator.value] = tradesToCandlesFunctions[indicator.fn]({tick, candle, previousCandle, ...indicator.params} as any);
+      candle[indicator.value] = tradesToCandlesFunctions[indicator.fn]({tick, candle, previousCandle, timeframeName, ...indicator.params} as any);
     }
   }
   console.log({candle});
