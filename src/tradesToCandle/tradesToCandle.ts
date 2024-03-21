@@ -301,7 +301,7 @@ export const tradesToCandle = (tick: Trade[], timeframeName: string, indicators:
       // if (typeof indicator.params === 'object' && 'tick' in indicator.params && 'candle' in indicator.params) {
         // indicator.params as any
         // TODO: временное решение. Пока пробрасываются tick, candle. Хотя хочется реализовать проброс любых параметров для работы функций декларативно
-        candle[indicator.value] = tradesToCandlesFunctions[indicator.fn]({tick, candle, previousCandle} as any);
+        candle[indicator.value] = tradesToCandlesFunctions[indicator.fn]({tick, candle, previousCandle, ...indicator.params} as any);
       // }
     }
   }
