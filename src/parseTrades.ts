@@ -6,6 +6,7 @@ import { Trade } from "./types";
 import { tradeCcxtToCore } from "./tradesCcxtToCore/tradesCcxtToCore";
 import { upsertTrades } from "./db/db";
 import { sleep } from "./index";
+import { tradesToCandle } from "./tradesToCandle/tradesToCandle";
 const log = debug("parseTrades");
 
 export const parseTrades = async ({exchangeIds, pairIds}: {exchangeIds: string[], pairIds: string[]}) => {
@@ -38,7 +39,12 @@ export const parseTradesOneExchange = async ({exchangeId, pairIds}: {exchangeId:
             log({trade});
             trades.push(trade);
           }
-          upsertTrades({trades});
+          upsertTrades({trades, callback: () => {
+            log('upsertTrades callback'); // TODO: возможно callback не нужен
+          }});
+          // генерировать свечи
+          // TODO: HERE
+
         } catch (e) { log(e) };
       }
     }
