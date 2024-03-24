@@ -1,8 +1,13 @@
 export const timeframes = [
+  // {
+  //   name: "tick", // live ticks/candles
+  //   ms: 0,
+  //   active: true,
+  // },
   {
-    name: "tick",
-    ms: 0,
-    active: true,
+    name: "0.1s",
+    ms: 200,
+    active: false,
   },
   {
     name: "0.2s",

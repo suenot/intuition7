@@ -44,6 +44,7 @@ export const parseTradesOneExchange = async ({exchangeId, pairIds}: {exchangeId:
           }});
           // генерировать свечи
           // TODO: HERE
+          
 
         } catch (e) { log(e) };
       }
