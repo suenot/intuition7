@@ -172,7 +172,7 @@ const app = express()
     if (!base && !quote && !exchange && !timeframe) {
       res.json( store.candles );
     }
-    if (store.candles?.[id] && store.candles?.[id].length > 0) {
+    if (store.candles?.[id]) {
       res.json( store.candles[id] );
     } else {
       res.json( [] );

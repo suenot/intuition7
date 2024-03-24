@@ -153,9 +153,11 @@ export const upsertCandles = async ({candles}: {candles: Candle[]}) => {
   log('upsertCandles', {candles});
 
   for (const candle of candles) {
-    if (candle.id === undefined) continue;
-    if (!store.candles[candle.id]) store.candles[candle.id] = [];
-    store.candles[candle.id].push(candle);
+    if (candle.id === undefined || candle.timeframeName === undefined || candle.timestamp === undefined || typeof(candle.timestamp) !== 'number') continue;
+    if (!store.candles) store.candles = {};
+    if (!store.candles[candle.id]) store.candles[candle.id] = {};
+    if (!store.candles[candle.id][candle.timeframeName]) store.candles[candle.id][candle.timeframeName] = {};
+    store.candles[candle.id][candle.timestamp] = candle;
   }
   return candles;
 }

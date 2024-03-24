@@ -422,6 +422,6 @@ export interface Store {
   signals: Dictionary<Signal>,
   bots: Dictionary<Bot>,
   trades: Dictionary<Trade[]>,
-  candles: Dictionary<Candle[]>,
+  candles: Dictionary<Dictionary<Candle>>, // Example: store.candles[`btc/usdt/binance/1s`][1711291218000] = Candle
   exchangesInstances: Dictionary<ExchangeCCXT>,
 }

@@ -201,11 +201,19 @@ export const priceStandardDeviationFn = ({tick, candle}: {tick: Trade[], candle:
   return Math.sqrt(tick.reduce((acc, trade) => acc + Math.pow(trade.price - weightedAveragePrice, 2), 0) / count);
 }
 
+export const getTimestampOfPreviousCandle = ({timestamp, timeframeName}: {timestamp: number, timeframeName: string}) => {
+  const timeframeMs = getTimeframeMilliseconds(timeframeName);
+  return timestamp - timeframeMs;
+}
+
 // Грязная функция, которая вытаскивает из хранилища предыдущую свечу с закрытым статусом
 export const previousCandleFn = ({candle}: {candle: Candle}) => {
   const { id } = candle;
   if (!id || !store.candles[id]) return undefined;
-  return store.candles[id].filter(candle => candle.status === 'closed')[store.candles[id].length - 1];
+  // return store.candles[id].filter(candle => candle.status === 'closed')[store.candles[id].length - 1];
+  if (!candle.timestamp || !candle.timeframeName) return undefined;
+  const timestampOfPreviousCandle = getTimestampOfPreviousCandle({timestamp: candle.timestamp, timeframeName: candle.timeframeName});
+  return store.candles?.[id]?.[timestampOfPreviousCandle];
 }
 
 // Heikin-Ashi

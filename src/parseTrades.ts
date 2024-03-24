@@ -6,7 +6,6 @@ import { Trade } from "./types";
 import { tradeCcxtToCore } from "./tradesCcxtToCore/tradesCcxtToCore";
 import { upsertCandles, upsertTrades } from "./db/db";
 import { sleep } from "./index";
-import { tradesToCandle } from "./tradesToCandle/tradesToCandle";
 import { tradesToCandles } from "./tradesToCandles/tradesToCandles";
 const log = debug("parseTrades");
 
@@ -49,7 +48,7 @@ export const parseTradesOneExchange = async ({exchangeId, pairIds}: {exchangeId:
 
           const firstTrade = trades[0];
           const pair = firstTrade?.pairId; // TODO: убдиться, что трейды приходят по одной торговой паре
-          const candles = await tradesToCandles({trades, pair, timeframeName: '0.1s'});
+          const candles = await tradesToCandles({trades, pair, timeframeName: '1s'});
           log({candles});
           upsertCandles({candles});
 

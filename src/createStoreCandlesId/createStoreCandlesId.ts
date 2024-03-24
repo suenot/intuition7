@@ -6,6 +6,6 @@ export const createStoreCandlesId = ({candle}: {candle: Candle}) => {
   const {id} = candle;
   if (id) {
     if (!store?.candles) store.candles = {};
-    if (!store?.candles?.[id]) store.candles[id] = [];
+    if (!store?.candles?.[id]) store.candles[id] = {};
   }
 }
