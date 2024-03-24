@@ -45,6 +45,18 @@ export const demoCandleIndicators: CandleIndicator[] = [
     callback: undefined,
   },
   {
+    "value": "timeframeName",
+    "fn": "timeframeName",
+    "params": [],
+    callback: undefined,
+  },
+  {
+    "value": "timeframeMs",
+    "fn": "timeframeMs",
+    "params": [],
+    callback: undefined,
+  },
+  {
     "value": "timestamp",
     "fn": "timestamp",
     "params": [],
@@ -62,18 +74,6 @@ export const demoCandleIndicators: CandleIndicator[] = [
   //   "params": [],
   //   callback: undefined,
   // },
-  {
-    "value": "timeframeName",
-    "fn": "timeframeName",
-    "params": [],
-    callback: undefined,
-  },
-  {
-    "value": "timeframeMs",
-    "fn": "timeframeMs",
-    "params": [],
-    callback: undefined,
-  },
   {
     "value": "id",
     "fn": "id",

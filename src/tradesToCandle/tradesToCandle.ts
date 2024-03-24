@@ -28,12 +28,11 @@ export const baseIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle
 export const quoteIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle?.firstTrade ? candle?.firstTrade.quoteId : undefined };
 
 export const timestampFn = ({candle}: {candle: Partial<Candle>}) => {
-  // нужно выровнять timestamp по времени начала свечи
   const { timeframeMs } = candle;
   if (!candle?.firstTrade?.timestamp || !timeframeMs) {
     return undefined;
   }
-  return (candle?.firstTrade?.timestamp / timeframeMs) * timeframeMs;
+  return Math.floor(candle.firstTrade.timestamp / timeframeMs) * timeframeMs;
 };
 
 export const exchangeIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle?.firstTrade ? candle?.firstTrade?.exchangeId : undefined };

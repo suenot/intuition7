@@ -153,6 +153,7 @@ export const upsertCandles = async ({candles}: {candles: Candle[]}) => {
   log('upsertCandles', {candles});
 
   for (const candle of candles) {
+    log({candle});
     if (candle.id === undefined || candle.timeframeName === undefined || candle.timestamp === undefined) continue;
     if (!store.candles) store.candles = {};
     if (!store.candles[candle.id]) store.candles[candle.id] = {};
