@@ -6,7 +6,7 @@ export const timeframes = [
   // },
   {
     name: "0.1s",
-    ms: 200,
+    ms: 100,
     active: false,
   },
   {

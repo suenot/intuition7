@@ -5,8 +5,8 @@ import _ from 'lodash';
 // import { demoCandleIndicators } from './demoCandleIndicators';
 
 export const firstTradeFn = ({tick}: {tick: Trade[]}) => {
-  console.log('firstTradeFn');
-  console.log({tick})
+  // console.log('firstTradeFn');
+  // console.log({tick})
   return tick?.[0];
 }
 
@@ -14,7 +14,7 @@ export const lastTradeFn = ({tick}: {tick: Trade[]}) => tick?.[tick.length - 1];
 
 export const instrumentTimeframeIdFn = ({candle}: {candle: Candle}): string | undefined => {
   const {firstTrade, timeframeName} = candle;
-  console.log({firstTrade, timeframeName});
+  // console.log({firstTrade, timeframeName});
   if (!firstTrade || !firstTrade.pairId || !firstTrade.exchangeId || !timeframeName) {
     return undefined;
   }
@@ -300,6 +300,6 @@ export const tradesToCandle = (tick: Trade[], timeframeName: string, indicators:
       candle[indicator.value] = tradesToCandlesFunctions[indicator.fn]({tick, candle, previousCandle, timeframeName, ...indicator.params} as any);
     }
   }
-  console.log({candle});
+  // console.log({candle});
   return candle as Candle;
 };

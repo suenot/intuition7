@@ -15,6 +15,7 @@ import { createStoreCandlesId } from '../createStoreCandlesId/createStoreCandles
 const demoTicks: Trade[][] = _.chunk(demoTrades, 10);
 // console.log({demoTicks});
 
+// TODO: переписать тест на trades to candle
 describe('tradesToCandles', () => {
   it.only('should update or create a new 1-minute candle', async () => {
     const candles: Candle[] = [];
