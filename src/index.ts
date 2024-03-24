@@ -17,7 +17,7 @@ import { orderBookCcxtToCore } from "./orderBookCcxtToCore/orderBookCcxtToCore";
 
 // Generating candles in core format
 import { tradesToCandle } from "./tradesToCandle/tradesToCandle";
-import { candlesToCandle } from "./candlesToCandle/candlesToCandle";
+// import { candlesToCandle } from "./candlesToCandle/candlesToCandle";
 
 // Insert/Update/Upsert data to db
 // ...
@@ -27,4 +27,4 @@ import { toShift } from "./toShift/toShift";
 import { calculateLag } from "./calculateLag/calculateLag";
 import { sleep } from "./sleep/sleep";
 
-export { getExchanges, getMarketData, parseCandles, parseTrades, parseOrderBooks, getNextTimeframe, getTimeframeMilliseconds, tradeCcxtToCore, orderBookCcxtToCore, tradesToCandle, candlesToCandle, toShift, calculateLag, sleep };
+export { getExchanges, getMarketData, parseCandles, parseTrades, parseOrderBooks, getNextTimeframe, getTimeframeMilliseconds, tradeCcxtToCore, orderBookCcxtToCore, tradesToCandle, toShift, calculateLag, sleep };
