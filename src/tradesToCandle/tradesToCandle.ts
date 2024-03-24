@@ -44,11 +44,12 @@ export const timeframeMsFn = ({candle}: {candle: Partial<Candle>}) => { return g
 export const timeframeNameFn = ({timeframeName}: {timeframeName: string}) => { return timeframeName  || undefined};
 
 export const statusFn = ({candle}: {candle: Partial<Candle>}) => {
-  const {timeframeMs, timestampStart, timestampEnd} = candle;
-  if (!timeframeMs || !timestampStart || !timestampEnd) {
-    return undefined;
-  }
-  return timeframeMs + timestampStart <= timestampEnd ? 'open' : 'closed';
+  // TODO: Тут какая-то чушь, надо переосмыслить
+  // const {timeframeMs, timestampStart, timestampEnd} = candle;
+  // if (!timeframeMs || !timestampStart || !timestampEnd) {
+  //   return undefined;
+  // }
+  // return timeframeMs + timestampStart <= timestampEnd ? 'open' : 'closed';
 };
 
 export const openFn = ({tick}: {tick: Trade[]}) => { return tick[0].price };
