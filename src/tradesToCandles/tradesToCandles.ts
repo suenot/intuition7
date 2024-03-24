@@ -25,11 +25,12 @@ export const tradesToCandles = async ({trades, pair, timeframeName, mergeWithSto
   const end = Math.floor(endTimestamp / timeframeInMs);
   const diff = end - start;
   const numberOfCandles = diff / timeframeInMs;
-  log({start, end, diff, numberOfCandles});
+
+  log({start, end, diff, numberOfCandles, numberOfTrades: trades.length});
 
   // Generate even time intervals
   const timeIntervals = [];
-  for (let time = start; time < end; time += timeframeInMs) {
+  for (let time = start; time <= end; time += timeframeInMs) {
     timeIntervals.push(time * timeframeInMs); // Convert back to milliseconds
   }
   log({timeIntervals});
