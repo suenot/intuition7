@@ -4,6 +4,8 @@ import { store } from "../db/store/store";
 import { demoTrades } from './data';
 import { tradesToCandle } from '../tradesToCandle/tradesToCandle';
 import { demoCandleIndicators } from '../tradesToCandle/demoCandleIndicators';
+import debug from "debug";
+const log = debug("tradesToCandles");
 
 // разбиваем трейды на срезы для генерации свечек
 export const tradesToCandles = async ({trades, pair, timeframeName, mergeWithStore}: {trades: Trade[], pair: string, timeframeName: string, mergeWithStore?: boolean}) => {
@@ -11,11 +13,11 @@ export const tradesToCandles = async ({trades, pair, timeframeName, mergeWithSto
   const startTimestamp = trades?.[0]?.timestamp;
   const endTimestamp = trades?.[trades.length - 1]?.timestamp;
   const diffTimestamp = endTimestamp - startTimestamp;
-  console.log({startTimestamp, endTimestamp, diffTimestamp});
+  log({startTimestamp, endTimestamp, diffTimestamp});
   // нужно получить ровные интервалы времени (для секундых свечек, т.е. где timeframeName = 1s: 00:00:00, 00:00:01, 00:00:02, ...)
   // т.е. в диапазоне [startTimestamp : endTimestamp)
   const timeframeInMs = getTimeframeMilliseconds(timeframeName);
-  console.log({timeframeInMs});
+  log({timeframeInMs});
 
   // Мне нужен 100мс интервал
   // Convert startTimestamp and endTimestamp to 100ms intervals
@@ -23,14 +25,14 @@ export const tradesToCandles = async ({trades, pair, timeframeName, mergeWithSto
   const end = Math.floor(endTimestamp / timeframeInMs);
   const diff = end - start;
   const numberOfCandles = diff / timeframeInMs;
-  console.log({start, end, diff, numberOfCandles});
+  log({start, end, diff, numberOfCandles});
 
   // Generate even time intervals
   const timeIntervals = [];
   for (let time = start; time < end; time += timeframeInMs) {
     timeIntervals.push(time * timeframeInMs); // Convert back to milliseconds
   }
-  console.log({timeIntervals});
+  log({timeIntervals});
 
   // if (mergeWithStore) {
   // TODO: получаем для каждого интервала свечи из store.candles
@@ -44,6 +46,7 @@ export const tradesToCandles = async ({trades, pair, timeframeName, mergeWithSto
     });
     if (tradesInInterval.length === 0) continue;
     const candle = await tradesToCandle(tradesInInterval, timeframeName, demoCandleIndicators);
+    log({candle});
     candles.push(candle);
   }
 

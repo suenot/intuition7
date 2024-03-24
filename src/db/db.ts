@@ -149,7 +149,19 @@ export const upsertTrades = async ({trades, callback}: {trades: Trade[], callbac
   return trades;
 }
 
-export const upsertCandle = async ({candle}: {candle: Candle}) => {
-  log('upsertCandle', {candle});
-  return candle;
+export const upsertCandles = async ({candles}: {candles: Candle[]}) => {
+  log('upsertCandles', {candles});
+
+  for (const candle of candles) {
+    if (candle.id === undefined) continue;
+    if (!store.candles[candle.id]) store.candles[candle.id] = [];
+    store.candles[candle.id].push(candle);
+  }
+  return candles;
 }
+
+// TODO: не готово
+// export const upsertCandle = async ({candle}: {candle: Candle}) => {
+//   log('upsertCandle', {candle});
+//   return candle;
+// }

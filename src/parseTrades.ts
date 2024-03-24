@@ -7,6 +7,7 @@ import { tradeCcxtToCore } from "./tradesCcxtToCore/tradesCcxtToCore";
 import { upsertTrades } from "./db/db";
 import { sleep } from "./index";
 import { tradesToCandle } from "./tradesToCandle/tradesToCandle";
+import { tradesToCandles } from "./tradesToCandles/tradesToCandles";
 const log = debug("parseTrades");
 
 export const parseTrades = async ({exchangeIds, pairIds}: {exchangeIds: string[], pairIds: string[]}) => {
@@ -44,7 +45,12 @@ export const parseTradesOneExchange = async ({exchangeId, pairIds}: {exchangeId:
           }});
           // генерировать свечи
           // TODO: HERE
-          
+          if (trades.length === 0) continue;
+
+          const firstTrade = trades[0];
+          const pair = firstTrade?.pairId; // TODO: убдиться, что трейды приходят по одной торговой паре
+          const candles = await tradesToCandles({trades, pair, timeframeName: '0.1s'});
+          log({candles});
 
         } catch (e) { log(e) };
       }

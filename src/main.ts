@@ -34,7 +34,7 @@ export const main = async () => {
 
   // Сбор ордербуков, тиков, свечей, трейдов вебсокетами
   parseTrades({exchangeIds, pairIds});
-  parseOrderBooks({exchangeIds, pairIds});
+  // parseOrderBooks({exchangeIds, pairIds}); // TODO: работает, просто временно выключил
   // parseCandles({exchangeIds, pairIds});
 
   // Раз в 1 секунду собирать исторические данные

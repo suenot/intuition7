@@ -2,7 +2,7 @@ import ccxt from "ccxt";
 import debug from "debug";
 import _ from "lodash";
 import { OHLCV as CcxtCandle, OHLCVSubscription as CcxtCandleSubscription } from "./ccxtTypes";
-import { upsertCandle } from "./db/db";
+import { upsertCandles } from "./db/db";
 import { sleep } from "./index";
 const log = debug("parseCandles");
 

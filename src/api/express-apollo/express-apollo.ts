@@ -160,9 +160,24 @@ const app = express()
   .get("/trades", (req: any, res: any) => {
     // TODO: выдавать ошибку, если пары не существует
     const { exchange, base, quote } = req.query;
-    res.json( store.trades[`${base}/${quote}/${exchange}`] );
+    if (store.trades[`${base}/${quote}/${exchange}`] && store.trades[`${base}/${quote}/${exchange}`].length > 0) {
+      res.json( store.trades[`${base}/${quote}/${exchange}`] );
+    } else {
+      res.json( [] );
+    }
   })
-  .get("/candles", () => store.candles)
+  .get("/candles", (req: any, res: any) => {
+    const { exchange, base, quote, timeframe } = req.query;
+    const id = `${base}/${quote}/${exchange}/${timeframe}`; // TODO: перепроверить
+    if (!base && !quote && !exchange && !timeframe) {
+      res.json( store.candles );
+    }
+    if (store.candles?.[id] && store.candles?.[id].length > 0) {
+      res.json( store.candles[id] );
+    } else {
+      res.json( [] );
+    }
+  })
   .get("/users", () => store.users)
   .get("/users/:id", (req: any, res: any) => {
     const { id } = req.params;
