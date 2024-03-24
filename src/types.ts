@@ -2,7 +2,7 @@ import { Exchange as ExchangeCCXT } from 'ccxt';
 import { tradesToCandlesFunctions } from './tradesToCandle/tradesToCandle';
 
 export interface Dictionary<T> {
-  [key: string]: T;
+  [key: string | number]: T;
 }
 
 export interface MinMax {
