@@ -291,8 +291,8 @@ export interface Candle {
   quoteId?: string,
   //
   timestamp?: number,
-  timestampStart?: number,
-  timestampEnd?: number,
+  // timestampStart?: number,
+  // timestampEnd?: number,
 
   // timeframe?: number, // number is universal
   // timeframeId?: string,

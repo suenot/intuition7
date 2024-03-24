@@ -27,11 +27,14 @@ export const baseIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle
 
 export const quoteIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle?.firstTrade ? candle?.firstTrade.quoteId : undefined };
 
-export const timestampFn = ({candle}: {candle: Partial<Candle>}) => { return candle?.firstTrade ? candle?.firstTrade.timestamp : undefined };
-
-export const timestampStartFn = ({candle}: {candle: Partial<Candle>}) => { return candle?.firstTrade ? candle?.firstTrade.timestamp : undefined };
-
-export const timestampEndFn = ({candle}: {candle: Partial<Candle>}) => { return candle?.lastTrade ? candle?.lastTrade?.timestamp : undefined };
+export const timestampFn = ({candle}: {candle: Partial<Candle>}) => {
+  // нужно выровнять timestamp по времени начала свечи
+  const { timeframeMs } = candle;
+  if (!candle?.firstTrade?.timestamp || !timeframeMs) {
+    return undefined;
+  }
+  return (candle?.firstTrade?.timestamp / timeframeMs) * timeframeMs;
+};
 
 export const exchangeIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle?.firstTrade ? candle?.firstTrade?.exchangeId : undefined };
 export const instrumentIdFn = ({candle}: {candle: Partial<Candle>}) => { return candle?.firstTrade ? candle?.firstTrade.instrumentId : undefined };
@@ -250,11 +253,9 @@ export const tradesToCandlesFunctions = {
   pairId: pairIdFn,
   baseId: baseIdFn,
   quoteId: quoteIdFn,
-  timestamp: timestampFn,
-  timestampStart: timestampStartFn,
-  timestampEnd: timestampEndFn,
   timeframeMs: timeframeMsFn,
   timeframeName: timeframeNameFn,
+  timestamp: timestampFn,
   status: statusFn,
   open: openFn,
   high: highFn,
