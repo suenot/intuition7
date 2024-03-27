@@ -1,3 +1,4 @@
+import { store } from './db/store/store';
 // Export all functions to use in external projects
 
 // Parsing
@@ -27,4 +28,4 @@ import { toShift } from "./toShift/toShift";
 import { calculateLag } from "./calculateLag/calculateLag";
 import { sleep } from "./sleep/sleep";
 
-export { getExchanges, getMarketData, parseCandles, parseTrades, parseOrderBooks, getNextTimeframe, getTimeframeMilliseconds, tradeCcxtToCore, orderBookCcxtToCore, tradesToCandle, toShift, calculateLag, sleep };
+export { store, getExchanges, getMarketData, parseCandles, parseTrades, parseOrderBooks, getNextTimeframe, getTimeframeMilliseconds, tradeCcxtToCore, orderBookCcxtToCore, tradesToCandle, toShift, calculateLag, sleep };
