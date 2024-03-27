@@ -14,8 +14,8 @@ import {
 import { Exchange, Asset, Instrument, Pair, OrderBook, Trade, Candle } from "./../types";
 import { store } from "./store/store";
 import _ from "lodash";
-import { getExchangeOrderbook } from "../getExchangeOrderbook";
-import { toShift } from "../toShift/toShift";
+import { getExchangeOrderbook } from "../providers/ccxt/getExchangeOrderbook";
+import { toShift } from "../backend/toShift/toShift";
 import debug from "debug";
 const log = debug("db");
 

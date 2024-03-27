@@ -1,13 +1,33 @@
-import { intervalFn } from './intervalFn';
-import { upsertExchange, upsertPair } from './db/db';
 import { store } from './db/store/store';
-import { parseTrades } from './parseTrades';
-import { parseOrderBooks } from './parseOrderBooks';
+import { parseTrades } from './providers/ccxt/parseTrades';
+import { parseOrderBooks } from './providers/ccxt/parseOrderBooks';
 import { startExpressApollo } from './api/express-apollo/express-apollo';
+import { upsertExchange, upsertInstrument, upsertAsset, upsertPair } from "./db/db";
+import { Exchange, Asset, Pair, Instrument } from "./types";
+import { getMarketData } from "./providers/ccxt/getMarketData";
+import debug from "debug";
+const log = debug("main");
+
+// TODO: функция для проверки валидности модулей, все ли зависимости для модулей подключены
 
 export const main = async () => {
   // Сбор ассетов, пар, инструментов, бирж
-  await intervalFn();
+  const { assets, pairs, instruments, exchanges, exchangesInstances } = await getMarketData();
+  log({ assets, pairs, instruments, exchanges });
+
+  for (const exchange of Object.values(exchanges) as Exchange[]) {
+    upsertExchange({ dbs: ['store'], exchange});
+  }
+  for (const asset of Object.values(assets) as Asset[]) {
+    upsertAsset({ dbs: ['store'], asset});
+  }
+  for (const pair of Object.values(pairs) as Pair[]) {
+    upsertPair({ dbs: ['store'], pair} );
+  }
+  for (const instrument of Object.values(instruments) as Instrument[]) {
+    upsertInstrument({ dbs: ['store'], instrument });
+  }
+  // end Сбор ассетов, пар, инструментов, бирж
 
   // Сделать активными часть бирж и пар
   const exchangeIds = ['binance', 'okx', 'kucoin'];

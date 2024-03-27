@@ -1,5 +1,5 @@
 import { Exchange as ExchangeCCXT } from 'ccxt';
-import { tradesToCandlesFunctions } from './tradesToCandle/tradesToCandle';
+import { tradesToCandlesFunctions } from './backend/tradesToCandle/tradesToCandle';
 
 export interface Dictionary<T> {
   [key: string | number]: T;

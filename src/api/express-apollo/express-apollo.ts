@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import { store } from "../../db/store/store";
-import { intervalFn } from "../../intervalFn";
 import { upsertAsset, upsertExchange, upsertInstrument, upsertPair, saveOrderBookHistoryByTimer } from "../../db/db";
 import { parseOrderBooks, parseTrades, parseCandles } from "../../index";
 import debug from "debug";

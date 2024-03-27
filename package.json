@@ -2,7 +2,7 @@
   "name": "app",
   "version": "1.0.50",
   "scripts": {
-    "dev:node:express": "DEBUG='upsertCandles' nodemon --experimental-specifier-resolution=node ./src/main.ts",
+    "dev:node:express": "DEBUG=* nodemon --experimental-specifier-resolution=node ./src/main.ts",
     "prod:node:express": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm ./src/main.ts",
     "deep:profitmaker": "DEBUG=* node --experimental-specifier-resolution=node --loader ts-node/esm  ./src/db/deep/deep.ts",
     "test": "jest --silent=false",
