@@ -57,3 +57,20 @@ export const parseTradesOneExchange = async ({exchangeId, pairIds}: {exchangeId:
     }
   }
 }
+
+// TODO: написать тест, а то может и не работает xD
+export const parseTradesRest = async ({exchangeId, pairId}: {exchangeId: string, pairId: string}) => {
+  const exchangeInstance = new (ccxt.pro as any)[exchangeId]({});
+  if (exchangeId in ccxt.pro) {
+    try {
+      const trades: CcxtTrade = await exchangeInstance.fetchTrades(pairId);
+      log({trades});
+      return { success: true, data: trades };
+    } catch (e) { 
+      log(e);
+      return { success: false, error: e };
+    };
+  }
+  return { success: false, error: new Error('Exchange not found in ccxt.pro') };
+}
+

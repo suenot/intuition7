@@ -40,7 +40,7 @@ export interface Exchange {
 // Интерфейс для представления инструмента (торговой пары на конкретной бирже)
 // Market в ccxt
 export interface Instrument {
-  id: string;
+  id: string; // TODO: пример
   // base?: Asset // string; // Базовый актив (монета)
   baseId: string;
   // quote?: Asset // string; // Котируемый актив (монета)
